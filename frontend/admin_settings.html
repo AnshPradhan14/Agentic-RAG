@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Admin Settings | Ask Data</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<style>
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:'Inter',sans-serif; background:#131315; color:#e5e1e4; min-height:100vh; }
+  .topnav { background:#1b1b1d; border-bottom:1px solid rgba(66,71,84,0.3); padding:0 24px; height:56px; display:flex; align-items:center; gap:16px; position:sticky; top:0; z-index:50; }
+  .nav-tab { padding:6px 14px; border-radius:8px; font-size:13px; font-weight:600; color:#8c909f; cursor:pointer; transition:all 0.2s; text-decoration:none; }
+  .nav-tab:hover { color:#e5e1e4; background:rgba(173,198,255,0.05); }
+  .nav-tab.active { color:#adc6ff; background:rgba(173,198,255,0.1); }
+  .admin-badge { padding:3px 8px; background:rgba(245,158,11,0.15); border:1px solid rgba(245,158,11,0.25); border-radius:12px; font-size:11px; color:#F59E0B; font-weight:600; }
+  .settings-card { background:#1a1a1e; border:1px solid rgba(66,71,84,0.3); border-radius:14px; overflow:hidden; }
+  .card-header { padding:16px 20px; border-bottom:1px solid rgba(66,71,84,0.2); display:flex; align-items:center; gap:10px; }
+  .card-body { padding:20px; }
+  .field-label { font-size:11px; font-weight:700; color:#5a5e6e; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:8px; }
+  .info-value { font-size:14px; color:#c2c6d6; padding:10px 14px; background:#0e0e10; border:1px solid rgba(66,71,84,0.35); border-radius:10px; font-family:monospace; word-break:break-all; }
+  .info-chip { display:inline-flex; align-items:center; gap:5px; padding:3px 10px; border-radius:12px; font-size:11px; font-weight:600; }
+  .chip-green { background:rgba(16,185,129,0.12); color:#10B981; border:1px solid rgba(16,185,129,0.2); }
+  .chip-red { background:rgba(239,68,68,0.12); color:#EF4444; border:1px solid rgba(239,68,68,0.2); }
+  .chip-blue { background:rgba(173,198,255,0.1); color:#adc6ff; border:1px solid rgba(173,198,255,0.2); }
+  .masked-key { color:#adc6ff; letter-spacing:0.05em; }
+  .toggle-row { display:flex; align-items:center; justify-content:space-between; padding:14px 0; border-bottom:1px solid rgba(66,71,84,0.15); }
+  .toggle-row:last-child { border-bottom:none; }
+  .toggle-switch { position:relative; width:44px; height:24px; cursor:pointer; }
+  .toggle-switch input { opacity:0; width:0; height:0; }
+  .toggle-slider { position:absolute; top:0; left:0; right:0; bottom:0; background:#333; border-radius:24px; transition:0.3s; }
+  .toggle-slider:before { position:absolute; content:""; width:18px; height:18px; left:3px; bottom:3px; background:white; border-radius:50%; transition:0.3s; }
+  input:checked + .toggle-slider { background:#3B82F6; }
+  input:checked + .toggle-slider:before { transform:translateX(20px); }
+  .material-symbols-outlined { font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24; }
+  .toast { position:fixed; bottom:24px; right:24px; padding:12px 18px; border-radius:10px; font-size:13px; font-weight:600; z-index:999; }
+  .toast.success { background:#10B981; color:white; }
+  .toast.error { background:#EF4444; color:white; }
+  .divider { height:1px; background:rgba(66,71,84,0.2); margin:16px 0; }
+</style>
+</head>
+<body>
+
+<div id="toast" class="toast" style="display:none;"></div>
+
+<!-- Top Nav -->
+<nav class="topnav">
+  <div style="display:flex;align-items:center;gap:8px;">
+    <span style="font-weight:700;font-size:15px;color:#e5e1e4;">Ask Data</span>
+    <span class="admin-badge">Admin Panel</span>
+  </div>
+  <div style="display:flex;gap:4px;flex:1;justify-content:center;">
+    <a class="nav-tab" href="admin_dashboard.html">Data Ingestion</a>
+    <a class="nav-tab" href="admin_dashboard.html#docs">Documents</a>
+    <a class="nav-tab active" href="admin_settings.html">Settings</a>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <div style="text-align:right;">
+      <div style="font-size:13px;font-weight:600;color:#e5e1e4;">Admin</div>
+      <div style="font-size:11px;color:#5a5e6e;">Administrator</div>
+    </div>
+    <a href="admin_login.html" onclick="sessionStorage.removeItem('ask_data_auth')" title="Logout" style="background:rgba(66,71,84,0.2);border:1px solid rgba(66,71,84,0.3);border-radius:8px;padding:6px;display:flex;align-items:center;">
+      <span class="material-symbols-outlined" style="color:#8c909f;font-size:18px;">logout</span>
+    </a>
+  </div>
+</nav>
+
+<div style="padding:24px;max-width:1300px;margin:0 auto;">
+
+  <!-- Two column grid -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;">
+
+    <!-- Left: Model Config -->
+    <div class="settings-card">
+      <div class="card-header">
+        <span class="material-symbols-outlined" style="color:#3B82F6;font-size:20px;">settings</span>
+        <span style="font-size:15px;font-weight:700;color:#e5e1e4;">Model Configuration</span>
+        <span class="info-chip chip-blue" id="health-status" style="margin-left:auto;">Checking...</span>
+      </div>
+      <div class="card-body" style="display:flex;flex-direction:column;gap:18px;">
+
+        <!-- Embedding Model -->
+        <div>
+          <div class="field-label">Embedding Model</div>
+          <div class="info-value" id="embedding-model">Loading...</div>
+          <div style="margin-top:8px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+            <span class="info-chip chip-blue">768-dim vectors</span>
+            <span class="info-chip chip-blue">512 token limit</span>
+            <span class="info-chip chip-blue">Multilingual</span>
+          </div>
+          <div style="margin-top:10px;display:flex;align-items:center;gap:6px;font-size:12px;" id="embedding-status-row">
+            <span class="material-symbols-outlined" id="embedding-icon" style="font-size:15px;">help</span>
+            <span id="embedding-status-text" style="color:#8c909f;">Checking status...</span>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- LLM -->
+        <div>
+          <div class="field-label">Generation Model (LLM)</div>
+          <div class="info-value" id="llm-model">Loading...</div>
+          <div style="margin-top:8px;display:flex;align-items:center;gap:8px;">
+            <span style="font-size:12px;color:#5a5e6e;">Provider: Groq Cloud</span>
+            <span class="info-chip" id="llm-status-chip" style="background:rgba(66,71,84,0.3);color:#8c909f;">Checking...</span>
+          </div>
+          <div style="margin-top:8px;font-size:12px;color:#5a5e6e;">
+            LLM Temperature: <span style="color:#adc6ff;font-weight:600;" id="llm-temp">0 (Deterministic)</span>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- FAISS -->
+        <div>
+          <div class="field-label">Vector Index (FAISS)</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <div>
+              <div style="font-size:13px;color:#c2c6d6;" id="faiss-status">Checking...</div>
+              <div style="font-size:11px;color:#5a5e6e;margin-top:3px;">Cosine similarity • Inner Product index</div>
+            </div>
+            <span class="info-chip" id="faiss-chip">—</span>
+          </div>
+        </div>
+
+        <!-- Startup info -->
+        <div style="padding:12px;background:#0e0e10;border-radius:10px;border:1px solid rgba(66,71,84,0.3);">
+          <div style="font-size:11px;color:#5a5e6e;margin-bottom:4px;">Server Startup Time</div>
+          <div style="font-size:20px;font-weight:700;color:#e5e1e4;" id="startup-time">—</div>
+          <div style="font-size:11px;color:#5a5e6e;margin-top:2px;">seconds to load all models</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Pipeline Info -->
+    <div style="display:flex;flex-direction:column;gap:20px;">
+
+      <!-- Chunking Config -->
+      <div class="settings-card">
+        <div class="card-header">
+          <span class="material-symbols-outlined" style="color:#10B981;font-size:20px;">segment</span>
+          <span style="font-size:15px;font-weight:700;color:#e5e1e4;">Chunking Configuration</span>
+        </div>
+        <div class="card-body" style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+          <div>
+            <div class="field-label">Chunk Token Limit</div>
+            <div class="info-value" style="font-size:22px;font-weight:700;color:#adc6ff;">400</div>
+            <div style="font-size:11px;color:#5a5e6e;margin-top:4px;">tokens per chunk</div>
+          </div>
+          <div>
+            <div class="field-label">Chunk Overlap</div>
+            <div class="info-value" style="font-size:22px;font-weight:700;color:#adc6ff;">100</div>
+            <div style="font-size:11px;color:#5a5e6e;margin-top:4px;">token overlap</div>
+          </div>
+          <div>
+            <div class="field-label">Retrieval Top-K</div>
+            <div class="info-value" style="font-size:22px;font-weight:700;color:#d0bcff;">5</div>
+            <div style="font-size:11px;color:#5a5e6e;margin-top:4px;">chunks per search</div>
+          </div>
+          <div>
+            <div class="field-label">Parser</div>
+            <div class="info-value" style="font-size:13px;">Docling</div>
+            <div style="font-size:11px;color:#5a5e6e;margin-top:4px;">PDF → Markdown</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats card -->
+      <div class="settings-card">
+        <div class="card-header">
+          <span class="material-symbols-outlined" style="color:#F59E0B;font-size:20px;">bar_chart</span>
+          <span style="font-size:15px;font-weight:700;color:#e5e1e4;">Live System Stats</span>
+          <button onclick="refreshStats()" style="margin-left:auto;background:none;border:none;cursor:pointer;">
+            <span class="material-symbols-outlined" style="color:#5a5e6e;font-size:16px;">refresh</span>
+          </button>
+        </div>
+        <div class="card-body" style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+          <div><div class="field-label">Documents</div><div style="font-size:24px;font-weight:700;color:#e5e1e4;" id="s-docs">—</div></div>
+          <div><div class="field-label">Queries (Session)</div><div style="font-size:24px;font-weight:700;color:#e5e1e4;" id="s-queries">—</div></div>
+          <div><div class="field-label">Total Chunks</div><div style="font-size:24px;font-weight:700;color:#e5e1e4;" id="s-chunks">—</div></div>
+          <div><div class="field-label">Index Status</div><div style="margin-top:4px;" id="s-index">—</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- System Preferences -->
+  <div class="settings-card">
+    <div class="card-header">
+      <span class="material-symbols-outlined" style="color:#d0bcff;font-size:20px;">tune</span>
+      <span style="font-size:15px;font-weight:700;color:#e5e1e4;">System Preferences</span>
+      <span style="font-size:12px;color:#5a5e6e;margin-left:auto;">Stored locally in browser</span>
+    </div>
+    <div class="card-body">
+      <div class="toggle-row">
+        <div>
+          <div style="font-size:14px;font-weight:600;color:#e5e1e4;">Show Agent Reasoning UI to Users</div>
+          <div style="font-size:12px;color:#5a5e6e;margin-top:2px;">Display the step-by-step thinking block in the chat interface</div>
+        </div>
+        <label class="toggle-switch"><input type="checkbox" id="t-reasoning" onchange="savePref('reasoning',this.checked)" checked><span class="toggle-slider"></span></label>
+      </div>
+      <div class="toggle-row">
+        <div>
+          <div style="font-size:14px;font-weight:600;color:#e5e1e4;">Allow Cross-Document Queries</div>
+          <div style="font-size:12px;color:#5a5e6e;margin-top:2px;">Query across all ingested documents simultaneously</div>
+        </div>
+        <label class="toggle-switch"><input type="checkbox" id="t-crossdoc" onchange="savePref('crossdoc',this.checked)" checked><span class="toggle-slider"></span></label>
+      </div>
+      <div class="toggle-row">
+        <div>
+          <div style="font-size:14px;font-weight:600;color:#e5e1e4;">Enable Query Logging (Console)</div>
+          <div style="font-size:12px;color:#5a5e6e;margin-top:2px;">Log all queries to server stderr for debugging</div>
+        </div>
+        <label class="toggle-switch"><input type="checkbox" id="t-logging" onchange="savePref('logging',this.checked)" checked><span class="toggle-slider"></span></label>
+      </div>
+      <div class="toggle-row" style="border-bottom:none;">
+        <div>
+          <div style="font-size:14px;font-weight:600;" id="maint-label" style="color:#e5e1e4;">Maintenance Mode</div>
+          <div style="font-size:12px;color:#5a5e6e;margin-top:2px;">When ON, users will see a maintenance message instead of the chat</div>
+        </div>
+        <label class="toggle-switch"><input type="checkbox" id="t-maintenance" onchange="toggleMaintenance(this.checked)"><span class="toggle-slider"></span></label>
+      </div>
+    </div>
+  </div>
+
+  <!-- .env info (read-only display) -->
+  <div style="margin-top:20px;padding:16px;background:rgba(14,14,16,0.6);border:1px solid rgba(66,71,84,0.2);border-radius:12px;">
+    <div style="font-size:11px;color:#5a5e6e;display:flex;align-items:center;gap:6px;">
+      <span class="material-symbols-outlined" style="font-size:14px;">info</span>
+      API keys and model names are configured via the <code style="color:#adc6ff;">.env</code> file at the project root. Edit it directly using a text editor, then restart the backend server.
+    </div>
+  </div>
+</div>
+
+<script>
+const API = 'http://localhost:8000';
+
+// Auth guard
+if (sessionStorage.getItem('ask_data_auth') !== 'admin') window.location.href = 'admin_login.html';
+
+window.addEventListener('DOMContentLoaded', async () => {
+  loadPrefs();
+  await loadHealth();
+  await refreshStats();
+});
+
+async function loadHealth() {
+  try {
+    const res = await fetch(`${API}/health`);
+    if (!res.ok) throw new Error();
+    const d = await res.json();
+
+    document.getElementById('health-status').textContent = d.status === 'ok' ? '✅ Online' : '⚠️ Issue';
+    document.getElementById('health-status').className = `info-chip ${d.status === 'ok' ? 'chip-green' : 'chip-red'}`;
+    document.getElementById('embedding-model').textContent = d.embedding_model || 'intfloat/multilingual-e5-base';
+    document.getElementById('llm-model').textContent = d.active_llm || 'llama-3.1-8b-instant';
+    document.getElementById('startup-time').textContent = d.startup_time_seconds ?? '—';
+
+    // Embedding status
+    const embIcon = document.getElementById('embedding-icon');
+    const embText = document.getElementById('embedding-status-text');
+    if (d.embedding_model_loaded) {
+      embIcon.textContent = 'check_circle'; embIcon.style.color = '#10B981';
+      embText.textContent = 'Model loaded in RAM'; embText.style.color = '#10B981';
+    } else {
+      embIcon.textContent = 'warning'; embIcon.style.color = '#F59E0B';
+      embText.textContent = 'Model not loaded'; embText.style.color = '#F59E0B';
+    }
+
+    // LLM status
+    const llmChip = document.getElementById('llm-status-chip');
+    if (d.groq_llm_ready) {
+      llmChip.textContent = '✅ Connected'; llmChip.className = 'info-chip chip-green';
+    } else {
+      llmChip.textContent = '❌ Not Ready'; llmChip.className = 'info-chip chip-red';
+    }
+
+    // FAISS
+    const faissStatus = document.getElementById('faiss-status');
+    const faissChip = document.getElementById('faiss-chip');
+    if (d.faiss_index_loaded) {
+      faissStatus.textContent = 'FAISS index loaded and ready for queries';
+      faissChip.textContent = '✅ Loaded'; faissChip.className = 'info-chip chip-green';
+    } else {
+      faissStatus.textContent = 'No FAISS index found. Upload a PDF to build it.';
+      faissChip.textContent = '⚠️ Not built'; faissChip.className = 'info-chip chip-red';
+    }
+
+  } catch {
+    document.getElementById('health-status').textContent = '❌ Offline';
+    document.getElementById('health-status').className = 'info-chip chip-red';
+    document.getElementById('embedding-model').textContent = 'Cannot reach backend';
+    document.getElementById('llm-model').textContent = 'Cannot reach backend';
+  }
+}
+
+async function refreshStats() {
+  try {
+    const res = await fetch(`${API}/stats`);
+    if (!res.ok) return;
+    const d = await res.json();
+    document.getElementById('s-docs').textContent = d.total_documents;
+    document.getElementById('s-queries').textContent = d.total_queries;
+    document.getElementById('s-chunks').textContent = d.total_chunks.toLocaleString();
+    document.getElementById('s-index').innerHTML = d.faiss_index_loaded
+      ? '<span class="info-chip chip-green">✅ Ready</span>'
+      : '<span class="info-chip chip-red">⚠️ Not built</span>';
+  } catch {}
+}
+
+// Preferences
+function loadPrefs() {
+  const prefs = JSON.parse(localStorage.getItem('ask_data_prefs') || '{}');
+  ['reasoning','crossdoc','logging'].forEach(k => {
+    const el = document.getElementById(`t-${k}`);
+    if (el) el.checked = prefs[k] !== false;
+  });
+  const el = document.getElementById('t-maintenance');
+  if (el) el.checked = prefs['maintenance'] === true;
+  updateMaintenanceLabel(prefs['maintenance'] === true);
+}
+
+function savePref(key, val) {
+  const prefs = JSON.parse(localStorage.getItem('ask_data_prefs') || '{}');
+  prefs[key] = val;
+  localStorage.setItem('ask_data_prefs', JSON.stringify(prefs));
+  showToast(`Preference saved`, 'success');
+}
+
+function toggleMaintenance(on) {
+  savePref('maintenance', on);
+  updateMaintenanceLabel(on);
+}
+
+function updateMaintenanceLabel(on) {
+  const label = document.getElementById('maint-label');
+  if (label) {
+    label.textContent = on ? 'Maintenance Mode — ⚠️ ACTIVE' : 'Maintenance Mode';
+    label.style.color = on ? '#EF4444' : '#e5e1e4';
+  }
+}
+
+function showToast(msg, type='info') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = `toast ${type}`;
+  t.style.display = 'block';
+  setTimeout(() => { t.style.display = 'none'; }, 3000);
+}
+</script>
+</body>
+</html>

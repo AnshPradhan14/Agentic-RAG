@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Login | Ask Data</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: { extend: {
+      colors: {
+        "surface": "#131315", "surface-container-low": "#1b1b1d",
+        "surface-container": "#201f21", "surface-container-high": "#2a2a2c",
+        "surface-container-lowest": "#0e0e10", "surface-container-highest": "#353437",
+        "on-surface": "#e5e1e4", "on-surface-variant": "#c2c6d6",
+        "outline": "#8c909f", "outline-variant": "#424754",
+        "primary": "#adc6ff", "primary-container": "#4d8eff",
+        "on-primary": "#002e6a", "secondary": "#d0bcff",
+        "background": "#131315", "on-background": "#e5e1e4", "error": "#ffb4ab"
+      },
+      fontFamily: { headline: ["Inter"], body: ["Inter"], label: ["Inter"] }
+    }}
+  }
+</script>
+<style>
+  body {
+    background-color: #0D0D0F;
+    background-image: radial-gradient(circle at 50% 50%, rgba(173,198,255,0.08) 0%, transparent 50%),
+                      radial-gradient(#1b1b1d 0.5px, transparent 0.5px);
+    background-size: 100% 100%, 24px 24px;
+    font-family: 'Inter', sans-serif;
+  }
+  .glass-card {
+    background: rgba(26,26,30,0.85);
+    backdrop-filter: blur(24px);
+    border: 1px solid rgba(66,71,84,0.4);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 40px rgba(173,198,255,0.05);
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, #3B82F6, #6366f1);
+    transition: all 0.2s ease;
+  }
+  .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 8px 25px rgba(59,130,246,0.35); }
+  .btn-primary:active { transform: scale(0.98); }
+  .input-field {
+    width: 100%; padding: 0.875rem 1rem 0.875rem 2.75rem;
+    background: #0e0e10; border: 1px solid rgba(66,71,84,0.4);
+    border-radius: 0.75rem; color: #e5e1e4; font-size: 0.875rem;
+    outline: none; transition: all 0.2s;
+  }
+  .input-field:focus { border-color: rgba(173,198,255,0.5); box-shadow: 0 0 0 3px rgba(173,198,255,0.1); }
+  .input-field::placeholder { color: #5a5e6e; }
+  .error-box { background: rgba(255,180,171,0.1); border: 1px solid rgba(255,180,171,0.3); border-radius: 0.75rem; padding: 0.75rem 1rem; color: #ffb4ab; font-size: 0.8rem; display: none; }
+</style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-6">
+
+<div class="fixed top-[-10%] right-[-10%] w-[500px] h-[500px] bg-blue-500/5 rounded-full blur-[120px] pointer-events-none"></div>
+<div class="fixed bottom-[-10%] left-[-10%] w-[400px] h-[400px] bg-purple-500/5 rounded-full blur-[100px] pointer-events-none"></div>
+
+<main class="w-full max-w-md">
+  <!-- Brand -->
+  <div class="flex flex-col items-center mb-8 text-center">
+    <div class="mb-4 flex items-center justify-center w-14 h-14 rounded-2xl" style="background: linear-gradient(135deg,rgba(59,130,246,0.2),rgba(99,102,241,0.2)); border: 1px solid rgba(173,198,255,0.2);">
+      <span class="material-symbols-outlined text-3xl" style="color:#adc6ff;">hub</span>
+    </div>
+    <h1 class="text-3xl font-bold tracking-tight mb-1" style="color:#e5e1e4;">Ask Data</h1>
+    <p class="text-xs font-medium uppercase tracking-widest" style="color:#8c909f;">Intelligent Document Intelligence</p>
+  </div>
+
+  <!-- Card -->
+  <div class="glass-card rounded-2xl p-8">
+    <div id="error-box" class="error-box mb-5">
+      <span class="material-symbols-outlined text-sm align-middle mr-1">error</span>
+      <span id="error-msg">Invalid credentials.</span>
+    </div>
+
+    <form id="login-form" class="space-y-5" onsubmit="handleLogin(event)">
+      <!-- Username -->
+      <div class="space-y-1.5">
+        <label class="block text-[11px] font-semibold uppercase tracking-widest px-1" style="color:#8c909f;" for="username">Username / ID</label>
+        <div class="relative">
+          <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+            <span class="material-symbols-outlined text-lg" style="color:#5a5e6e;">person</span>
+          </div>
+          <input class="input-field" id="username" name="username" placeholder="Enter your username" required type="text" autocomplete="username"/>
+        </div>
+      </div>
+      <!-- Password -->
+      <div class="space-y-1.5">
+        <div class="flex items-center justify-between px-1">
+          <label class="block text-[11px] font-semibold uppercase tracking-widest" style="color:#8c909f;" for="password">Password</label>
+        </div>
+        <div class="relative">
+          <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+            <span class="material-symbols-outlined text-lg" style="color:#5a5e6e;">lock</span>
+          </div>
+          <input class="input-field" id="password" name="password" placeholder="••••••••" required type="password" autocomplete="current-password"/>
+          <button class="absolute inset-y-0 right-0 pr-3.5 flex items-center" type="button" onclick="togglePass('password',this)">
+            <span class="material-symbols-outlined text-lg" style="color:#5a5e6e;">visibility</span>
+          </button>
+        </div>
+      </div>
+      <!-- Submit -->
+      <button id="login-btn" class="btn-primary w-full flex items-center justify-center gap-2 py-3.5 px-4 rounded-xl text-sm font-bold text-white mt-2" type="submit">
+        <span id="btn-text">Sign In</span>
+        <span id="btn-spinner" class="material-symbols-outlined text-base animate-spin hidden">progress_activity</span>
+      </button>
+    </form>
+  </div>
+
+  <!-- Admin Link -->
+  <div class="mt-6 flex justify-center">
+    <a class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full transition-all hover:opacity-80" style="color:#8c909f; background:rgba(27,27,29,0.6); border:1px solid rgba(66,71,84,0.2);" href="admin_login.html">
+      Admin Panel
+      <span class="material-symbols-outlined text-base">arrow_forward</span>
+    </a>
+  </div>
+</main>
+
+<script>
+// ── Credentials ────────────────────────────────────────────────
+const USER_CREDENTIALS = { username: "user", password: "askdata123" };
+
+function togglePass(id, btn) {
+  const inp = document.getElementById(id);
+  const icon = btn.querySelector('.material-symbols-outlined');
+  if (inp.type === 'password') { inp.type = 'text'; icon.textContent = 'visibility_off'; }
+  else { inp.type = 'password'; icon.textContent = 'visibility'; }
+}
+
+function showError(msg) {
+  const box = document.getElementById('error-box');
+  document.getElementById('error-msg').textContent = msg;
+  box.style.display = 'block';
+}
+
+function setLoading(on) {
+  document.getElementById('btn-text').textContent = on ? 'Signing In...' : 'Sign In';
+  document.getElementById('btn-spinner').classList.toggle('hidden', !on);
+  document.getElementById('login-btn').disabled = on;
+}
+
+async function handleLogin(e) {
+  e.preventDefault();
+  document.getElementById('error-box').style.display = 'none';
+  const u = document.getElementById('username').value.trim();
+  const p = document.getElementById('password').value;
+
+  if (u === USER_CREDENTIALS.username && p === USER_CREDENTIALS.password) {
+    setLoading(true);
+    // Check backend health
+    try {
+      const res = await fetch('http://localhost:8000/health');
+      if (!res.ok) throw new Error('Backend unreachable');
+    } catch {
+      setLoading(false);
+      showError('⚠️ Cannot connect to the backend server. Make sure it is running on port 8000.');
+      return;
+    }
+    sessionStorage.setItem('ask_data_auth', 'user');
+    window.location.href = 'chat.html';
+  } else {
+    showError('Invalid username or password.');
+  }
+}
+
+// Guard: redirect to login if already logged in
+if (sessionStorage.getItem('ask_data_auth') === 'user') {
+  window.location.href = 'chat.html';
+}
+</script>
+</body>
+</html>

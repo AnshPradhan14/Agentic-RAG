@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Admin Login | Ask Data</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<style>
+  body {
+    background-color: #0D0D0F;
+    background-image: radial-gradient(circle at 50% 40%, rgba(245,158,11,0.07) 0%, transparent 55%),
+                      radial-gradient(#1b1b1d 0.5px, transparent 0.5px);
+    background-size: 100% 100%, 24px 24px;
+    font-family: 'Inter', sans-serif;
+  }
+  .glass-card {
+    background: rgba(26,26,30,0.85);
+    backdrop-filter: blur(24px);
+    border: 1px solid rgba(100,70,30,0.3);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 40px rgba(245,158,11,0.04);
+  }
+  .btn-admin {
+    background: linear-gradient(135deg, #F59E0B, #EF4444);
+    transition: all 0.2s ease;
+  }
+  .btn-admin:hover { opacity:0.9; transform:translateY(-1px); box-shadow:0 8px 25px rgba(245,158,11,0.3); }
+  .btn-admin:active { transform:scale(0.98); }
+  .input-field {
+    width:100%; padding:0.875rem 1rem 0.875rem 2.75rem;
+    background:#0e0e10; border:1px solid rgba(100,70,30,0.35);
+    border-radius:0.75rem; color:#e5e1e4; font-size:0.875rem;
+    outline:none; transition:all 0.2s;
+  }
+  .input-field:focus { border-color:rgba(245,158,11,0.45); box-shadow:0 0 0 3px rgba(245,158,11,0.08); }
+  .input-field::placeholder { color:#5a5e6e; }
+  .error-box { background:rgba(255,180,171,0.1); border:1px solid rgba(255,180,171,0.3); border-radius:0.75rem; padding:0.75rem 1rem; color:#ffb4ab; font-size:0.8rem; display:none; }
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+</style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-6">
+
+<div class="fixed top-[-10%] right-[-10%] w-[500px] h-[500px]" style="background:rgba(245,158,11,0.04);border-radius:50%;filter:blur(120px);pointer-events:none;"></div>
+<div class="fixed bottom-[-10%] left-[-10%] w-[400px] h-[400px]" style="background:rgba(239,68,68,0.04);border-radius:50%;filter:blur(100px);pointer-events:none;"></div>
+
+<main class="w-full max-w-md">
+  <!-- Brand -->
+  <div class="flex flex-col items-center mb-8 text-center">
+    <div class="mb-4 flex items-center justify-center w-14 h-14 rounded-2xl" style="background:linear-gradient(135deg,rgba(245,158,11,0.2),rgba(239,68,68,0.2));border:1px solid rgba(245,158,11,0.25);">
+      <span class="material-symbols-outlined text-3xl" style="color:#F59E0B;">shield</span>
+    </div>
+    <h1 class="text-3xl font-bold tracking-tight mb-1" style="color:#e5e1e4;">Admin Panel</h1>
+    <p class="text-xs font-medium uppercase tracking-widest" style="color:#8c909f;">Management & Configuration Access</p>
+  </div>
+
+  <!-- Card -->
+  <div class="glass-card rounded-2xl p-8">
+    <!-- Restricted Access Banner -->
+    <div style="background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.2);border-radius:10px;padding:10px 14px;margin-bottom:20px;display:flex;align-items:center;gap:8px;">
+      <span class="material-symbols-outlined" style="color:#F59E0B;font-size:18px;">lock</span>
+      <span style="color:#D97706;font-size:12px;font-weight:600;">Restricted Access — Authorized Personnel Only</span>
+    </div>
+
+    <div id="error-box" class="error-box mb-5">
+      <span class="material-symbols-outlined text-sm align-middle mr-1">error</span>
+      <span id="error-msg">Invalid admin credentials.</span>
+    </div>
+
+    <form id="admin-login-form" class="space-y-5" onsubmit="handleAdminLogin(event)">
+      <!-- Admin ID -->
+      <div class="space-y-1.5">
+        <label class="block text-[11px] font-semibold uppercase tracking-widest px-1" style="color:#8c909f;" for="admin-id">Admin ID</label>
+        <div class="relative">
+          <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+            <span class="material-symbols-outlined text-lg" style="color:#5a5e6e;">admin_panel_settings</span>
+          </div>
+          <input class="input-field" id="admin-id" name="admin-id" placeholder="Enter admin username" required type="text"/>
+        </div>
+      </div>
+      <!-- Password -->
+      <div class="space-y-1.5">
+        <label class="block text-[11px] font-semibold uppercase tracking-widest px-1" style="color:#8c909f;" for="admin-password">Password</label>
+        <div class="relative">
+          <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+            <span class="material-symbols-outlined text-lg" style="color:#5a5e6e;">lock</span>
+          </div>
+          <input class="input-field" id="admin-password" name="admin-password" placeholder="••••••••" required type="password"/>
+          <button class="absolute inset-y-0 right-0 pr-3.5 flex items-center" type="button" onclick="togglePass()">
+            <span class="material-symbols-outlined text-lg" style="color:#5a5e6e;" id="eye-icon">visibility</span>
+          </button>
+        </div>
+      </div>
+      <!-- Submit -->
+      <button id="admin-btn" class="btn-admin w-full flex items-center justify-center gap-2 py-3.5 px-4 rounded-xl text-sm font-bold text-white mt-2" type="submit">
+        <span class="material-symbols-outlined" style="font-size:16px;">shield</span>
+        <span id="btn-text">Admin Sign In</span>
+        <span id="btn-spinner" class="material-symbols-outlined text-base animate-spin hidden">progress_activity</span>
+      </button>
+    </form>
+  </div>
+
+  <!-- Back Link -->
+  <div class="mt-6 flex justify-center">
+    <a href="login.html" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full transition-all hover:opacity-80" style="color:#8c909f;background:rgba(27,27,29,0.6);border:1px solid rgba(66,71,84,0.2);">
+      <span class="material-symbols-outlined text-base">arrow_back</span>
+      Back to User Login
+    </a>
+  </div>
+</main>
+
+<script>
+const ADMIN_CREDENTIALS = { username: "admin", password: "admin@askdata2024" };
+
+function togglePass() {
+  const inp = document.getElementById('admin-password');
+  const icon = document.getElementById('eye-icon');
+  if (inp.type === 'password') { inp.type = 'text'; icon.textContent = 'visibility_off'; }
+  else { inp.type = 'password'; icon.textContent = 'visibility'; }
+}
+
+function showError(msg) {
+  const box = document.getElementById('error-box');
+  document.getElementById('error-msg').textContent = msg;
+  box.style.display = 'block';
+}
+
+function setLoading(on) {
+  document.getElementById('btn-text').textContent = on ? 'Authenticating...' : 'Admin Sign In';
+  document.getElementById('btn-spinner').classList.toggle('hidden', !on);
+  document.getElementById('admin-btn').disabled = on;
+}
+
+async function handleAdminLogin(e) {
+  e.preventDefault();
+  document.getElementById('error-box').style.display = 'none';
+  const u = document.getElementById('admin-id').value.trim();
+  const p = document.getElementById('admin-password').value;
+
+  if (u === ADMIN_CREDENTIALS.username && p === ADMIN_CREDENTIALS.password) {
+    setLoading(true);
+    try {
+      const res = await fetch('http://localhost:8000/health');
+      if (!res.ok) throw new Error();
+    } catch {
+      setLoading(false);
+      showError('⚠️ Cannot connect to backend on port 8000. Please start the server first.');
+      return;
+    }
+    sessionStorage.setItem('ask_data_auth', 'admin');
+    window.location.href = 'admin_dashboard.html';
+  } else {
+    showError('Invalid admin credentials.');
+  }
+}
+
+if (sessionStorage.getItem('ask_data_auth') === 'admin') {
+  window.location.href = 'admin_dashboard.html';
+}
+</script>
+</body>
+</html>

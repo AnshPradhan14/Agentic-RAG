@@ -1,0 +1,26 @@
+# ── PDF Parsing ──────────────────────────────────────────────────────────────
+docling>=2.5.0                  # Offline PDF → Markdown + JSON (MIT license)
+
+# ── NLP & Tokenization ───────────────────────────────────────────────────────
+nltk>=3.8.1                     # sent_tokenize for Fix 2 & Fix 3
+tiktoken>=0.7.0                 # Token counting during chunking (Layer 1)
+
+# ── Embeddings ───────────────────────────────────────────────────────────────
+sentence-transformers>=3.0.0    # all-MiniLM-L6-v2 — local sentence embeddings
+torch>=2.2.0                    # Backend for sentence-transformers (CPU build)
+
+# ── Vector Search ────────────────────────────────────────────────────────────
+faiss-cpu>=1.8.0                # IndexFlatIP + normalize_L2 (Fix 1) — CPU only
+
+# ── Orchestration & Agent ────────────────────────────────────────────────────
+langchain>=0.3.0                # Core: @tool, AgentExecutor, message history
+langchain-ollama>=0.2.0         # ChatOllama wrapper for local LLM
+langchain-core>=0.3.0           # Base abstractions (messages, tools, runnables)
+
+# ── Storage ───────────────────────────────────────────────────────────────────
+# sqlite3 is part of Python stdlib — no pip install needed
+
+# ── Utilities ────────────────────────────────────────────────────────────────
+numpy>=1.26.0                   # Array ops for FAISS embedding normalisation
+tqdm>=4.66.0                    # Progress bars during ingestion
+python-dotenv>=1.0.0            # Optional: load config from .env file

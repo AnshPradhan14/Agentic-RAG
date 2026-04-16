@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Admin Dashboard | Ask Data</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<style>
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:'Inter',sans-serif; background:#131315; color:#e5e1e4; min-height:100vh; }
+
+  /* Nav */
+  .topnav { background:#1b1b1d; border-bottom:1px solid rgba(66,71,84,0.3); padding:0 24px; height:56px; display:flex; align-items:center; gap:16px; position:sticky; top:0; z-index:50; }
+  .nav-tab { padding:6px 14px; border-radius:8px; font-size:13px; font-weight:600; color:#8c909f; cursor:pointer; transition:all 0.2s; text-decoration:none; }
+  .nav-tab:hover { color:#e5e1e4; background:rgba(173,198,255,0.05); }
+  .nav-tab.active { color:#adc6ff; background:rgba(173,198,255,0.1); }
+  .admin-badge { padding:3px 8px; background:rgba(245,158,11,0.15); border:1px solid rgba(245,158,11,0.25); border-radius:12px; font-size:11px; color:#F59E0B; font-weight:600; }
+
+  /* Stats cards */
+  .stat-card { background:#1a1a1e; border:1px solid rgba(66,71,84,0.3); border-radius:12px; padding:20px; }
+  .stat-num { font-size:28px; font-weight:700; color:#e5e1e4; }
+  .stat-label { font-size:11px; color:#8c909f; text-transform:uppercase; letter-spacing:0.08em; font-weight:600; margin-bottom:8px; }
+  .stat-trend { font-size:12px; color:#10B981; }
+
+  /* Upload zone */
+  .upload-zone { border:2px dashed rgba(173,198,255,0.2); border-radius:14px; padding:40px; text-align:center; transition:all 0.2s; cursor:pointer; background:rgba(14,14,16,0.4); }
+  .upload-zone:hover, .upload-zone.drag-over { border-color:rgba(173,198,255,0.5); background:rgba(173,198,255,0.04); }
+
+  /* Upload state cards */
+  .upload-state-card { background:#1a1a1e; border:1px solid rgba(66,71,84,0.3); border-radius:10px; padding:14px 16px; display:flex; align-items:center; gap:12px; }
+  .progress-bar-bg { height:4px; background:rgba(66,71,84,0.4); border-radius:4px; overflow:hidden; flex:1; }
+  .progress-bar-fill { height:100%; background:linear-gradient(90deg,#3B82F6,#6366f1); border-radius:4px; transition:width 0.5s ease; }
+
+  /* Table */
+  .doc-table { width:100%; border-collapse:collapse; }
+  .doc-table th { text-align:left; padding:10px 14px; font-size:11px; font-weight:700; color:#5a5e6e; text-transform:uppercase; letter-spacing:0.08em; border-bottom:1px solid rgba(66,71,84,0.3); }
+  .doc-table td { padding:12px 14px; font-size:13px; color:#c2c6d6; border-bottom:1px solid rgba(66,71,84,0.15); }
+  .doc-table tr:hover td { background:rgba(173,198,255,0.03); }
+  .doc-table tr:last-child td { border-bottom:none; }
+  .status-chip { display:inline-flex; align-items:center; gap:5px; padding:3px 10px; border-radius:12px; font-size:11px; font-weight:600; }
+  .status-indexed { background:rgba(16,185,129,0.12); color:#10B981; border:1px solid rgba(16,185,129,0.2); }
+  .status-processing { background:rgba(173,198,255,0.1); color:#adc6ff; border:1px solid rgba(173,198,255,0.2); }
+  .action-btn { background:none; border:none; cursor:pointer; padding:4px 6px; border-radius:6px; transition:background 0.15s; }
+  .action-btn:hover { background:rgba(66,71,84,0.3); }
+  .section-card { background:#1a1a1e; border:1px solid rgba(66,71,84,0.3); border-radius:12px; overflow:hidden; }
+  .section-header { padding:16px 20px; border-bottom:1px solid rgba(66,71,84,0.2); display:flex; align-items:center; justify-content:space-between; }
+
+  .material-symbols-outlined { font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+  .animate-spin { animation:spin 1s linear infinite; }
+  .toast { position:fixed; bottom:24px; right:24px; padding:12px 18px; border-radius:10px; font-size:13px; font-weight:600; z-index:999; transition:all 0.3s; }
+  .toast.success { background:#10B981; color:white; }
+  .toast.error { background:#EF4444; color:white; }
+  .toast.info { background:#3B82F6; color:white; }
+</style>
+</head>
+<body>
+
+<!-- Toast -->
+<div id="toast" class="toast" style="display:none;"></div>
+
+<!-- Top Nav -->
+<nav class="topnav">
+  <div style="display:flex;align-items:center;gap:8px;">
+    <span style="font-weight:700;font-size:15px;color:#e5e1e4;">Ask Data</span>
+    <span class="admin-badge">Admin Panel</span>
+  </div>
+  <div style="display:flex;gap:4px;flex:1;justify-content:center;">
+    <a class="nav-tab active" href="admin_dashboard.html">Data Ingestion</a>
+    <a class="nav-tab" href="admin_dashboard.html#docs" id="docs-tab">Documents</a>
+    <a class="nav-tab" href="admin_settings.html">Settings</a>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <div style="text-align:right;">
+      <div style="font-size:13px;font-weight:600;color:#e5e1e4;">Admin</div>
+      <div style="font-size:11px;color:#5a5e6e;">Administrator</div>
+    </div>
+    <a href="admin_login.html" onclick="sessionStorage.removeItem('ask_data_auth')" title="Logout" style="background:rgba(66,71,84,0.2);border:1px solid rgba(66,71,84,0.3);border-radius:8px;padding:6px;display:flex;align-items:center;">
+      <span class="material-symbols-outlined" style="color:#8c909f;font-size:18px;">logout</span>
+    </a>
+  </div>
+</nav>
+
+<div style="padding:24px;max-width:1300px;margin:0 auto;">
+
+  <!-- Stats Row -->
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px;">
+    <div class="stat-card">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;">
+        <div>
+          <div class="stat-label">Total Documents</div>
+          <div class="stat-num" id="total-docs">—</div>
+          <div class="stat-trend" id="docs-trend" style="margin-top:4px;"></div>
+        </div>
+        <div style="width:40px;height:40px;border-radius:10px;background:rgba(59,130,246,0.1);display:flex;align-items:center;justify-content:center;">
+          <span class="material-symbols-outlined" style="color:#3B82F6;font-size:20px;">folder</span>
+        </div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;">
+        <div>
+          <div class="stat-label">Total Queries</div>
+          <div class="stat-num" id="total-queries">—</div>
+          <div class="stat-trend" style="margin-top:4px;">This session</div>
+        </div>
+        <div style="width:40px;height:40px;border-radius:10px;background:rgba(16,185,129,0.1);display:flex;align-items:center;justify-content:center;">
+          <span class="material-symbols-outlined" style="color:#10B981;font-size:20px;">chat</span>
+        </div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;">
+        <div>
+          <div class="stat-label">Total Chunks</div>
+          <div class="stat-num" id="total-chunks">—</div>
+          <div class="stat-trend" id="chunks-trend" style="margin-top:4px;"></div>
+        </div>
+        <div style="width:40px;height:40px;border-radius:10px;background:rgba(245,158,11,0.1);display:flex;align-items:center;justify-content:center;">
+          <span class="material-symbols-outlined" style="color:#F59E0B;font-size:20px;">bolt</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Upload Section -->
+  <div class="section-card" style="margin-bottom:24px;">
+    <div class="section-header">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span class="material-symbols-outlined" style="color:#3B82F6;font-size:20px;">upload_file</span>
+        <span style="font-size:15px;font-weight:700;color:#e5e1e4;">Data Ingestion</span>
+      </div>
+      <span style="font-size:12px;color:#5a5e6e;">PDF files only</span>
+    </div>
+    <div style="padding:20px;">
+      <!-- Drop zone -->
+      <div class="upload-zone" id="drop-zone" onclick="document.getElementById('file-input').click()"
+           ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="handleDrop(event)">
+        <input type="file" id="file-input" accept=".pdf" multiple style="display:none" onchange="handleFiles(this.files)"/>
+        <span class="material-symbols-outlined" style="font-size:48px;color:rgba(173,198,255,0.3);">cloud_upload</span>
+        <div style="margin-top:12px;font-size:15px;font-weight:600;color:#c2c6d6;">Drag &amp; Drop PDF files here</div>
+        <div style="font-size:13px;color:#5a5e6e;margin-top:4px;">or click to browse — only <strong style="color:#adc6ff;">.pdf</strong> files accepted</div>
+        <button style="margin-top:16px;padding:8px 20px;background:linear-gradient(135deg,rgba(59,130,246,0.2),rgba(99,102,241,0.2));border:1px solid rgba(173,198,255,0.25);border-radius:8px;color:#adc6ff;font-size:13px;font-weight:600;cursor:pointer;">
+          Upload Files
+        </button>
+      </div>
+
+      <!-- Upload queue -->
+      <div id="upload-queue" style="margin-top:16px;display:flex;flex-direction:column;gap:10px;"></div>
+    </div>
+  </div>
+
+  <!-- Document Library -->
+  <div class="section-card" id="docs">
+    <div class="section-header">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span class="material-symbols-outlined" style="color:#10B981;font-size:20px;">inventory_2</span>
+        <span style="font-size:15px;font-weight:700;color:#e5e1e4;">Document Library</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <input id="search-input" type="text" placeholder="Search documents..." oninput="filterDocs()" style="padding:6px 12px;background:#0e0e10;border:1px solid rgba(66,71,84,0.4);border-radius:8px;color:#e5e1e4;font-size:13px;outline:none;width:200px;"/>
+        <button onclick="loadDocs()" style="display:flex;align-items:center;gap:5px;padding:6px 12px;background:rgba(66,71,84,0.2);border:1px solid rgba(66,71,84,0.3);border-radius:8px;color:#8c909f;font-size:12px;cursor:pointer;">
+          <span class="material-symbols-outlined" style="font-size:14px;">refresh</span> Refresh
+        </button>
+      </div>
+    </div>
+    <div style="overflow-x:auto;">
+      <table class="doc-table">
+        <thead>
+          <tr>
+            <th>Document Name</th>
+            <th>Upload Date</th>
+            <th>Chunks</th>
+            <th>Doc Type</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="docs-tbody">
+          <tr><td colspan="6" style="text-align:center;padding:30px;color:#5a5e6e;">Loading documents...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+const API = 'http://localhost:8000';
+let allDocs = [];
+
+// Auth guard
+if (sessionStorage.getItem('ask_data_auth') !== 'admin') window.location.href = 'admin_login.html';
+
+window.addEventListener('DOMContentLoaded', async () => {
+  await loadStats();
+  await loadDocs();
+  // Auto-scroll to docs if hash
+  if (window.location.hash === '#docs') document.getElementById('docs').scrollIntoView({behavior:'smooth'});
+});
+
+// ── Stats ──────────────────────────────────────────────────────────────────────
+async function loadStats() {
+  try {
+    const res = await fetch(`${API}/stats`);
+    if (!res.ok) return;
+    const d = await res.json();
+    document.getElementById('total-docs').textContent = d.total_documents;
+    document.getElementById('total-queries').textContent = d.total_queries;
+    document.getElementById('total-chunks').textContent = d.total_chunks.toLocaleString();
+    document.getElementById('docs-trend').textContent = `${d.total_documents} indexed`;
+    document.getElementById('chunks-trend').textContent = `${d.embedding_model_loaded ? '✅ Embeddings ready' : '⚠️ Model not loaded'}`;
+  } catch { /* backend may not be running */ }
+}
+
+// ── Docs ───────────────────────────────────────────────────────────────────────
+async function loadDocs() {
+  try {
+    const res = await fetch(`${API}/documents`);
+    if (!res.ok) return;
+    allDocs = await res.json();
+    renderDocs(allDocs);
+  } catch {
+    document.getElementById('docs-tbody').innerHTML = '<tr><td colspan="6" style="text-align:center;padding:24px;color:#5a5e6e;">Cannot reach the backend. Is the server running?</td></tr>';
+  }
+}
+
+function renderDocs(docs) {
+  const tbody = document.getElementById('docs-tbody');
+  if (!docs.length) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:30px;color:#5a5e6e;">No documents found. Upload a PDF to get started.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = docs.map(d => {
+    const date = d.ingested_at ? new Date(d.ingested_at).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}) : '—';
+    const chipClass = d.status === 'indexed' ? 'status-indexed' : 'status-processing';
+    const chipText = d.status === 'indexed' ? '✅ Indexed' : '⟳ Processing';
+    const docType = d.doc_type || '—';
+    return `<tr>
+      <td style="font-weight:500;color:#e5e1e4;display:flex;align-items:center;gap:8px;padding:12px 14px;">
+        <span class="material-symbols-outlined" style="color:#5a5e6e;font-size:16px;">description</span>
+        <span title="${d.source}">${d.source}</span>
+      </td>
+      <td>${date}</td>
+      <td>${d.chunk_count || '—'}</td>
+      <td style="color:#8c909f;">${docType}</td>
+      <td><span class="status-chip ${chipClass}">${chipText}</span></td>
+      <td>
+        <button class="action-btn" onclick="deleteDoc(${d.doc_id},'${d.source}')" title="Delete document">
+          <span class="material-symbols-outlined" style="color:#EF4444;font-size:17px;">delete</span>
+        </button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function filterDocs() {
+  const q = document.getElementById('search-input').value.toLowerCase();
+  renderDocs(allDocs.filter(d => d.source.toLowerCase().includes(q)));
+}
+
+async function deleteDoc(docId, name) {
+  if (!confirm(`Delete "${name}" and all its chunks? This cannot be undone.`)) return;
+  try {
+    const res = await fetch(`${API}/documents/${docId}`, { method: 'DELETE' });
+    if (res.ok) {
+      showToast(`✅ "${name}" deleted`, 'success');
+      await loadDocs();
+      await loadStats();
+    } else {
+      const err = await res.json();
+      showToast(`❌ ${err.detail}`, 'error');
+    }
+  } catch { showToast('❌ Cannot reach backend', 'error'); }
+}
+
+// ── Upload ─────────────────────────────────────────────────────────────────────
+function dragOver(e) { e.preventDefault(); document.getElementById('drop-zone').classList.add('drag-over'); }
+function dragLeave(e) { document.getElementById('drop-zone').classList.remove('drag-over'); }
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('drop-zone').classList.remove('drag-over');
+  handleFiles(e.dataTransfer.files);
+}
+
+function handleFiles(files) {
+  for (const file of files) {
+    if (!file.name.toLowerCase().endsWith('.pdf')) {
+      showToast(`❌ "${file.name}" is not a PDF. Only PDF files allowed.`, 'error');
+      continue;
+    }
+    uploadFile(file);
+  }
+}
+
+async function uploadFile(file) {
+  const id = 'upload-' + Date.now() + Math.random().toString(36).slice(2);
+  const queue = document.getElementById('upload-queue');
+
+  // Add upload card
+  queue.insertAdjacentHTML('afterbegin', `
+    <div id="${id}" class="upload-state-card">
+      <span class="material-symbols-outlined" style="color:#3B82F6;font-size:20px;flex-shrink:0;">description</span>
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:13px;font-weight:600;color:#e5e1e4;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${file.name}</div>
+        <div style="display:flex;align-items:center;gap:10px;margin-top:6px;">
+          <div class="progress-bar-bg"><div class="progress-bar-fill" id="${id}-bar" style="width:15%;"></div></div>
+          <span id="${id}-status" style="font-size:11px;color:#adc6ff;white-space:nowrap;min-width:140px;">Uploading...</span>
+        </div>
+      </div>
+      <span class="material-symbols-outlined animate-spin" id="${id}-spinner" style="color:#3B82F6;font-size:18px;flex-shrink:0;">progress_activity</span>
+    </div>
+  `);
+
+  const setStatus = (text, pct, color='#adc6ff') => {
+    const bar = document.getElementById(`${id}-bar`);
+    const status = document.getElementById(`${id}-status`);
+    if (bar) bar.style.width = pct + '%';
+    if (status) { status.textContent = text; status.style.color = color; }
+  };
+
+  // Animate progress
+  setTimeout(() => setStatus('Parsing Document...', 35), 800);
+  setTimeout(() => setStatus('Generating Embeddings...', 65), 3000);
+
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+    const res = await fetch(`${API}/upload`, { method: 'POST', body: formData });
+
+    const spinner = document.getElementById(`${id}-spinner`);
+    if (spinner) { spinner.classList.remove('animate-spin'); }
+
+    if (res.status === 409) {
+      const err = await res.json();
+      setStatus('⚠️ ' + (err.detail || 'Already exists'), 100, '#F59E0B');
+      if (spinner) spinner.textContent = 'warning';
+      if (spinner) spinner.style.color = '#F59E0B';
+      showToast(`⚠️ ${err.detail}`, 'info');
+    } else if (!res.ok) {
+      const err = await res.json();
+      setStatus('❌ ' + (err.detail || 'Error'), 100, '#EF4444');
+      if (spinner) spinner.textContent = 'error';
+      if (spinner) spinner.style.color = '#EF4444';
+      showToast(`❌ Upload failed: ${err.detail}`, 'error');
+    } else {
+      const data = await res.json();
+      setStatus(`✅ Indexed (${data.chunks_created} chunks)`, 100, '#10B981');
+      if (spinner) spinner.textContent = 'check_circle';
+      if (spinner) spinner.style.color = '#10B981';
+      if (spinner) spinner.classList.remove('animate-spin');
+      showToast(`✅ "${file.name}" ingested (${data.chunks_created} chunks)`, 'success');
+      await loadDocs();
+      await loadStats();
+    }
+  } catch {
+    setStatus('❌ Cannot reach backend', 100, '#EF4444');
+    showToast('❌ Backend unreachable. Is the server running?', 'error');
+  }
+
+  // Auto-remove after 8s
+  setTimeout(() => { const el = document.getElementById(id); if(el) el.remove(); }, 8000);
+}
+
+// ── Toast ──────────────────────────────────────────────────────────────────────
+function showToast(msg, type='info') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = `toast ${type}`;
+  t.style.display = 'block';
+  setTimeout(() => { t.style.display = 'none'; }, 4000);
+}
+</script>
+</body>
+</html>
