@@ -1,0 +1,6678 @@
+{
+  "schema_name": "DoclingDocument",
+  "version": "1.10.0",
+  "name": "Final Contract-1",
+  "origin": {
+    "mimetype": "application/pdf",
+    "binary_hash": 841832014591362323,
+    "filename": "Final Contract-1.pdf"
+  },
+  "furniture": {
+    "self_ref": "#/furniture",
+    "children": [],
+    "content_layer": "furniture",
+    "name": "_root_",
+    "label": "unspecified"
+  },
+  "body": {
+    "self_ref": "#/body",
+    "children": [
+      {
+        "$ref": "#/pictures/0"
+      },
+      {
+        "$ref": "#/pictures/1"
+      },
+      {
+        "$ref": "#/texts/0"
+      },
+      {
+        "$ref": "#/groups/0"
+      },
+      {
+        "$ref": "#/texts/11"
+      },
+      {
+        "$ref": "#/groups/1"
+      },
+      {
+        "$ref": "#/texts/20"
+      },
+      {
+        "$ref": "#/tables/0"
+      },
+      {
+        "$ref": "#/groups/2"
+      },
+      {
+        "$ref": "#/groups/3"
+      },
+      {
+        "$ref": "#/groups/4"
+      },
+      {
+        "$ref": "#/texts/48"
+      },
+      {
+        "$ref": "#/tables/1"
+      },
+      {
+        "$ref": "#/texts/49"
+      },
+      {
+        "$ref": "#/tables/2"
+      },
+      {
+        "$ref": "#/texts/50"
+      },
+      {
+        "$ref": "#/groups/5"
+      },
+      {
+        "$ref": "#/texts/54"
+      },
+      {
+        "$ref": "#/groups/6"
+      },
+      {
+        "$ref": "#/texts/66"
+      },
+      {
+        "$ref": "#/texts/67"
+      },
+      {
+        "$ref": "#/texts/68"
+      },
+      {
+        "$ref": "#/groups/7"
+      },
+      {
+        "$ref": "#/texts/81"
+      },
+      {
+        "$ref": "#/texts/82"
+      },
+      {
+        "$ref": "#/texts/83"
+      },
+      {
+        "$ref": "#/texts/84"
+      },
+      {
+        "$ref": "#/texts/85"
+      },
+      {
+        "$ref": "#/texts/86"
+      },
+      {
+        "$ref": "#/texts/87"
+      },
+      {
+        "$ref": "#/texts/88"
+      },
+      {
+        "$ref": "#/texts/89"
+      },
+      {
+        "$ref": "#/groups/8"
+      },
+      {
+        "$ref": "#/texts/97"
+      },
+      {
+        "$ref": "#/texts/98"
+      },
+      {
+        "$ref": "#/texts/99"
+      },
+      {
+        "$ref": "#/texts/100"
+      },
+      {
+        "$ref": "#/texts/101"
+      },
+      {
+        "$ref": "#/texts/102"
+      },
+      {
+        "$ref": "#/groups/9"
+      },
+      {
+        "$ref": "#/texts/106"
+      },
+      {
+        "$ref": "#/groups/10"
+      },
+      {
+        "$ref": "#/texts/120"
+      },
+      {
+        "$ref": "#/tables/3"
+      },
+      {
+        "$ref": "#/texts/121"
+      },
+      {
+        "$ref": "#/groups/11"
+      },
+      {
+        "$ref": "#/texts/126"
+      },
+      {
+        "$ref": "#/texts/127"
+      },
+      {
+        "$ref": "#/texts/128"
+      },
+      {
+        "$ref": "#/texts/129"
+      },
+      {
+        "$ref": "#/texts/130"
+      },
+      {
+        "$ref": "#/groups/12"
+      },
+      {
+        "$ref": "#/texts/132"
+      },
+      {
+        "$ref": "#/texts/133"
+      },
+      {
+        "$ref": "#/texts/134"
+      },
+      {
+        "$ref": "#/texts/135"
+      },
+      {
+        "$ref": "#/groups/13"
+      },
+      {
+        "$ref": "#/texts/140"
+      },
+      {
+        "$ref": "#/texts/141"
+      },
+      {
+        "$ref": "#/texts/142"
+      },
+      {
+        "$ref": "#/texts/143"
+      },
+      {
+        "$ref": "#/groups/14"
+      },
+      {
+        "$ref": "#/texts/145"
+      },
+      {
+        "$ref": "#/texts/146"
+      },
+      {
+        "$ref": "#/texts/147"
+      },
+      {
+        "$ref": "#/texts/148"
+      },
+      {
+        "$ref": "#/groups/15"
+      },
+      {
+        "$ref": "#/texts/151"
+      },
+      {
+        "$ref": "#/texts/152"
+      }
+    ],
+    "content_layer": "body",
+    "name": "_root_",
+    "label": "unspecified"
+  },
+  "groups": [
+    {
+      "self_ref": "#/groups/0",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/1"
+        },
+        {
+          "$ref": "#/texts/2"
+        },
+        {
+          "$ref": "#/texts/3"
+        },
+        {
+          "$ref": "#/texts/4"
+        },
+        {
+          "$ref": "#/texts/5"
+        },
+        {
+          "$ref": "#/texts/6"
+        },
+        {
+          "$ref": "#/texts/7"
+        },
+        {
+          "$ref": "#/texts/8"
+        },
+        {
+          "$ref": "#/texts/9"
+        },
+        {
+          "$ref": "#/texts/10"
+        }
+      ],
+      "content_layer": "body",
+      "name": "group",
+      "label": "key_value_area"
+    },
+    {
+      "self_ref": "#/groups/1",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/12"
+        },
+        {
+          "$ref": "#/texts/13"
+        },
+        {
+          "$ref": "#/texts/14"
+        },
+        {
+          "$ref": "#/texts/15"
+        },
+        {
+          "$ref": "#/texts/16"
+        },
+        {
+          "$ref": "#/texts/17"
+        },
+        {
+          "$ref": "#/texts/18"
+        },
+        {
+          "$ref": "#/texts/19"
+        }
+      ],
+      "content_layer": "body",
+      "name": "group",
+      "label": "key_value_area"
+    },
+    {
+      "self_ref": "#/groups/2",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/21"
+        },
+        {
+          "$ref": "#/texts/22"
+        },
+        {
+          "$ref": "#/texts/23"
+        },
+        {
+          "$ref": "#/texts/24"
+        },
+        {
+          "$ref": "#/texts/25"
+        },
+        {
+          "$ref": "#/texts/26"
+        },
+        {
+          "$ref": "#/texts/27"
+        },
+        {
+          "$ref": "#/texts/28"
+        },
+        {
+          "$ref": "#/texts/29"
+        },
+        {
+          "$ref": "#/texts/30"
+        },
+        {
+          "$ref": "#/texts/31"
+        },
+        {
+          "$ref": "#/texts/32"
+        },
+        {
+          "$ref": "#/texts/33"
+        },
+        {
+          "$ref": "#/texts/34"
+        },
+        {
+          "$ref": "#/texts/35"
+        },
+        {
+          "$ref": "#/texts/36"
+        },
+        {
+          "$ref": "#/texts/37"
+        },
+        {
+          "$ref": "#/texts/38"
+        },
+        {
+          "$ref": "#/texts/39"
+        },
+        {
+          "$ref": "#/texts/40"
+        }
+      ],
+      "content_layer": "body",
+      "name": "group",
+      "label": "key_value_area"
+    },
+    {
+      "self_ref": "#/groups/3",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/41"
+        },
+        {
+          "$ref": "#/texts/42"
+        },
+        {
+          "$ref": "#/texts/43"
+        },
+        {
+          "$ref": "#/texts/44"
+        },
+        {
+          "$ref": "#/texts/45"
+        },
+        {
+          "$ref": "#/texts/46"
+        }
+      ],
+      "content_layer": "body",
+      "name": "group",
+      "label": "key_value_area"
+    },
+    {
+      "self_ref": "#/groups/4",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/47"
+        }
+      ],
+      "content_layer": "body",
+      "name": "list",
+      "label": "list"
+    },
+    {
+      "self_ref": "#/groups/5",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/51"
+        },
+        {
+          "$ref": "#/texts/52"
+        },
+        {
+          "$ref": "#/texts/53"
+        }
+      ],
+      "content_layer": "body",
+      "name": "group",
+      "label": "key_value_area"
+    },
+    {
+      "self_ref": "#/groups/6",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/55"
+        },
+        {
+          "$ref": "#/texts/56"
+        },
+        {
+          "$ref": "#/texts/57"
+        },
+        {
+          "$ref": "#/texts/58"
+        },
+        {
+          "$ref": "#/texts/59"
+        },
+        {
+          "$ref": "#/texts/60"
+        },
+        {
+          "$ref": "#/texts/61"
+        },
+        {
+          "$ref": "#/texts/62"
+        },
+        {
+          "$ref": "#/texts/63"
+        },
+        {
+          "$ref": "#/texts/64"
+        },
+        {
+          "$ref": "#/texts/65"
+        }
+      ],
+      "content_layer": "body",
+      "name": "group",
+      "label": "key_value_area"
+    },
+    {
+      "self_ref": "#/groups/7",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/69"
+        },
+        {
+          "$ref": "#/texts/70"
+        },
+        {
+          "$ref": "#/texts/71"
+        },
+        {
+          "$ref": "#/texts/72"
+        },
+        {
+          "$ref": "#/texts/73"
+        },
+        {
+          "$ref": "#/texts/74"
+        },
+        {
+          "$ref": "#/texts/75"
+        },
+        {
+          "$ref": "#/texts/76"
+        },
+        {
+          "$ref": "#/texts/77"
+        },
+        {
+          "$ref": "#/texts/78"
+        },
+        {
+          "$ref": "#/texts/79"
+        },
+        {
+          "$ref": "#/texts/80"
+        }
+      ],
+      "content_layer": "body",
+      "name": "group",
+      "label": "key_value_area"
+    },
+    {
+      "self_ref": "#/groups/8",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/90"
+        },
+        {
+          "$ref": "#/texts/91"
+        },
+        {
+          "$ref": "#/texts/92"
+        },
+        {
+          "$ref": "#/texts/93"
+        },
+        {
+          "$ref": "#/texts/94"
+        },
+        {
+          "$ref": "#/texts/95"
+        },
+        {
+          "$ref": "#/texts/96"
+        }
+      ],
+      "content_layer": "body",
+      "name": "list",
+      "label": "list"
+    },
+    {
+      "self_ref": "#/groups/9",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/103"
+        },
+        {
+          "$ref": "#/texts/104"
+        },
+        {
+          "$ref": "#/texts/105"
+        }
+      ],
+      "content_layer": "body",
+      "name": "list",
+      "label": "list"
+    },
+    {
+      "self_ref": "#/groups/10",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/107"
+        },
+        {
+          "$ref": "#/texts/108"
+        },
+        {
+          "$ref": "#/texts/109"
+        },
+        {
+          "$ref": "#/texts/110"
+        },
+        {
+          "$ref": "#/texts/111"
+        },
+        {
+          "$ref": "#/texts/112"
+        },
+        {
+          "$ref": "#/texts/113"
+        },
+        {
+          "$ref": "#/texts/114"
+        },
+        {
+          "$ref": "#/texts/115"
+        },
+        {
+          "$ref": "#/texts/116"
+        },
+        {
+          "$ref": "#/texts/117"
+        },
+        {
+          "$ref": "#/texts/118"
+        },
+        {
+          "$ref": "#/texts/119"
+        }
+      ],
+      "content_layer": "body",
+      "name": "list",
+      "label": "list"
+    },
+    {
+      "self_ref": "#/groups/11",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/122"
+        },
+        {
+          "$ref": "#/texts/123"
+        },
+        {
+          "$ref": "#/texts/124"
+        },
+        {
+          "$ref": "#/texts/125"
+        }
+      ],
+      "content_layer": "body",
+      "name": "list",
+      "label": "list"
+    },
+    {
+      "self_ref": "#/groups/12",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/131"
+        }
+      ],
+      "content_layer": "body",
+      "name": "list",
+      "label": "list"
+    },
+    {
+      "self_ref": "#/groups/13",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/136"
+        },
+        {
+          "$ref": "#/texts/137"
+        },
+        {
+          "$ref": "#/texts/138"
+        },
+        {
+          "$ref": "#/texts/139"
+        }
+      ],
+      "content_layer": "body",
+      "name": "list",
+      "label": "list"
+    },
+    {
+      "self_ref": "#/groups/14",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/144"
+        }
+      ],
+      "content_layer": "body",
+      "name": "list",
+      "label": "list"
+    },
+    {
+      "self_ref": "#/groups/15",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [
+        {
+          "$ref": "#/texts/149"
+        },
+        {
+          "$ref": "#/texts/150"
+        }
+      ],
+      "content_layer": "body",
+      "name": "list",
+      "label": "list"
+    }
+  ],
+  "texts": [
+    {
+      "self_ref": "#/texts/0",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 47.705357544,
+            "t": 736.0165851561552,
+            "r": 166.84046658232268,
+            "b": 725.3900207600907,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            32
+          ]
+        }
+      ],
+      "orig": "\"|Organisation Details",
+      "text": "\"|Organisation Details",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/1",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 47.705357544,
+            "t": 722.0884997647925,
+            "r": 79.13199934856766,
+            "b": 713.9142194601275,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            10
+          ]
+        }
+      ],
+      "orig": "DE|Type :",
+      "text": "DE|Type :"
+    },
+    {
+      "self_ref": "#/texts/2",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 182.142860352,
+            "t": 722.0884997647925,
+            "r": 240.5747855749805,
+            "b": 713.9142194601275,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            18
+          ]
+        }
+      ],
+      "orig": "Central Autonomous",
+      "text": "Central Autonomous"
+    },
+    {
+      "self_ref": "#/texts/3",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 47.705357544,
+            "t": 712.4858209927925,
+            "r": 92.94522769930595,
+            "b": 704.3115406881275,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            17
+          ]
+        }
+      ],
+      "orig": "K|Ministry :",
+      "text": "K|Ministry :"
+    },
+    {
+      "self_ref": "#/texts/4",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 182.142860352,
+            "t": 712.4858209927925,
+            "r": 195.86231254285548,
+            "b": 704.3115406881275,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            3
+          ]
+        }
+      ],
+      "orig": "PMO",
+      "text": "PMO"
+    },
+    {
+      "self_ref": "#/texts/5",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 47.705357544,
+            "t": 702.8831422207925,
+            "r": 102.4728855433997,
+            "b": 694.7088619161275,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            18
+          ]
+        }
+      ],
+      "orig": "\"|Department :",
+      "text": "\"|Department :"
+    },
+    {
+      "self_ref": "#/texts/6",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 182.142860352,
+            "t": 702.8831422207925,
+            "r": 266.0710230285591,
+            "b": 694.7088619161275,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            27
+          ]
+        }
+      ],
+      "orig": "DepartmentofAtomic Energy",
+      "text": "DepartmentofAtomic Energy"
+    },
+    {
+      "self_ref": "#/texts/7",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 47.705357544,
+            "t": 693.2804634487925,
+            "r": 141.31497096686064,
+            "b": 685.1061831441275,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            32
+          ]
+        }
+      ],
+      "orig": "|Organisation Name :",
+      "text": "|Organisation Name :"
+    },
+    {
+      "self_ref": "#/texts/8",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 182.142860352,
+            "t": 693.2804634487925,
+            "r": 264.8470565897686,
+            "b": 685.1061831441275,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            29
+          ]
+        }
+      ],
+      "orig": "Institute for Plasma Research",
+      "text": "Institute for Plasma Research"
+    },
+    {
+      "self_ref": "#/texts/9",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 47.705357544,
+            "t": 683.6777846767925,
+            "r": 112.7226198185911,
+            "b": 675.5035043721275,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            24
+          ]
+        }
+      ],
+      "orig": "PQK|Office Zone:",
+      "text": "PQK|Office Zone:"
+    },
+    {
+      "self_ref": "#/texts/10",
+      "parent": {
+        "$ref": "#/groups/0"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 182.142860352,
+            "t": 683.6777846767925,
+            "r": 211.81138671108468,
+            "b": 675.5035043721275,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            9
+          ]
+        }
+      ],
+      "orig": "West Zone",
+      "text": "West Zone"
+    },
+    {
+      "self_ref": "#/texts/11",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 47.705357544,
+            "t": 651.9931459011552,
+            "r": 205.86815378142364,
+            "b": 641.3665815050907,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            47
+          ]
+        }
+      ],
+      "orig": "\"bc \" \"|Financial Approval Detail",
+      "text": "\"bc \" \"|Financial Approval Detail",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/12",
+      "parent": {
+        "$ref": "#/groups/1"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 47.705357544,
+            "t": 638.0650605097925,
+            "r": 140.5741393037864,
+            "b": 629.8907802051275,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            30
+          ]
+        }
+      ],
+      "orig": "\"|IFD Concurrence :",
+      "text": "\"|IFD Concurrence :"
+    },
+    {
+      "self_ref": "#/texts/13",
+      "parent": {
+        "$ref": "#/groups/1"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 183.94336262175003,
+            "t": 638.0650605097925,
+            "r": 192.1018885315547,
+            "b": 629.8907802051275,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            2
+          ]
+        }
+      ],
+      "orig": "No",
+      "text": "No"
+    },
+    {
+      "self_ref": "#/texts/14",
+      "parent": {
+        "$ref": "#/groups/1"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 47.705357544,
+            "t": 628.4623817377925,
+            "r": 118.74492480626533,
+            "b": 620.2881014331275,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            25
+          ]
+        }
+      ],
+      "orig": "D\" |",
+      "text": "D\" |"
+    },
+    {
+      "self_ref": "#/texts/15",
+      "parent": {
+        "$ref": "#/groups/1"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 47.705357544,
+            "t": 618.8597029657925,
+            "r": 159.8357625437161,
+            "b": 610.6854226611275,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            39
+          ]
+        }
+      ],
+      "orig": "DesignationofAdministrative Approval:",
+      "text": "DesignationofAdministrative Approval:"
+    },
+    {
+      "self_ref": "#/texts/16",
+      "parent": {
+        "$ref": "#/groups/1"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 189.94503685425002,
+            "t": 623.6610423517925,
+            "r": 271.2748496927761,
+            "b": 615.4867620471275,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            26
+          ]
+        }
+      ],
+      "orig": "Chairman, Stores Committee",
+      "text": "Chairman, Stores Committee"
+    },
+    {
+      "self_ref": "#/texts/17",
+      "parent": {
+        "$ref": "#/groups/1"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 47.705357544,
+            "t": 609.2570241937925,
+            "r": 110.2019166409411,
+            "b": 601.0827438891274,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            23
+          ]
+        }
+      ],
+      "orig": "\"b |",
+      "text": "\"b |"
+    },
+    {
+      "self_ref": "#/texts/18",
+      "parent": {
+        "$ref": "#/groups/1"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 47.705357544,
+            "t": 599.6543454217924,
+            "r": 145.2348144499622,
+            "b": 591.4800651171274,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            35
+          ]
+        }
+      ],
+      "orig": "DesignationofFinancial Approval :",
+      "text": "DesignationofFinancial Approval :"
+    },
+    {
+      "self_ref": "#/texts/19",
+      "parent": {
+        "$ref": "#/groups/1"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 189.94503685425002,
+            "t": 604.4556848077925,
+            "r": 243.77292773162392,
+            "b": 596.2814045031275,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            20
+          ]
+        }
+      ],
+      "orig": "Accounts Officer- II",
+      "text": "Accounts Officer- II"
+    },
+    {
+      "self_ref": "#/texts/20",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 47.705357544,
+            "t": 539.7618377534052,
+            "r": 159.75098889518205,
+            "b": 529.1352733573408,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            31
+          ]
+        }
+      ],
+      "orig": "\" \"|Consignee Details",
+      "text": "\" \"|Consignee Details",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/21",
+      "parent": {
+        "$ref": "#/groups/2"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 47.705357544,
+            "t": 430.5313667219053,
+            "r": 190.19073039314299,
+            "b": 419.9048023258407,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            41
+          ]
+        }
+      ],
+      "orig": "D \"|Service Provider Details",
+      "text": "D \"|Service Provider Details",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/22",
+      "parent": {
+        "$ref": "#/groups/2"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 47.705357544,
+            "t": 416.6032813305425,
+            "r": 132.09677445038017,
+            "b": 408.4290010258775,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            33
+          ]
+        }
+      ],
+      "orig": "\" |GeM SellerID :",
+      "text": "\" |GeM SellerID :"
+    },
+    {
+      "self_ref": "#/texts/23",
+      "parent": {
+        "$ref": "#/groups/2"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 199.54771562625,
+            "t": 416.6032813305425,
+            "r": 255.77477577806582,
+            "b": 408.4290010258775,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            16
+          ]
+        }
+      ],
+      "orig": "A8D8180000090745",
+      "text": "A8D8180000090745"
+    },
+    {
+      "self_ref": "#/texts/24",
+      "parent": {
+        "$ref": "#/groups/2"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 47.705357544,
+            "t": 407.0006025585425,
+            "r": 129.99618846900518,
+            "b": 398.8263222538775,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            28
+          ]
+        }
+      ],
+      "orig": "|Company Name :",
+      "text": "|Company Name :"
+    },
+    {
+      "self_ref": "#/texts/25",
+      "parent": {
+        "$ref": "#/groups/2"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 199.54771562625,
+            "t": 407.0006025585425,
+            "r": 332.45066535392766,
+            "b": 398.8263222538775,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            39
+          ]
+        }
+      ],
+      "orig": "TECHSER POWER SOLUTIONS PRIVATE LIMITED",
+      "text": "TECHSER POWER SOLUTIONS PRIVATE LIMITED"
+    },
+    {
+      "self_ref": "#/texts/26",
+      "parent": {
+        "$ref": "#/groups/2"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 47.705357544,
+            "t": 397.3979237865425,
+            "r": 109.98435595001297,
+            "b": 389.2236434818775,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            26
+          ]
+        }
+      ],
+      "orig": "P |ContactNo. :",
+      "text": "P |ContactNo. :"
+    },
+    {
+      "self_ref": "#/texts/27",
+      "parent": {
+        "$ref": "#/groups/2"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 199.54771562625,
+            "t": 397.3979237865425,
+            "r": 237.2727394331869,
+            "b": 389.2236434818775,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            11
+          ]
+        }
+      ],
+      "orig": "09448990444",
+      "text": "09448990444"
+    },
+    {
+      "self_ref": "#/texts/28",
+      "parent": {
+        "$ref": "#/groups/2"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 47.705357544,
+            "t": 387.7952450145425,
+            "r": 103.74824131780595,
+            "b": 379.6209647098775,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            20
+          ]
+        }
+      ],
+      "orig": "|EmailID :",
+      "text": "|EmailID :"
+    },
+    {
+      "self_ref": "#/texts/29",
+      "parent": {
+        "$ref": "#/groups/2"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 199.54771562625,
+            "t": 387.7952450145425,
+            "r": 252.1366358792522,
+            "b": 379.6209647098775,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            15
+          ]
+        }
+      ],
+      "orig": "gem@techser.com",
+      "text": "gem@techser.com"
+    },
+    {
+      "self_ref": "#/texts/30",
+      "parent": {
+        "$ref": "#/groups/2"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 47.705357544,
+            "t": 373.3912268565425,
+            "r": 86.8685325388997,
+            "b": 365.21694655187747,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            14
+          ]
+        }
+      ],
+      "orig": "| Address :",
+      "text": "| Address :"
+    },
+    {
+      "self_ref": "#/texts/31",
+      "parent": {
+        "$ref": "#/groups/2"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 199.54771562625,
+            "t": 378.1925662425425,
+            "r": 443.60242234910675,
+            "b": 370.01828593787747,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            71
+          ]
+        }
+      ],
+      "orig": "12/1,TECHSER HOUSE, JALAHALLI,MES RING ROAD, SHARADAMBANAGAR,BENGALURU,",
+      "text": "12/1,TECHSER HOUSE, JALAHALLI,MES RING ROAD, SHARADAMBANAGAR,BENGALURU,"
+    },
+    {
+      "self_ref": "#/texts/32",
+      "parent": {
+        "$ref": "#/groups/2"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 199.54771562625,
+            "t": 368.58988747054246,
+            "r": 293.70985818314017,
+            "b": 360.4156071658775,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            30
+          ]
+        }
+      ],
+      "orig": "Bangalore, KARNATAKA-560013, -",
+      "text": "Bangalore, KARNATAKA-560013, -"
+    },
+    {
+      "self_ref": "#/texts/33",
+      "parent": {
+        "$ref": "#/groups/2"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 47.705357544,
+            "t": 358.9872086985425,
+            "r": 191.89783160764972,
+            "b": 350.8129283938775,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            48
+          ]
+        }
+      ],
+      "orig": "4|MSME Registration number :",
+      "text": "4|MSME Registration number :"
+    },
+    {
+      "self_ref": "#/texts/34",
+      "parent": {
+        "$ref": "#/groups/2"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 199.54771562625,
+            "t": 358.9872086985425,
+            "r": 265.0679932224525,
+            "b": 350.8129283938775,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            19
+          ]
+        }
+      ],
+      "orig": "UDYAM-KR-03-0010269",
+      "text": "UDYAM-KR-03-0010269"
+    },
+    {
+      "self_ref": "#/texts/35",
+      "parent": {
+        "$ref": "#/groups/2"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 47.705357544,
+            "t": 339.7818511545425,
+            "r": 103.80450701373563,
+            "b": 331.6075708498775,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            17
+          ]
+        }
+      ],
+      "orig": "^|GSTIN:",
+      "text": "^|GSTIN:"
+    },
+    {
+      "self_ref": "#/texts/36",
+      "parent": {
+        "$ref": "#/groups/2"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 199.54771562625,
+            "t": 349.3845299265425,
+            "r": 547.6643265525057,
+            "b": 341.2102496218775,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            113
+          ]
+        }
+      ],
+      "orig": "09AABCT0359D1ZK (B) , 29AABCT0359D1ZI (R) , (M) , 02AABCT0359D2ZX (M) , 05AABCT0359D2ZR (B) , 33AABCT0359D1ZT (B)",
+      "text": "09AABCT0359D1ZK (B) , 29AABCT0359D1ZI (R) , (M) , 02AABCT0359D2ZX (M) , 05AABCT0359D2ZR (B) , 33AABCT0359D1ZT (B)"
+    },
+    {
+      "self_ref": "#/texts/37",
+      "parent": {
+        "$ref": "#/groups/2"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 199.54771562625,
+            "t": 339.7818511545425,
+            "r": 540.838922531595,
+            "b": 331.6075708498775,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            111
+          ]
+        }
+      ],
+      "orig": ", 27AABCT0359D1ZM (B) , 36AABCT0359D1ZN (B) , 30AABCT0359D1ZZ (B) , 37AABCT0359D1ZL (B) , 19AABCT0359D1ZJ (B) ,",
+      "text": ", 27AABCT0359D1ZM (B) , 36AABCT0359D1ZN (B) , 30AABCT0359D1ZZ (B) , 37AABCT0359D1ZL (B) , 19AABCT0359D1ZJ (B) ,"
+    },
+    {
+      "self_ref": "#/texts/38",
+      "parent": {
+        "$ref": "#/groups/2"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 199.54771562625,
+            "t": 330.1791723825425,
+            "r": 537.9116059246932,
+            "b": 322.00489207787746,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            107
+          ]
+        }
+      ],
+      "orig": "32AABCT0359D1ZV (B) , 10AABCT0359D1Z1 (B) , 07AABCT0359D1ZO (B) , 08AABCT0359D1ZM (B) , 23AABCT0359D1ZU (B)",
+      "text": "32AABCT0359D1ZV (B) , 10AABCT0359D1Z1 (B) , 07AABCT0359D1ZO (B) , 08AABCT0359D1ZM (B) , 23AABCT0359D1ZU (B)"
+    },
+    {
+      "self_ref": "#/texts/39",
+      "parent": {
+        "$ref": "#/groups/2"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 47.705357544,
+            "t": 319.97632618729244,
+            "r": 184.71232713278908,
+            "b": 302.19936711062746,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            68
+          ]
+        }
+      ],
+      "orig": "yz\" \"{\" |MSME Statusasverifiedbybuyer :",
+      "text": "yz\" \"{\" |MSME Statusasverifiedbybuyer :"
+    },
+    {
+      "self_ref": "#/texts/40",
+      "parent": {
+        "$ref": "#/groups/2"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 199.54771562625,
+            "t": 315.17498680129256,
+            "r": 221.19500437359847,
+            "b": 307.00070649662746,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            8
+          ]
+        }
+      ],
+      "orig": "Verified",
+      "text": "Verified"
+    },
+    {
+      "self_ref": "#/texts/41",
+      "parent": {
+        "$ref": "#/groups/3"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 47.705357544,
+            "t": 319.97632618729244,
+            "r": 184.71232713278908,
+            "b": 302.19936711062746,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            68
+          ]
+        }
+      ],
+      "orig": "yz\" \"{\" |MSME Statusasverifiedbybuyer :",
+      "text": "yz\" \"{\" |MSME Statusasverifiedbybuyer :"
+    },
+    {
+      "self_ref": "#/texts/42",
+      "parent": {
+        "$ref": "#/groups/3"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 199.54771562625,
+            "t": 315.17498680129256,
+            "r": 221.19500437359847,
+            "b": 307.00070649662746,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            8
+          ]
+        }
+      ],
+      "orig": "Verified",
+      "text": "Verified"
+    },
+    {
+      "self_ref": "#/texts/43",
+      "parent": {
+        "$ref": "#/groups/3"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 47.705357544,
+            "t": 300.17080122004245,
+            "r": 162.85535489194265,
+            "b": 291.99652091537746,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            40
+          ]
+        }
+      ],
+      "orig": "\" ||MSE Social Category :",
+      "text": "\" ||MSE Social Category :"
+    },
+    {
+      "self_ref": "#/texts/44",
+      "parent": {
+        "$ref": "#/groups/3"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 199.54771562625,
+            "t": 300.17080122004245,
+            "r": 221.74303225195362,
+            "b": 291.99652091537746,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            7
+          ]
+        }
+      ],
+      "orig": "General",
+      "text": "General"
+    },
+    {
+      "self_ref": "#/texts/45",
+      "parent": {
+        "$ref": "#/groups/3"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 47.705357544,
+            "t": 290.56812244804246,
+            "r": 128.2800847431497,
+            "b": 282.39384214337747,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            28
+          ]
+        }
+      ],
+      "orig": "\" ||MSE Gender :",
+      "text": "\" ||MSE Gender :"
+    },
+    {
+      "self_ref": "#/texts/46",
+      "parent": {
+        "$ref": "#/groups/3"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 199.54771562625,
+            "t": 290.56812244804246,
+            "r": 213.25553957328,
+            "b": 282.39384214337747,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            4
+          ]
+        }
+      ],
+      "orig": "Male",
+      "text": "Male"
+    },
+    {
+      "self_ref": "#/texts/47",
+      "parent": {
+        "$ref": "#/groups/4"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "list_item",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 47.705357544,
+            "t": 273.97049235806367,
+            "r": 487.48403860467005,
+            "b": 261.7090719010662,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            111
+          ]
+        }
+      ],
+      "orig": "*\" Q ~ GST/TAX \" |GST / Tax invoicetobe raisedinthe nameof - Consignee",
+      "text": "*\" Q ~ GST/TAX \" |GST / Tax invoicetobe raisedinthe nameof - Consignee",
+      "enumerated": false,
+      "marker": ""
+    },
+    {
+      "self_ref": "#/texts/48",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 253.56278371875,
+            "t": 234.2766193191552,
+            "r": 344.0211430649086,
+            "b": 223.6500549230907,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            26
+          ]
+        }
+      ],
+      "orig": "\"|Service Details",
+      "text": "\"|Service Details",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/49",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 44.70452042775,
+            "t": 182.02064194420097,
+            "r": 152.55280588350524,
+            "b": 172.2115055786029,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            34
+          ]
+        }
+      ],
+      "orig": "\"\" |Billing Cycle: quarterly",
+      "text": "\"\" |Billing Cycle: quarterly",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/50",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 244.26018865837503,
+            "t": 803.359571216768,
+            "r": 312.2253232741143,
+            "b": 790.280722729304,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            15
+          ]
+        }
+      ],
+      "orig": "|Contract",
+      "text": "|Contract",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/51",
+      "parent": {
+        "$ref": "#/groups/5"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 337.58622297375,
+            "t": 782.188065194201,
+            "r": 507.16592908273054,
+            "b": 772.378928828603,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            46
+          ]
+        }
+      ],
+      "orig": "|ContractNo: GEMC-511687748916939",
+      "text": "|ContractNo: GEMC-511687748916939"
+    },
+    {
+      "self_ref": "#/texts/52",
+      "parent": {
+        "$ref": "#/groups/5"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 337.58622297375,
+            "t": 768.984381882701,
+            "r": 503.9587844147383,
+            "b": 759.175245517103,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            49
+          ]
+        }
+      ],
+      "orig": "\"\"|Contract Generated Date : 21-Jan-2026",
+      "text": "\"\"|Contract Generated Date : 21-Jan-2026"
+    },
+    {
+      "self_ref": "#/texts/53",
+      "parent": {
+        "$ref": "#/groups/5"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 337.58622297375,
+            "t": 755.780698571201,
+            "r": 540.4095777611876,
+            "b": 745.971562205603,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            57
+          ]
+        }
+      ],
+      "orig": "// 4|Bid/RA/PBPNo.: GEM/2025/B/6912385",
+      "text": "// 4|Bid/RA/PBPNo.: GEM/2025/B/6912385"
+    },
+    {
+      "self_ref": "#/texts/54",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 308.77818665775004,
+            "t": 736.0165851561552,
+            "r": 403.9347316140375,
+            "b": 725.3900207600907,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            26
+          ]
+        }
+      ],
+      "orig": "\"|Buyer Details",
+      "text": "\"|Buyer Details",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/55",
+      "parent": {
+        "$ref": "#/groups/6"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 308.77818665775004,
+            "t": 722.0884997647925,
+            "r": 355.7247829229231,
+            "b": 713.9142194601275,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            16
+          ]
+        }
+      ],
+      "orig": "|Designation :",
+      "text": "|Designation :"
+    },
+    {
+      "self_ref": "#/texts/56",
+      "parent": {
+        "$ref": "#/groups/6"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 381.39844487100004,
+            "t": 722.0884997647925,
+            "r": 446.77355697170395,
+            "b": 713.9142194601275,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            24
+          ]
+        }
+      ],
+      "orig": "Assistant Stores Officer",
+      "text": "Assistant Stores Officer"
+    },
+    {
+      "self_ref": "#/texts/57",
+      "parent": {
+        "$ref": "#/groups/6"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 308.77818665775004,
+            "t": 712.4858209927925,
+            "r": 371.057185063763,
+            "b": 704.3115406881275,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            26
+          ]
+        }
+      ],
+      "orig": "P |ContactNo. :",
+      "text": "P |ContactNo. :"
+    },
+    {
+      "self_ref": "#/texts/58",
+      "parent": {
+        "$ref": "#/groups/6"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 381.39844487100004,
+            "t": 712.4858209927925,
+            "r": 436.71587627195254,
+            "b": 704.3115406881275,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            17
+          ]
+        }
+      ],
+      "orig": "079-23962000-2260",
+      "text": "079-23962000-2260"
+    },
+    {
+      "self_ref": "#/texts/59",
+      "parent": {
+        "$ref": "#/groups/6"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 308.77818665775004,
+            "t": 702.8831422207925,
+            "r": 364.82107043155594,
+            "b": 694.7088619161275,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            20
+          ]
+        }
+      ],
+      "orig": "|EmailID :",
+      "text": "|EmailID :"
+    },
+    {
+      "self_ref": "#/texts/60",
+      "parent": {
+        "$ref": "#/groups/6"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 381.39844487100004,
+            "t": 702.8831422207925,
+            "r": 461.3549996242022,
+            "b": 694.7088619161275,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            26
+          ]
+        }
+      ],
+      "orig": "yogesh.dadheech@ipr.res.in",
+      "text": "yogesh.dadheech@ipr.res.in"
+    },
+    {
+      "self_ref": "#/texts/61",
+      "parent": {
+        "$ref": "#/groups/6"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 308.77818665775004,
+            "t": 693.2804634487925,
+            "r": 366.43402038154034,
+            "b": 685.1061831441275,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            18
+          ]
+        }
+      ],
+      "orig": "^|GSTIN :",
+      "text": "^|GSTIN :"
+    },
+    {
+      "self_ref": "#/texts/62",
+      "parent": {
+        "$ref": "#/groups/6"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 381.39844487100004,
+            "t": 693.2804634487925,
+            "r": 433.7375454340744,
+            "b": 685.1061831441275,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            15
+          ]
+        }
+      ],
+      "orig": "24AAAAI0348C2ZC",
+      "text": "24AAAAI0348C2ZC"
+    },
+    {
+      "self_ref": "#/texts/63",
+      "parent": {
+        "$ref": "#/groups/6"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 308.77818665775004,
+            "t": 678.8764452907925,
+            "r": 346.384677398595,
+            "b": 670.7021649861275,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            13
+          ]
+        }
+      ],
+      "orig": "|Address :",
+      "text": "|Address :"
+    },
+    {
+      "self_ref": "#/texts/64",
+      "parent": {
+        "$ref": "#/groups/6"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 381.39844487100004,
+            "t": 683.6777846767925,
+            "r": 509.5458179787005,
+            "b": 675.5035043721275,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            38
+          ]
+        }
+      ],
+      "orig": "BHAT, NEAR INDIRA BRIDGE, GANDHINAGAR,",
+      "text": "BHAT, NEAR INDIRA BRIDGE, GANDHINAGAR,"
+    },
+    {
+      "self_ref": "#/texts/65",
+      "parent": {
+        "$ref": "#/groups/6"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 381.39844487100004,
+            "t": 674.0751059047925,
+            "r": 493.53110049855337,
+            "b": 665.9008256001275,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            34
+          ]
+        }
+      ],
+      "orig": "GANDHINAGAR, GUJARAT-382428, India",
+      "text": "GANDHINAGAR, GUJARAT-382428, India"
+    },
+    {
+      "self_ref": "#/texts/66",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 308.77818665775004,
+            "t": 651.9931459011552,
+            "r": 473.17904807150626,
+            "b": 641.3665815050907,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            45
+          ]
+        }
+      ],
+      "orig": "D\" \"|Paying Authority Details",
+      "text": "D\" \"|Paying Authority Details",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/67",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 308.77818665775004,
+            "t": 638.0650605097925,
+            "r": 322.6593089482435,
+            "b": 629.8907802051275,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            5
+          ]
+        }
+      ],
+      "orig": "Role:",
+      "text": "Role:"
+    },
+    {
+      "self_ref": "#/texts/68",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 381.39844487100004,
+            "t": 638.0650605097925,
+            "r": 393.5049471118711,
+            "b": 629.8907802051275,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            3
+          ]
+        }
+      ],
+      "orig": "PAO",
+      "text": "PAO"
+    },
+    {
+      "self_ref": "#/texts/69",
+      "parent": {
+        "$ref": "#/groups/7"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 308.77818665775004,
+            "t": 628.4623817377925,
+            "r": 350.68150104442554,
+            "b": 620.2881014331275,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            16
+          ]
+        }
+      ],
+      "orig": "|",
+      "text": "|"
+    },
+    {
+      "self_ref": "#/texts/70",
+      "parent": {
+        "$ref": "#/groups/7"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 308.77818665775004,
+            "t": 618.8597029657925,
+            "r": 352.96776382236845,
+            "b": 610.6854226611275,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            13
+          ]
+        }
+      ],
+      "orig": "Payment Mode:",
+      "text": "Payment Mode:"
+    },
+    {
+      "self_ref": "#/texts/71",
+      "parent": {
+        "$ref": "#/groups/7"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 381.39844487100004,
+            "t": 623.6610423517925,
+            "r": 429.0311075218758,
+            "b": 615.4867620471275,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            16
+          ]
+        }
+      ],
+      "orig": "Internet Banking",
+      "text": "Internet Banking"
+    },
+    {
+      "self_ref": "#/texts/72",
+      "parent": {
+        "$ref": "#/groups/7"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 308.77818665775004,
+            "t": 609.2570241937925,
+            "r": 355.7247829229231,
+            "b": 601.0827438891274,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            16
+          ]
+        }
+      ],
+      "orig": "|Designation :",
+      "text": "|Designation :"
+    },
+    {
+      "self_ref": "#/texts/73",
+      "parent": {
+        "$ref": "#/groups/7"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 381.39844487100004,
+            "t": 609.2570241937925,
+            "r": 434.7574549489599,
+            "b": 601.0827438891274,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            20
+          ]
+        }
+      ],
+      "orig": "Accounts Officer - I",
+      "text": "Accounts Officer - I"
+    },
+    {
+      "self_ref": "#/texts/74",
+      "parent": {
+        "$ref": "#/groups/7"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 308.77818665775004,
+            "t": 599.6543454217924,
+            "r": 364.82107043155594,
+            "b": 591.4800651171274,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            20
+          ]
+        }
+      ],
+      "orig": "|EmailID :",
+      "text": "|EmailID :"
+    },
+    {
+      "self_ref": "#/texts/75",
+      "parent": {
+        "$ref": "#/groups/7"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 381.39844487100004,
+            "t": 599.6543454217924,
+            "r": 451.1240205809874,
+            "b": 591.4800651171274,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            23
+          ]
+        }
+      ],
+      "orig": "accounts.gem@ipr.res.in",
+      "text": "accounts.gem@ipr.res.in"
+    },
+    {
+      "self_ref": "#/texts/76",
+      "parent": {
+        "$ref": "#/groups/7"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 308.77818665775004,
+            "t": 590.0516666497924,
+            "r": 366.43402038154034,
+            "b": 581.8773863451274,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            18
+          ]
+        }
+      ],
+      "orig": "^|GSTIN :",
+      "text": "^|GSTIN :"
+    },
+    {
+      "self_ref": "#/texts/77",
+      "parent": {
+        "$ref": "#/groups/7"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 381.39844487100004,
+            "t": 590.0516666497924,
+            "r": 385.923707242305,
+            "b": 581.8773863451274,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            1
+          ]
+        }
+      ],
+      "orig": "N",
+      "text": "N"
+    },
+    {
+      "self_ref": "#/texts/78",
+      "parent": {
+        "$ref": "#/groups/7"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 308.77818665775004,
+            "t": 575.6476484917924,
+            "r": 344.8279931445403,
+            "b": 567.4733681871274,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            12
+          ]
+        }
+      ],
+      "orig": "|Address:",
+      "text": "|Address:"
+    },
+    {
+      "self_ref": "#/texts/79",
+      "parent": {
+        "$ref": "#/groups/7"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 381.39844487100004,
+            "t": 580.4489878777924,
+            "r": 509.5458179787005,
+            "b": 572.2747075731274,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            38
+          ]
+        }
+      ],
+      "orig": "BHAT, NEAR INDIRA BRIDGE, GANDHINAGAR,",
+      "text": "BHAT, NEAR INDIRA BRIDGE, GANDHINAGAR,"
+    },
+    {
+      "self_ref": "#/texts/80",
+      "parent": {
+        "$ref": "#/groups/7"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 381.39844487100004,
+            "t": 570.8463091057924,
+            "r": 493.53110049855337,
+            "b": 562.6720288011275,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            34
+          ]
+        }
+      ],
+      "orig": "GANDHINAGAR, GUJARAT-382428, India",
+      "text": "GANDHINAGAR, GUJARAT-382428, India"
+    },
+    {
+      "self_ref": "#/texts/81",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "furniture",
+      "label": "page_footer",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 241.85951896537503,
+            "t": 42.69897664579241,
+            "r": 349.98455662417643,
+            "b": 34.524696341127424,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            41
+          ]
+        }
+      ],
+      "orig": "\" (K) |Total Amount (Formula) :",
+      "text": "\" (K) |Total Amount (Formula) :"
+    },
+    {
+      "self_ref": "#/texts/82",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "furniture",
+      "label": "page_header",
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 93.01799799937501,
+            "t": 813.3139434877926,
+            "r": 501.17948409859554,
+            "b": 805.1396631831276,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            144
+          ]
+        }
+      ],
+      "orig": "( Consolidated Unit Price for AMC/CMC (InclusiveofGST) of product/equipment for the entire Contract Period*Quantityofproduct/ equipment )",
+      "text": "( Consolidated Unit Price for AMC/CMC (InclusiveofGST) of product/equipment for the entire Contract Period*Quantityofproduct/ equipment )"
+    },
+    {
+      "self_ref": "#/texts/83",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 44.70452042775,
+            "t": 797.1094230600427,
+            "r": 196.25692262364237,
+            "b": 788.9351427553776,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            58
+          ]
+        }
+      ],
+      "orig": "\" |Total Value without Addons(INR)",
+      "text": "\" |Total Value without Addons(INR)",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/84",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 44.70452042775,
+            "t": 780.9049026322926,
+            "r": 152.1727498627322,
+            "b": 772.7306223276275,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            38
+          ]
+        }
+      ],
+      "orig": "|Total Addon Value(INR)",
+      "text": "|Total Addon Value(INR)",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/85",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 44.70452042775,
+            "t": 764.7003822045426,
+            "r": 196.82895719892753,
+            "b": 756.5261018998775,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            55
+          ]
+        }
+      ],
+      "orig": "\" |Total Value Including Addons(INR)",
+      "text": "\" |Total Value Including Addons(INR)"
+    },
+    {
+      "self_ref": "#/texts/86",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 237.35826329100001,
+            "t": 749.8204312799053,
+            "r": 357.98118737155943,
+            "b": 739.1938668838409,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            33
+          ]
+        }
+      ],
+      "orig": "\"|AmountofContract",
+      "text": "\"|AmountofContract",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/87",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 119.725448334,
+            "t": 732.2913413490426,
+            "r": 374.13154268936114,
+            "b": 724.1170610443776,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            95
+          ]
+        }
+      ],
+      "orig": "\" |Total Contract Value Including All Duties and Taxes(INR)",
+      "text": "\" |Total Contract Value Including All Duties and Taxes(INR)"
+    },
+    {
+      "self_ref": "#/texts/88",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 47.705357544,
+            "t": 718.0115578476552,
+            "r": 137.38537476313127,
+            "b": 707.3849934515908,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            23
+          ]
+        }
+      ],
+      "orig": "\"|SLA Details",
+      "text": "\"|SLA Details",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/89",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 44.70452042775,
+            "t": 695.0809611075426,
+            "r": 80.02174755353579,
+            "b": 686.9066808028775,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            9
+          ]
+        }
+      ],
+      "orig": "PREAMBLE:",
+      "text": "PREAMBLE:",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/90",
+      "parent": {
+        "$ref": "#/groups/8"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "list_item",
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 60.30887343225,
+            "t": 679.4766081030426,
+            "r": 483.35413652343095,
+            "b": 671.3023277983775,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            144
+          ]
+        }
+      ],
+      "orig": "1. HiringofCustomized AMC/CMC for Pre-owned Products contracts placed through GeM shallbegovernedbyfollowing setofTerms and Conditions:",
+      "text": "HiringofCustomized AMC/CMC for Pre-owned Products contracts placed through GeM shallbegovernedbyfollowing setofTerms and Conditions:",
+      "enumerated": true,
+      "marker": "1."
+    },
+    {
+      "self_ref": "#/texts/91",
+      "parent": {
+        "$ref": "#/groups/8"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "list_item",
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 86.116072632,
+            "t": 663.8722550985426,
+            "r": 243.99048842255206,
+            "b": 655.6979747938775,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            56
+          ]
+        }
+      ],
+      "orig": "i. General terms and conditions for Goods and Services;",
+      "text": "General terms and conditions for Goods and Services;",
+      "enumerated": true,
+      "marker": "i."
+    },
+    {
+      "self_ref": "#/texts/92",
+      "parent": {
+        "$ref": "#/groups/8"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "list_item",
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 84.9157377855,
+            "t": 654.2695763265426,
+            "r": 525.4900157866159,
+            "b": 636.4926172498775,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            182
+          ]
+        }
+      ],
+      "orig": "ii. Service Specific STCof Hiringof AMC/CMC service for Other Products - as definedinService Catalogue which includes SLA for the ServiceorService foraparticular product;",
+      "text": "Service Specific STCof Hiringof AMC/CMC service for Other Products - as definedinService Catalogue which includes SLA for the ServiceorService foraparticular product;",
+      "enumerated": true,
+      "marker": "ii."
+    },
+    {
+      "self_ref": "#/texts/93",
+      "parent": {
+        "$ref": "#/groups/8"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "list_item",
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 83.11523551575002,
+            "t": 635.0642187825426,
+            "r": 185.3995188324103,
+            "b": 626.8899384778775,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            38
+          ]
+        }
+      ],
+      "orig": "iii. BID/Reverse Auction specific ATC",
+      "text": "BID/Reverse Auction specific ATC",
+      "enumerated": true,
+      "marker": "iii."
+    },
+    {
+      "self_ref": "#/texts/94",
+      "parent": {
+        "$ref": "#/groups/8"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "list_item",
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 60.30887343225,
+            "t": 625.4615400105426,
+            "r": 528.17538990102,
+            "b": 607.6845809338776,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            243
+          ]
+        }
+      ],
+      "orig": "2. Operationofthe above terms and conditions areinreverse orderofprecedencei.e. ATC supplement Service Specific STC and GTC, however Service Specific STC will prevailsorsupersede the GTC wherever there are any conflicting provisions.",
+      "text": "Operationofthe above terms and conditions areinreverse orderofprecedencei.e. ATC supplement Service Specific STC and GTC, however Service Specific STC will prevailsorsupersede the GTC wherever there are any conflicting provisions.",
+      "enumerated": true,
+      "marker": "2."
+    },
+    {
+      "self_ref": "#/texts/95",
+      "parent": {
+        "$ref": "#/groups/8"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "list_item",
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 60.30887343225,
+            "t": 606.2561824665426,
+            "r": 509.40515373887627,
+            "b": 598.0819021618776,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            160
+          ]
+        }
+      ],
+      "orig": "3. The above setofconditions along with scopeofsupply including priceasenumeratedinthe contract document shallbeconstruedtobe partofthe contract.",
+      "text": "The above setofconditions along with scopeofsupply including priceasenumeratedinthe contract document shallbeconstruedtobe partofthe contract.",
+      "enumerated": true,
+      "marker": "3."
+    },
+    {
+      "self_ref": "#/texts/96",
+      "parent": {
+        "$ref": "#/groups/8"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "list_item",
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 60.30887343225,
+            "t": 596.6535036945426,
+            "r": 536.9168284206563,
+            "b": 578.8765446178775,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            306
+          ]
+        }
+      ],
+      "orig": "4. This document representsacomprehensive Terms and Conditions governing the contract between the Buyer and Service Provider. The purposeofthis documentisto outline the scopeofwork, Stakeholder's obligation and terms and conditionsofall services coveredasmutually understoodbythe stakeholder",
+      "text": "This document representsacomprehensive Terms and Conditions governing the contract between the Buyer and Service Provider. The purposeofthis documentisto outline the scopeofwork, Stakeholder's obligation and terms and conditionsofall services coveredasmutually understoodbythe stakeholder",
+      "enumerated": true,
+      "marker": "4."
+    },
+    {
+      "self_ref": "#/texts/97",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 44.70452042775,
+            "t": 571.4464719180426,
+            "r": 547.0739118498835,
+            "b": 544.0668340693776,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            493
+          ]
+        }
+      ],
+      "orig": "Agreement Overview: This Agreement represents the Special Terms and Conditions (STC) and the Service Level Agreement (SLA) between the Buyer and SPA providing the AMC/CMC services . The Service Provider would provide the required equipment (if any) and personnel (onsiteorotherwise) as per the requirementsofthe buyer. This Agreement outlines the scopeofwork, Stakeholder's obligation and Terms and Conditionsofall services coveredasthey are mutually understoodbythe stakeholders.",
+      "text": "Agreement Overview: This Agreement represents the Special Terms and Conditions (STC) and the Service Level Agreement (SLA) between the Buyer and SPA providing the AMC/CMC services . The Service Provider would provide the required equipment (if any) and personnel (onsiteorotherwise) as per the requirementsofthe buyer. This Agreement outlines the scopeofwork, Stakeholder's obligation and Terms and Conditionsofall services coveredasthey are mutually understoodbythe stakeholders."
+    },
+    {
+      "self_ref": "#/texts/98",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 44.70452042775,
+            "t": 521.0324083650426,
+            "r": 367.0810758847317,
+            "b": 512.8581280603776,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            117
+          ]
+        }
+      ],
+      "orig": "STCofthis Service willbeattachedbythe Buyer during Bid creation and that will become the partofthe Contracts.",
+      "text": "STCofthis Service willbeattachedbythe Buyer during Bid creation and that will become the partofthe Contracts."
+    },
+    {
+      "self_ref": "#/texts/99",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 44.70452042775,
+            "t": 489.82370235604253,
+            "r": 91.29476728536844,
+            "b": 481.64942205137754,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            16
+          ]
+        }
+      ],
+      "orig": "Service Formula:",
+      "text": "Service Formula:",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/100",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 44.70452042775,
+            "t": 474.21934935154263,
+            "r": 260.11886260847723,
+            "b": 466.0450690468774,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            77
+          ]
+        }
+      ],
+      "orig": "Price for AMC/CMC (inclusiveofall applicable taxes) QuantityofEquipment",
+      "text": "Price for AMC/CMC (inclusiveofall applicable taxes) QuantityofEquipment"
+    },
+    {
+      "self_ref": "#/texts/101",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 44.1043530045,
+            "t": 443.21770110356374,
+            "r": 391.40998770008906,
+            "b": 430.95628064656626,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            79
+          ]
+        }
+      ],
+      "orig": "-\"\" |Techno-Commercial Clarification : Click heretodownload",
+      "text": "-\"\" |Techno-Commercial Clarification : Click heretodownload",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/102",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 47.705357544,
+            "t": 417.8450231182469,
+            "r": 294.17386262224034,
+            "b": 408.85331478311537,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            79
+          ]
+        }
+      ],
+      "orig": "\"\" /c: |Additional Required Data/Document(s) : Buyer",
+      "text": "\"\" /c: |Additional Required Data/Document(s) : Buyer"
+    },
+    {
+      "self_ref": "#/texts/103",
+      "parent": {
+        "$ref": "#/groups/9"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "list_item",
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 48.30552496725,
+            "t": 400.99892371504257,
+            "r": 127.6379056002722,
+            "b": 392.8246434103776,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            29
+          ]
+        }
+      ],
+      "orig": "1. ScopeofWork :click here",
+      "text": "ScopeofWork :click here",
+      "enumerated": true,
+      "marker": "1."
+    },
+    {
+      "self_ref": "#/texts/104",
+      "parent": {
+        "$ref": "#/groups/9"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "list_item",
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 48.30552496725,
+            "t": 391.3962449430426,
+            "r": 326.8934901192722,
+            "b": 383.2219646383776,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            98
+          ]
+        }
+      ],
+      "orig": "2. Special Terms and Conditions/Penalty/Payment Terms pertainingtothe Bid/Contract : click here",
+      "text": "Special Terms and Conditions/Penalty/Payment Terms pertainingtothe Bid/Contract : click here",
+      "enumerated": true,
+      "marker": "2."
+    },
+    {
+      "self_ref": "#/texts/105",
+      "parent": {
+        "$ref": "#/groups/9"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "list_item",
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 48.30552496725,
+            "t": 381.7935661710426,
+            "r": 163.0477835720222,
+            "b": 373.6192858663776,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            41
+          ]
+        }
+      ],
+      "orig": "3. Product/Equipment Details :click here",
+      "text": "Product/Equipment Details :click here",
+      "enumerated": true,
+      "marker": "3."
+    },
+    {
+      "self_ref": "#/texts/106",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 47.705357544,
+            "t": 363.2297876024968,
+            "r": 239.61489280242,
+            "b": 354.23807926736526,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            68
+          ]
+        }
+      ],
+      "orig": "\"\" /c : \" |Additional Data/Document(s) : Seller",
+      "text": "\"\" /c : \" |Additional Data/Document(s) : Seller",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/107",
+      "parent": {
+        "$ref": "#/groups/10"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "list_item",
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 48.30552496725,
+            "t": 346.38368819929246,
+            "r": 382.10889305827226,
+            "b": 338.2094078946277,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            121
+          ]
+        }
+      ],
+      "orig": "1. Audited Financial Statements/ Statutory Auditor's CertificateAsProof For Turnover/ Profit Requirements : click here",
+      "text": "Audited Financial Statements/ Statutory Auditor's CertificateAsProof For Turnover/ Profit Requirements : click here",
+      "enumerated": true,
+      "marker": "1."
+    },
+    {
+      "self_ref": "#/texts/108",
+      "parent": {
+        "$ref": "#/groups/10"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "list_item",
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 48.30552496725,
+            "t": 336.7810094272925,
+            "r": 170.8499600742722,
+            "b": 328.6067291226277,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            47
+          ]
+        }
+      ],
+      "orig": "2. Certificate (RequestedinATC) : click here",
+      "text": "Certificate (RequestedinATC) : click here",
+      "enumerated": true,
+      "marker": "2."
+    },
+    {
+      "self_ref": "#/texts/109",
+      "parent": {
+        "$ref": "#/groups/10"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "list_item",
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 48.30552496725,
+            "t": 327.1783306552925,
+            "r": 154.0452722232722,
+            "b": 319.0040503506277,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            36
+          ]
+        }
+      ],
+      "orig": "3. Human Resource Count :click here",
+      "text": "Human Resource Count :click here",
+      "enumerated": true,
+      "marker": "3."
+    },
+    {
+      "self_ref": "#/texts/110",
+      "parent": {
+        "$ref": "#/groups/10"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "list_item",
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 48.30552496725,
+            "t": 317.5756518832925,
+            "r": 330.4944946587722,
+            "b": 309.40137157862773,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            101
+          ]
+        }
+      ],
+      "orig": "4. Undertaking With DetailsOfEmployees, Name, Qualification, YearsOfExperience Etc. : click here",
+      "text": "Undertaking With DetailsOfEmployees, Name, Qualification, YearsOfExperience Etc. : click here",
+      "enumerated": true,
+      "marker": "4."
+    },
+    {
+      "self_ref": "#/texts/111",
+      "parent": {
+        "$ref": "#/groups/10"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "list_item",
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 48.30552496725,
+            "t": 307.9729731112925,
+            "r": 240.4693811712722,
+            "b": 299.79869280662774,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            70
+          ]
+        }
+      ],
+      "orig": "5. DetailsOfCentralized Call Centre/ Complaint Number. : click here",
+      "text": "DetailsOfCentralized Call Centre/ Complaint Number. : click here",
+      "enumerated": true,
+      "marker": "5."
+    },
+    {
+      "self_ref": "#/texts/112",
+      "parent": {
+        "$ref": "#/groups/10"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "list_item",
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 48.30552496725,
+            "t": 298.3702943392925,
+            "r": 239.2690463247722,
+            "b": 290.19601403462775,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            69
+          ]
+        }
+      ],
+      "orig": "6. Work Orders For Similar ExperienceInThe Past Years : click here",
+      "text": "Work Orders For Similar ExperienceInThe Past Years : click here",
+      "enumerated": true,
+      "marker": "6."
+    },
+    {
+      "self_ref": "#/texts/113",
+      "parent": {
+        "$ref": "#/groups/10"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "list_item",
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 48.30552496725,
+            "t": 288.7676155672925,
+            "r": 337.6965037377722,
+            "b": 280.59333526262753,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            108
+          ]
+        }
+      ],
+      "orig": "7. User ListOfThe Quoted Items SuppliedInIn Govt. / Pvt. Institutions / HospitalsInIndia : click here",
+      "text": "User ListOfThe Quoted Items SuppliedInIn Govt. / Pvt. Institutions / HospitalsInIndia : click here",
+      "enumerated": true,
+      "marker": "7."
+    },
+    {
+      "self_ref": "#/texts/114",
+      "parent": {
+        "$ref": "#/groups/10"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "list_item",
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 48.30552496725,
+            "t": 279.16493679529253,
+            "r": 154.0452722232722,
+            "b": 270.99065649062754,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            39
+          ]
+        }
+      ],
+      "orig": "8. Performance Certificate :click here",
+      "text": "Performance Certificate :click here",
+      "enumerated": true,
+      "marker": "8."
+    },
+    {
+      "self_ref": "#/texts/115",
+      "parent": {
+        "$ref": "#/groups/10"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "list_item",
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 48.30552496725,
+            "t": 269.56225802329254,
+            "r": 151.6446025302722,
+            "b": 261.38797771862755,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            40
+          ]
+        }
+      ],
+      "orig": "9. Registration Certificate :click here",
+      "text": "Registration Certificate :click here",
+      "enumerated": true,
+      "marker": "9."
+    },
+    {
+      "self_ref": "#/texts/116",
+      "parent": {
+        "$ref": "#/groups/10"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "list_item",
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 45.304687851,
+            "t": 259.95957925129255,
+            "r": 188.8549827717722,
+            "b": 251.78529894662756,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            53
+          ]
+        }
+      ],
+      "orig": "10. Additional Doc 1 (RequestedinATC) : click here",
+      "text": "Additional Doc 1 (RequestedinATC) : click here",
+      "enumerated": true,
+      "marker": "10."
+    },
+    {
+      "self_ref": "#/texts/117",
+      "parent": {
+        "$ref": "#/groups/10"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "list_item",
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 45.304687851,
+            "t": 250.35690047929256,
+            "r": 188.8549827717722,
+            "b": 242.18262017462757,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            53
+          ]
+        }
+      ],
+      "orig": "11. Additional Doc 2 (RequestedinATC) : click here",
+      "text": "Additional Doc 2 (RequestedinATC) : click here",
+      "enumerated": true,
+      "marker": "11."
+    },
+    {
+      "self_ref": "#/texts/118",
+      "parent": {
+        "$ref": "#/groups/10"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "list_item",
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 45.304687851,
+            "t": 240.75422170729257,
+            "r": 188.8549827717722,
+            "b": 232.57994140262758,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            53
+          ]
+        }
+      ],
+      "orig": "12. Additional Doc 3 (RequestedinATC) : click here",
+      "text": "Additional Doc 3 (RequestedinATC) : click here",
+      "enumerated": true,
+      "marker": "12."
+    },
+    {
+      "self_ref": "#/texts/119",
+      "parent": {
+        "$ref": "#/groups/10"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "list_item",
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 45.304687851,
+            "t": 231.15154293529258,
+            "r": 188.8549827717722,
+            "b": 222.9772626306276,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            53
+          ]
+        }
+      ],
+      "orig": "13. Additional Doc 4 (RequestedinATC) : click here",
+      "text": "Additional Doc 4 (RequestedinATC) : click here",
+      "enumerated": true,
+      "marker": "13."
+    },
+    {
+      "self_ref": "#/texts/120",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 47.705357544,
+            "t": 211.47025262465513,
+            "r": 145.19497833724398,
+            "b": 200.84368822859074,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            27
+          ]
+        }
+      ],
+      "orig": "\" | ePBG Detail",
+      "text": "\" | ePBG Detail",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/121",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 47.705357544,
+            "t": 131.04781790915513,
+            "r": 172.20446292761955,
+            "b": 120.42125351309073,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            32
+          ]
+        }
+      ],
+      "orig": "\" |Terms and Conditions",
+      "text": "\" |Terms and Conditions",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/122",
+      "parent": {
+        "$ref": "#/groups/11"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "list_item",
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 47.705357544,
+            "t": 109.35896756774673,
+            "r": 151.19275148149285,
+            "b": 100.3672592326152,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            32
+          ]
+        }
+      ],
+      "orig": "1. General Terms and Conditions-",
+      "text": "General Terms and Conditions-",
+      "enumerated": true,
+      "marker": "1."
+    },
+    {
+      "self_ref": "#/texts/123",
+      "parent": {
+        "$ref": "#/groups/11"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "list_item",
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 48.30552496725,
+            "t": 91.91270074129261,
+            "r": 453.6177162245911,
+            "b": 83.73842043662762,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            145
+          ]
+        }
+      ],
+      "orig": "1.1 This contractisgovernedbythe General Terms and Conditions, conditions stipulatedtothis Product/Serviceasprovidedinthe Marketplace.",
+      "text": "1.1 This contractisgovernedbythe General Terms and Conditions, conditions stipulatedtothis Product/Serviceasprovidedinthe Marketplace.",
+      "enumerated": false,
+      "marker": ""
+    },
+    {
+      "self_ref": "#/texts/124",
+      "parent": {
+        "$ref": "#/groups/11"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "list_item",
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 48.30552496725,
+            "t": 81.1096871227926,
+            "r": 542.4965099336837,
+            "b": 53.73004927412762,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            363
+          ]
+        }
+      ],
+      "orig": "1.2 This Contract between the Seller and the Buyer, is for the supplyofthe Goods and/ or Services, detailedinthe schedule above, in accordance with the General Terms and Conditions (GTC) unless otherwise supersededbyGoods / Services specific Special Terms and Conditions (STC) and/ or BID/Reverse Auction Additional Terms and Conditions (ATC), as applicable",
+      "text": "1.2 This Contract between the Seller and the Buyer, is for the supplyofthe Goods and/ or Services, detailedinthe schedule above, in accordance with the General Terms and Conditions (GTC) unless otherwise supersededbyGoods / Services specific Special Terms and Conditions (STC) and/ or BID/Reverse Auction Additional Terms and Conditions (ATC), as applicable",
+      "enumerated": false,
+      "marker": ""
+    },
+    {
+      "self_ref": "#/texts/125",
+      "parent": {
+        "$ref": "#/groups/11"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "list_item",
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 48.30552496725,
+            "t": 51.101315960292595,
+            "r": 544.5393298005708,
+            "b": 33.324356883627615,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            340
+          ]
+        }
+      ],
+      "orig": "1.3 All GeM Sellers / Service Providers are mandatedtoensure compliance with all the applicable laws / acts / rules including but not limitedtoall Labour Laws suchasThe Minimum Wages Act, 1948, The PaymentofWages Act, 1936, The PaymentofBonus Act, 1965, The Equal Remuneration Act, 1976, The PaymentofGratuity Act, 1972 etc. Any",
+      "text": "1.3 All GeM Sellers / Service Providers are mandatedtoensure compliance with all the applicable laws / acts / rules including but not limitedtoall Labour Laws suchasThe Minimum Wages Act, 1948, The PaymentofWages Act, 1936, The PaymentofBonus Act, 1965, The Equal Remuneration Act, 1976, The PaymentofGratuity Act, 1972 etc. Any",
+      "enumerated": false,
+      "marker": ""
+    },
+    {
+      "self_ref": "#/texts/126",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 493.62975301875,
+            "t": 797.1094230600427,
+            "r": 514.1937395671322,
+            "b": 788.9351427553776,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            6
+          ]
+        }
+      ],
+      "orig": "233640",
+      "text": "233640"
+    },
+    {
+      "self_ref": "#/texts/127",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 502.03209694425004,
+            "t": 780.9049026322926,
+            "r": 505.4350462340775,
+            "b": 772.7306223276275,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            1
+          ]
+        }
+      ],
+      "orig": "0",
+      "text": "0"
+    },
+    {
+      "self_ref": "#/texts/128",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 493.62975301875,
+            "t": 764.7003822045426,
+            "r": 514.1937395671322,
+            "b": 756.5261018998775,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            6
+          ]
+        }
+      ],
+      "orig": "233640",
+      "text": "233640"
+    },
+    {
+      "self_ref": "#/texts/129",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 493.62975301875,
+            "t": 732.2913413490426,
+            "r": 514.1937395671322,
+            "b": 724.1170610443776,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            6
+          ]
+        }
+      ],
+      "orig": "233640",
+      "text": "233640"
+    },
+    {
+      "self_ref": "#/texts/130",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 3,
+          "bbox": {
+            "l": 57.90820373925,
+            "t": 813.3139463767925,
+            "r": 369.82871736929815,
+            "b": 805.1396660721275,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            109
+          ]
+        }
+      ],
+      "orig": "non-compliance willbetreatedasbreachofcontract and Buyer may take suitable actionsasper GeM Contract.",
+      "text": "non-compliance willbetreatedasbreachofcontract and Buyer may take suitable actionsasper GeM Contract."
+    },
+    {
+      "self_ref": "#/texts/131",
+      "parent": {
+        "$ref": "#/groups/12"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "list_item",
+      "prov": [
+        {
+          "page_no": 3,
+          "bbox": {
+            "l": 47.705357544,
+            "t": 797.1508375012468,
+            "r": 203.57611439203194,
+            "b": 788.1591291661152,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            49
+          ]
+        }
+      ],
+      "orig": "2. Buyer Added Bid Specific Terms and Conditions-",
+      "text": "Buyer Added Bid Specific Terms and Conditions-",
+      "enumerated": true,
+      "marker": "2."
+    },
+    {
+      "self_ref": "#/texts/132",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 3,
+          "bbox": {
+            "l": 47.705357544,
+            "t": 780.3047380980424,
+            "r": 82.6662352622311,
+            "b": 772.1304577933777,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            12
+          ]
+        }
+      ],
+      "orig": "2.1 Generic:",
+      "text": "2.1 Generic:",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/133",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 3,
+          "bbox": {
+            "l": 47.705357544,
+            "t": 770.7020593260424,
+            "r": 542.2350619999304,
+            "b": 752.9251002493775,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            325
+          ]
+        }
+      ],
+      "orig": "OPTION CLAUSE: The buyer can increaseordecrease the contract quantityorcontract durationupto 25 percentatthe timeofissueofthe contract. However, once the contractisissued, contract quantityorcontract duration can onlybeincreasedupto 25 percent. Bidders are boundtoaccept the revised quantityorduration",
+      "text": "OPTION CLAUSE: The buyer can increaseordecrease the contract quantityorcontract durationupto 25 percentatthe timeofissueofthe contract. However, once the contractisissued, contract quantityorcontract duration can onlybeincreasedupto 25 percent. Bidders are boundtoaccept the revised quantityorduration"
+    },
+    {
+      "self_ref": "#/texts/134",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 3,
+          "bbox": {
+            "l": 47.705357544,
+            "t": 745.4950275495426,
+            "r": 92.8690814574811,
+            "b": 737.3207472448776,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            17
+          ]
+        }
+      ],
+      "orig": "2.2 Certificates:",
+      "text": "2.2 Certificates:",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/135",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 3,
+          "bbox": {
+            "l": 47.705357544,
+            "t": 735.8923487775426,
+            "r": 468.05924484654423,
+            "b": 727.7180684728776,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            152
+          ]
+        }
+      ],
+      "orig": "Bidder's offerisliabletobe rejectedifthey don't upload anyofthe certificates / documents soughtinthe Bid document, ATC and Corrigendumifany.",
+      "text": "Bidder's offerisliabletobe rejectedifthey don't upload anyofthe certificates / documents soughtinthe Bid document, ATC and Corrigendumifany."
+    },
+    {
+      "self_ref": "#/texts/136",
+      "parent": {
+        "$ref": "#/groups/13"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "list_item",
+      "prov": [
+        {
+          "page_no": 3,
+          "bbox": {
+            "l": 47.705357544,
+            "t": 720.2879957730424,
+            "r": 82.6662352622311,
+            "b": 712.1137154683777,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            12
+          ]
+        }
+      ],
+      "orig": "2.3 Generic:",
+      "text": "2.3 Generic:",
+      "enumerated": false,
+      "marker": ""
+    },
+    {
+      "self_ref": "#/texts/137",
+      "parent": {
+        "$ref": "#/groups/13"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "list_item",
+      "prov": [
+        {
+          "page_no": 3,
+          "bbox": {
+            "l": 47.705357544,
+            "t": 710.6853170010424,
+            "r": 360.16039528538016,
+            "b": 702.5110366963775,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            114
+          ]
+        }
+      ],
+      "orig": "1. The Seller shall not assign the Contractinwholeorpart without obtaining the prior written consentofbuyer.",
+      "text": "The Seller shall not assign the Contractinwholeorpart without obtaining the prior written consentofbuyer.",
+      "enumerated": true,
+      "marker": "1."
+    },
+    {
+      "self_ref": "#/texts/138",
+      "parent": {
+        "$ref": "#/groups/13"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "list_item",
+      "prov": [
+        {
+          "page_no": 3,
+          "bbox": {
+            "l": 47.705357544,
+            "t": 701.0826382290425,
+            "r": 414.1848409938685,
+            "b": 692.9083579243775,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            134
+          ]
+        }
+      ],
+      "orig": "2. The Seller shall not sub-contract the Contractinwholeorparttoany entity without obtaining the prior written consentofbuyer.",
+      "text": "The Seller shall not sub-contract the Contractinwholeorparttoany entity without obtaining the prior written consentofbuyer.",
+      "enumerated": true,
+      "marker": "2."
+    },
+    {
+      "self_ref": "#/texts/139",
+      "parent": {
+        "$ref": "#/groups/13"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "list_item",
+      "prov": [
+        {
+          "page_no": 3,
+          "bbox": {
+            "l": 47.705357544,
+            "t": 691.4799594570425,
+            "r": 527.0718320515191,
+            "b": 673.7030003803775,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            280
+          ]
+        }
+      ],
+      "orig": "3. The Seller shall, notwithstanding the consent and assignment/sub-contract, remain jointly and severally liable and responsibletobuyer together with the assignee/ subcontractor, for andinrespectofthe due performanceofthe Contract and the Sellers obligations there under.",
+      "text": "The Seller shall, notwithstanding the consent and assignment/sub-contract, remain jointly and severally liable and responsibletobuyer together with the assignee/ subcontractor, for andinrespectofthe due performanceofthe Contract and the Sellers obligations there under.",
+      "enumerated": true,
+      "marker": "3."
+    },
+    {
+      "self_ref": "#/texts/140",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 3,
+          "bbox": {
+            "l": 47.705357544,
+            "t": 666.2729276805426,
+            "r": 143.28314501048112,
+            "b": 658.0986473758776,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            33
+          ]
+        }
+      ],
+      "orig": "2.4 Purchase Preference (Centre):",
+      "text": "2.4 Purchase Preference (Centre):",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/141",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 3,
+          "bbox": {
+            "l": 47.705357544,
+            "t": 656.6702489085426,
+            "r": 537.9389885633789,
+            "b": 590.8798959718777,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            1086
+          ]
+        }
+      ],
+      "orig": "Purchase preferencetoMicro and Small Enterprises (MSEs): Purchase preference willbegiventoMSEsasdefinedinPublic Procurement Policy for Micro and Small Enterprises (MSEs) Order, 2012 dated 23.03.2012 issuedbyMinistryofMicro, Small and Medium Enterprises and its subsequent Orders/Notifications issuedbyconcerned Ministry. If the bidder wantstoavail the Purchase preference, the bidder mustbethe manufacturerofthe offered productincaseofbid for supplyofgoods. Traders are excluded from the purviewofPublic Procurement Policy for Micro and Small Enterprises. In respectofbid for Services, the bidder mustbethe Service providerofthe offered Service. Relevant documentary evidenceinthis regard shallbeuploaded along with the bidinrespectofthe offered productorservice. IfL-1 is notanMSE and MSE Seller (s) has/have quoted price withinL-1+ 15% of marginofpurchase preference /price band definedinrelevant policy, such Seller shallbegiven opportunitytomatchL-1 price and contract willbeawarded for percentageof 100% of total value.",
+      "text": "Purchase preferencetoMicro and Small Enterprises (MSEs): Purchase preference willbegiventoMSEsasdefinedinPublic Procurement Policy for Micro and Small Enterprises (MSEs) Order, 2012 dated 23.03.2012 issuedbyMinistryofMicro, Small and Medium Enterprises and its subsequent Orders/Notifications issuedbyconcerned Ministry. If the bidder wantstoavail the Purchase preference, the bidder mustbethe manufacturerofthe offered productincaseofbid for supplyofgoods. Traders are excluded from the purviewofPublic Procurement Policy for Micro and Small Enterprises. In respectofbid for Services, the bidder mustbethe Service providerofthe offered Service. Relevant documentary evidenceinthis regard shallbeuploaded along with the bidinrespectofthe offered productorservice. IfL-1 is notanMSE and MSE Seller (s) has/have quoted price withinL-1+ 15% of marginofpurchase preference /price band definedinrelevant policy, such Seller shallbegiven opportunitytomatchL-1 price and contract willbeawarded for percentageof 100% of total value."
+    },
+    {
+      "self_ref": "#/texts/142",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 3,
+          "bbox": {
+            "l": 47.705357544,
+            "t": 583.4498232720425,
+            "r": 111.47427157823111,
+            "b": 575.2755429673775,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            22
+          ]
+        }
+      ],
+      "orig": "2.5 Service & Support:",
+      "text": "2.5 Service & Support:",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/143",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 3,
+          "bbox": {
+            "l": 47.705357544,
+            "t": 573.8471445000425,
+            "r": 404.9947773253528,
+            "b": 565.6728641953775,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            124
+          ]
+        }
+      ],
+      "orig": "Escalation Matrix For Service Support : Bidder/OEM must provide Escalation MatrixofTelephone Numbers for Service Support.",
+      "text": "Escalation Matrix For Service Support : Bidder/OEM must provide Escalation MatrixofTelephone Numbers for Service Support."
+    },
+    {
+      "self_ref": "#/texts/144",
+      "parent": {
+        "$ref": "#/groups/14"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "list_item",
+      "prov": [
+        {
+          "page_no": 3,
+          "bbox": {
+            "l": 47.705357544,
+            "t": 558.2427914955424,
+            "r": 149.65879856859377,
+            "b": 540.4658324188777,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            69
+          ]
+        }
+      ],
+      "orig": "2.6 Buyer Added Bid Specific ATC : Buyer Added text based ATC clauses",
+      "text": "2.6 Buyer Added Bid Specific ATC : Buyer Added text based ATC clauses",
+      "enumerated": false,
+      "marker": ""
+    },
+    {
+      "self_ref": "#/texts/145",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 3,
+          "bbox": {
+            "l": 47.705357544,
+            "t": 533.0357597190425,
+            "r": 97.315196749845,
+            "b": 524.8614794143775,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            21
+          ]
+        }
+      ],
+      "orig": "Eligibility Criteria:",
+      "text": "Eligibility Criteria:",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/146",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 3,
+          "bbox": {
+            "l": 47.705357544,
+            "t": 517.4314067145424,
+            "r": 476.31154691623175,
+            "b": 509.2571264098776,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            153
+          ]
+        }
+      ],
+      "orig": "Bidder hastosubmit valid Authorization Letter from OEMM/s Techser Power Solutionsorself- certificationincaseofOEMatthe timeofbid submission.",
+      "text": "Bidder hastosubmit valid Authorization Letter from OEMM/s Techser Power Solutionsorself- certificationincaseofOEMatthe timeofbid submission."
+    },
+    {
+      "self_ref": "#/texts/147",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 3,
+          "bbox": {
+            "l": 47.705357544,
+            "t": 501.8270537100425,
+            "r": 49.301802889845,
+            "b": 493.6527734053775,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            1
+          ]
+        }
+      ],
+      "orig": ".",
+      "text": "."
+    },
+    {
+      "self_ref": "#/texts/148",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "section_header",
+      "prov": [
+        {
+          "page_no": 3,
+          "bbox": {
+            "l": 47.705357544,
+            "t": 461.6158363522925,
+            "r": 64.858142500485,
+            "b": 453.4415560476275,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            5
+          ]
+        }
+      ],
+      "orig": "Note:",
+      "text": "Note:",
+      "level": 1
+    },
+    {
+      "self_ref": "#/texts/149",
+      "parent": {
+        "$ref": "#/groups/15"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "list_item",
+      "prov": [
+        {
+          "page_no": 3,
+          "bbox": {
+            "l": 47.705357544,
+            "t": 449.61248788729245,
+            "r": 532.351054748282,
+            "b": 429.43485911762764,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            235
+          ]
+        }
+      ],
+      "orig": "1. Service Providers are requiredtoraise invoices onlineasper the contract termsonGeM portal. Timely invoice submissionismandatory for compliances, smooth payment processing, and will also contributetoimproving their ratings.",
+      "text": "Service Providers are requiredtoraise invoices onlineasper the contract termsonGeM portal. Timely invoice submissionismandatory for compliances, smooth payment processing, and will also contributetoimproving their ratings.",
+      "enumerated": true,
+      "marker": "1."
+    },
+    {
+      "self_ref": "#/texts/150",
+      "parent": {
+        "$ref": "#/groups/15"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "list_item",
+      "prov": [
+        {
+          "page_no": 3,
+          "bbox": {
+            "l": 47.705357544,
+            "t": 425.6057909572926,
+            "r": 525.9333894705418,
+            "b": 405.42816218762755,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            210
+          ]
+        }
+      ],
+      "orig": "2. The Excess settlement has been enabled for this contract. The service provider can claim additional charges, if applicable, in the invoice. Any additional charges mustbesupported with documentary evidence.",
+      "text": "The Excess settlement has been enabled for this contract. The service provider can claim additional charges, if applicable, in the invoice. Any additional charges mustbesupported with documentary evidence.",
+      "enumerated": true,
+      "marker": "2."
+    },
+    {
+      "self_ref": "#/texts/151",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 3,
+          "bbox": {
+            "l": 47.705357544,
+            "t": 384.19423875304255,
+            "r": 203.1498454796686,
+            "b": 376.01995844837757,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            60
+          ]
+        }
+      ],
+      "orig": ": \"c cQ",
+      "text": ": \"c cQ"
+    },
+    {
+      "self_ref": "#/texts/152",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "text",
+      "prov": [
+        {
+          "page_no": 3,
+          "bbox": {
+            "l": 47.705357544,
+            "t": 366.1892160555424,
+            "r": 217.63000987949346,
+            "b": 358.0149357508776,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            62
+          ]
+        }
+      ],
+      "orig": "Note: Thisissystem generated file. No signatureisrequired.",
+      "text": "Note: Thisissystem generated file. No signatureisrequired."
+    }
+  ],
+  "pictures": [
+    {
+      "self_ref": "#/pictures/0",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "picture",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 39.782901763916016,
+            "t": 787.0408401489258,
+            "r": 112.37332916259766,
+            "b": 749.4668045043945,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            0
+          ]
+        }
+      ],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    },
+    {
+      "self_ref": "#/pictures/1",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "picture",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 116.09789276123047,
+            "t": 783.6296997070312,
+            "r": 186.90968322753906,
+            "b": 752.1380615234375,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            0
+          ]
+        }
+      ],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "annotations": []
+    }
+  ],
+  "tables": [
+    {
+      "self_ref": "#/tables/0",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "table",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 41.3481559753418,
+            "t": 524.2575073242188,
+            "r": 552.09130859375,
+            "b": 441.6930847167969,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            0
+          ]
+        }
+      ],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "data": {
+        "table_cells": [
+          {
+            "bbox": {
+              "l": 49.27141941404297,
+              "t": 322.1679218704576,
+              "r": 72.88425647253516,
+              "b": 330.3422021751225,
+              "coord_origin": "TOPLEFT"
+            },
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 0,
+            "end_row_offset_idx": 1,
+            "start_col_offset_idx": 0,
+            "end_col_offset_idx": 1,
+            "text": "..|S.No",
+            "column_header": true,
+            "row_header": false,
+            "row_section": false,
+            "fillable": false
+          },
+          {
+            "bbox": {
+              "l": 90.61732830637501,
+              "t": 322.1679218704576,
+              "r": 214.03613232814456,
+              "b": 330.3422021751225,
+              "coord_origin": "TOPLEFT"
+            },
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 0,
+            "end_row_offset_idx": 1,
+            "start_col_offset_idx": 1,
+            "end_col_offset_idx": 2,
+            "text": "\" & |Consignee Name & Address",
+            "column_header": true,
+            "row_header": false,
+            "row_section": false,
+            "fillable": false
+          },
+          {
+            "bbox": {
+              "l": 327.3833767785,
+              "t": 322.1679218704576,
+              "r": 409.9375311604561,
+              "b": 330.3422021751225,
+              "coord_origin": "TOPLEFT"
+            },
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 0,
+            "end_row_offset_idx": 1,
+            "start_col_offset_idx": 2,
+            "end_col_offset_idx": 3,
+            "text": "\"|Service Description",
+            "column_header": true,
+            "row_header": false,
+            "row_section": false,
+            "fillable": false
+          },
+          {
+            "bbox": {
+              "l": 511.63477571625003,
+              "t": 322.1679218704576,
+              "r": 549.2937811066294,
+              "b": 330.3422021751225,
+              "coord_origin": "TOPLEFT"
+            },
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 0,
+            "end_row_offset_idx": 1,
+            "start_col_offset_idx": 3,
+            "end_col_offset_idx": 4,
+            "text": "K|Quantity",
+            "column_header": true,
+            "row_header": false,
+            "row_section": false,
+            "fillable": false
+          },
+          {
+            "bbox": {
+              "l": 57.007952604375006,
+              "t": 362.3791392282075,
+              "r": 60.4109018942025,
+              "b": 370.5534195328725,
+              "coord_origin": "TOPLEFT"
+            },
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 1,
+            "end_row_offset_idx": 2,
+            "start_col_offset_idx": 0,
+            "end_col_offset_idx": 1,
+            "text": "1",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false,
+            "fillable": false
+          },
+          {
+            "bbox": {
+              "l": 79.51423097625,
+              "t": 338.3724422982075,
+              "r": 199.6156095660052,
+              "b": 394.5601164628725,
+              "coord_origin": "TOPLEFT"
+            },
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 1,
+            "end_row_offset_idx": 2,
+            "start_col_offset_idx": 1,
+            "end_col_offset_idx": 2,
+            "text": "|Contact : 079-23962262- |EmailID : parvez@ipr.res.in ^|GSTIN : 24AAAAI0348C2ZC |Address : BHAT, NEAR INDIRA BRIDGE, GANDHINAGAR, GANDHINAGAR, GUJARAT-382428, India",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false,
+            "fillable": false
+          },
+          {
+            "bbox": {
+              "l": 232.55692390500002,
+              "t": 357.57779984220747,
+              "r": 499.8729946391082,
+              "b": 375.3547589188725,
+              "coord_origin": "TOPLEFT"
+            },
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 1,
+            "end_row_offset_idx": 2,
+            "start_col_offset_idx": 2,
+            "end_col_offset_idx": 3,
+            "text": "Customized AMC/CMC for Pre-owned Products - UPS; Techser Power Solutions; Comprehensive Maintenance Contract (CMC); Quarterly; No",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false,
+            "fillable": false
+          },
+          {
+            "bbox": {
+              "l": 528.7395472788751,
+              "t": 362.3791392282075,
+              "r": 532.1424965687025,
+              "b": 370.5534195328725,
+              "coord_origin": "TOPLEFT"
+            },
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 1,
+            "end_row_offset_idx": 2,
+            "start_col_offset_idx": 3,
+            "end_col_offset_idx": 4,
+            "text": "1",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false,
+            "fillable": false
+          }
+        ],
+        "num_rows": 2,
+        "num_cols": 4,
+        "grid": [
+          [
+            {
+              "bbox": {
+                "l": 49.27141941404297,
+                "t": 322.1679218704576,
+                "r": 72.88425647253516,
+                "b": 330.3422021751225,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "..|S.No",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 90.61732830637501,
+                "t": 322.1679218704576,
+                "r": 214.03613232814456,
+                "b": 330.3422021751225,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "\" & |Consignee Name & Address",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 327.3833767785,
+                "t": 322.1679218704576,
+                "r": 409.9375311604561,
+                "b": 330.3422021751225,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "\"|Service Description",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 511.63477571625003,
+                "t": 322.1679218704576,
+                "r": 549.2937811066294,
+                "b": 330.3422021751225,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 3,
+              "end_col_offset_idx": 4,
+              "text": "K|Quantity",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            }
+          ],
+          [
+            {
+              "bbox": {
+                "l": 57.007952604375006,
+                "t": 362.3791392282075,
+                "r": 60.4109018942025,
+                "b": 370.5534195328725,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "1",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 79.51423097625,
+                "t": 338.3724422982075,
+                "r": 199.6156095660052,
+                "b": 394.5601164628725,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "|Contact : 079-23962262- |EmailID : parvez@ipr.res.in ^|GSTIN : 24AAAAI0348C2ZC |Address : BHAT, NEAR INDIRA BRIDGE, GANDHINAGAR, GANDHINAGAR, GUJARAT-382428, India",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 232.55692390500002,
+                "t": 357.57779984220747,
+                "r": 499.8729946391082,
+                "b": 375.3547589188725,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "Customized AMC/CMC for Pre-owned Products - UPS; Techser Power Solutions; Comprehensive Maintenance Contract (CMC); Quarterly; No",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 528.7395472788751,
+                "t": 362.3791392282075,
+                "r": 532.1424965687025,
+                "b": 370.5534195328725,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 3,
+              "end_col_offset_idx": 4,
+              "text": "1",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            }
+          ]
+        ]
+      },
+      "annotations": []
+    },
+    {
+      "self_ref": "#/tables/1",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "table",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 41.206581115722656,
+            "t": 217.60430908203125,
+            "r": 552.6859741210938,
+            "b": 188.53857421875,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            0
+          ]
+        }
+      ],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "data": {
+        "table_cells": [
+          {
+            "bbox": {
+              "l": 43.50418558125,
+              "t": 625.769814930549,
+              "r": 262.447662252543,
+              "b": 635.578951296147,
+              "coord_origin": "TOPLEFT"
+            },
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 0,
+            "end_row_offset_idx": 1,
+            "start_col_offset_idx": 0,
+            "end_col_offset_idx": 1,
+            "text": "D \" () |Service Start Date (latestby): 03-Apr-2026",
+            "column_header": true,
+            "row_header": false,
+            "row_section": false,
+            "fillable": false
+          },
+          {
+            "bbox": {
+              "l": 397.60296529875,
+              "t": 625.769814930549,
+              "r": 550.528025412543,
+              "b": 635.578951296147,
+              "coord_origin": "TOPLEFT"
+            },
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 0,
+            "end_row_offset_idx": 1,
+            "start_col_offset_idx": 1,
+            "end_col_offset_idx": 2,
+            "text": "\" \"\"|Service End Date :02-Apr-2029",
+            "column_header": true,
+            "row_header": false,
+            "row_section": false,
+            "fillable": false
+          },
+          {
+            "bbox": {
+              "l": 175.240934984625,
+              "t": 642.5745027815491,
+              "r": 419.5634664201071,
+              "b": 652.383639147147,
+              "coord_origin": "TOPLEFT"
+            },
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 1,
+            "end_row_offset_idx": 2,
+            "start_col_offset_idx": 1,
+            "end_col_offset_idx": 2,
+            "text": "| |Category Name : Customized AMC/CMC for Pre-owned Products",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false,
+            "fillable": false
+          }
+        ],
+        "num_rows": 2,
+        "num_cols": 2,
+        "grid": [
+          [
+            {
+              "bbox": {
+                "l": 43.50418558125,
+                "t": 625.769814930549,
+                "r": 262.447662252543,
+                "b": 635.578951296147,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "D \" () |Service Start Date (latestby): 03-Apr-2026",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 397.60296529875,
+                "t": 625.769814930549,
+                "r": 550.528025412543,
+                "b": 635.578951296147,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "\" \"\"|Service End Date :02-Apr-2029",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            }
+          ],
+          [
+            {
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 175.240934984625,
+                "t": 642.5745027815491,
+                "r": 419.5634664201071,
+                "b": 652.383639147147,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "| |Category Name : Customized AMC/CMC for Pre-owned Products",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            }
+          ]
+        ]
+      },
+      "annotations": []
+    },
+    {
+      "self_ref": "#/tables/2",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "table",
+      "prov": [
+        {
+          "page_no": 1,
+          "bbox": {
+            "l": 39.85860061645508,
+            "t": 176.89691162109375,
+            "r": 553.0970458984375,
+            "b": 46.93792724609375,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            0
+          ]
+        }
+      ],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "data": {
+        "table_cells": [
+          {
+            "bbox": {
+              "l": 42.904018158,
+              "t": 702.0739007877075,
+              "r": 91.24412815903173,
+              "b": 710.2481810923726,
+              "coord_origin": "TOPLEFT"
+            },
+            "row_span": 2,
+            "col_span": 1,
+            "start_row_offset_idx": 1,
+            "end_row_offset_idx": 3,
+            "start_col_offset_idx": 3,
+            "end_col_offset_idx": 4,
+            "text": "Product category",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false,
+            "fillable": false
+          },
+          {
+            "bbox": {
+              "l": 187.54436716125002,
+              "t": 702.0739007877075,
+              "r": 198.81776199772222,
+              "b": 710.2481810923726,
+              "coord_origin": "TOPLEFT"
+            },
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 1,
+            "end_row_offset_idx": 2,
+            "start_col_offset_idx": 0,
+            "end_col_offset_idx": 1,
+            "text": "UPS",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false,
+            "fillable": false
+          },
+          {
+            "bbox": {
+              "l": 42.904018158,
+              "t": 714.6774166759575,
+              "r": 83.73790921737188,
+              "b": 722.8516969806226,
+              "coord_origin": "TOPLEFT"
+            },
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 2,
+            "end_row_offset_idx": 3,
+            "start_col_offset_idx": 0,
+            "end_col_offset_idx": 1,
+            "text": "Product Brand",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false,
+            "fillable": false
+          },
+          {
+            "bbox": {
+              "l": 187.54436716125002,
+              "t": 714.6774166759575,
+              "r": 256.56362083500005,
+              "b": 722.8516969806226,
+              "coord_origin": "TOPLEFT"
+            },
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 2,
+            "end_row_offset_idx": 3,
+            "start_col_offset_idx": 1,
+            "end_col_offset_idx": 2,
+            "text": "Techser Power Solutions",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false,
+            "fillable": false
+          },
+          {
+            "bbox": {
+              "l": 42.904018158,
+              "t": 732.0822719502075,
+              "r": 84.70717960592063,
+              "b": 740.2565522548726,
+              "coord_origin": "TOPLEFT"
+            },
+            "row_span": 2,
+            "col_span": 1,
+            "start_row_offset_idx": 3,
+            "end_row_offset_idx": 5,
+            "start_col_offset_idx": 3,
+            "end_col_offset_idx": 4,
+            "text": "Typeofservice",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false,
+            "fillable": false
+          },
+          {
+            "bbox": {
+              "l": 74.20650032688282,
+              "t": 727.2809325642075,
+              "r": 231.7106878382175,
+              "b": 757.6614075291226,
+              "coord_origin": "TOPLEFT"
+            },
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 3,
+            "end_row_offset_idx": 4,
+            "start_col_offset_idx": 0,
+            "end_col_offset_idx": 1,
+            "text": "Comprehensive Contract (CMC) Maintenance Frequency",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false,
+            "fillable": false
+          },
+          {
+            "bbox": {
+              "l": 233.28837795208597,
+              "t": 727.2809325642075,
+              "r": 308.58013140807753,
+              "b": 751.6597332966226,
+              "coord_origin": "TOPLEFT"
+            },
+            "row_span": 3,
+            "col_span": 1,
+            "start_row_offset_idx": 3,
+            "end_row_offset_idx": 6,
+            "start_col_offset_idx": 1,
+            "end_col_offset_idx": 2,
+            "text": "Maintenance 1",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false,
+            "fillable": false
+          },
+          {
+            "bbox": {
+              "l": 42.904018158,
+              "t": 749.4871272244575,
+              "r": 214.37222608516456,
+              "b": 757.6614075291226,
+              "coord_origin": "TOPLEFT"
+            },
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 4,
+            "end_row_offset_idx": 5,
+            "start_col_offset_idx": 0,
+            "end_col_offset_idx": 1,
+            "text": "Preventive Quarterly",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false,
+            "fillable": false
+          },
+          {
+            "bbox": {
+              "l": 42.904018158,
+              "t": 762.0906431127075,
+              "r": 100.41131044453594,
+              "b": 770.2649234173726,
+              "coord_origin": "TOPLEFT"
+            },
+            "row_span": 2,
+            "col_span": 1,
+            "start_row_offset_idx": 5,
+            "end_row_offset_idx": 7,
+            "start_col_offset_idx": 3,
+            "end_col_offset_idx": 4,
+            "text": "Manpower Required",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false,
+            "fillable": false
+          },
+          {
+            "bbox": {
+              "l": 42.904018158,
+              "t": 774.6941590009575,
+              "r": 181.03067509578986,
+              "b": 792.4711180776226,
+              "coord_origin": "TOPLEFT"
+            },
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 6,
+            "end_row_offset_idx": 7,
+            "start_col_offset_idx": 0,
+            "end_col_offset_idx": 1,
+            "text": "Numberofmonths within the contract period for which serviceisrequired",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false,
+            "fillable": false
+          },
+          {
+            "bbox": {
+              "l": 187.54436716125002,
+              "t": 779.4954983869575,
+              "r": 194.37952390278846,
+              "b": 787.6697786916226,
+              "coord_origin": "TOPLEFT"
+            },
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 6,
+            "end_row_offset_idx": 7,
+            "start_col_offset_idx": 1,
+            "end_col_offset_idx": 2,
+            "text": "36",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false,
+            "fillable": false
+          },
+          {
+            "bbox": {
+              "l": 132.62904793387503,
+              "t": 682.8685432437076,
+              "r": 183.14926609986236,
+              "b": 691.0428235483726,
+              "coord_origin": "TOPLEFT"
+            },
+            "row_span": 1,
+            "col_span": 2,
+            "start_row_offset_idx": 0,
+            "end_row_offset_idx": 1,
+            "start_col_offset_idx": 0,
+            "end_col_offset_idx": 2,
+            "text": "\"|Description",
+            "column_header": true,
+            "row_header": false,
+            "row_section": false,
+            "fillable": false
+          },
+          {
+            "bbox": {
+              "l": 278.16964807200003,
+              "t": 678.0672038577076,
+              "r": 335.8059763545347,
+              "b": 695.8441629343725,
+              "coord_origin": "TOPLEFT"
+            },
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 0,
+            "end_row_offset_idx": 1,
+            "start_col_offset_idx": 2,
+            "end_col_offset_idx": 3,
+            "text": "Quantityofproduct/ equipment",
+            "column_header": true,
+            "row_header": false,
+            "row_section": false,
+            "fillable": false
+          },
+          {
+            "bbox": {
+              "l": 365.19392444325,
+              "t": 678.0672038577076,
+              "r": 527.4664421323059,
+              "b": 695.8441629343725,
+              "coord_origin": "TOPLEFT"
+            },
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 0,
+            "end_row_offset_idx": 1,
+            "start_col_offset_idx": 3,
+            "end_col_offset_idx": 4,
+            "text": "Consolidated Unit Price for AMC/CMC (InclusiveofGST) of product/equipment for the entire Contract Period",
+            "column_header": true,
+            "row_header": false,
+            "row_section": false,
+            "fillable": false
+          },
+          {
+            "bbox": {
+              "l": 436.01368038675,
+              "t": 743.4854529919576,
+              "r": 456.5776669351322,
+              "b": 751.6597332966226,
+              "coord_origin": "TOPLEFT"
+            },
+            "row_span": 6,
+            "col_span": 1,
+            "start_row_offset_idx": 1,
+            "end_row_offset_idx": 7,
+            "start_col_offset_idx": 2,
+            "end_col_offset_idx": 3,
+            "text": "233640",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false,
+            "fillable": false
+          }
+        ],
+        "num_rows": 7,
+        "num_cols": 4,
+        "grid": [
+          [
+            {
+              "bbox": {
+                "l": 132.62904793387503,
+                "t": 682.8685432437076,
+                "r": 183.14926609986236,
+                "b": 691.0428235483726,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 2,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 2,
+              "text": "\"|Description",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 132.62904793387503,
+                "t": 682.8685432437076,
+                "r": 183.14926609986236,
+                "b": 691.0428235483726,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 2,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 2,
+              "text": "\"|Description",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 278.16964807200003,
+                "t": 678.0672038577076,
+                "r": 335.8059763545347,
+                "b": 695.8441629343725,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "Quantityofproduct/ equipment",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 365.19392444325,
+                "t": 678.0672038577076,
+                "r": 527.4664421323059,
+                "b": 695.8441629343725,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 3,
+              "end_col_offset_idx": 4,
+              "text": "Consolidated Unit Price for AMC/CMC (InclusiveofGST) of product/equipment for the entire Contract Period",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            }
+          ],
+          [
+            {
+              "bbox": {
+                "l": 187.54436716125002,
+                "t": 702.0739007877075,
+                "r": 198.81776199772222,
+                "b": 710.2481810923726,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "UPS",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 436.01368038675,
+                "t": 743.4854529919576,
+                "r": 456.5776669351322,
+                "b": 751.6597332966226,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 6,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 7,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "233640",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 42.904018158,
+                "t": 702.0739007877075,
+                "r": 91.24412815903173,
+                "b": 710.2481810923726,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 2,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 3,
+              "end_col_offset_idx": 4,
+              "text": "Product category",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            }
+          ],
+          [
+            {
+              "bbox": {
+                "l": 42.904018158,
+                "t": 714.6774166759575,
+                "r": 83.73790921737188,
+                "b": 722.8516969806226,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "Product Brand",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 187.54436716125002,
+                "t": 714.6774166759575,
+                "r": 256.56362083500005,
+                "b": 722.8516969806226,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 2,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "Techser Power Solutions",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 436.01368038675,
+                "t": 743.4854529919576,
+                "r": 456.5776669351322,
+                "b": 751.6597332966226,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 6,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 7,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "233640",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 42.904018158,
+                "t": 702.0739007877075,
+                "r": 91.24412815903173,
+                "b": 710.2481810923726,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 2,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 3,
+              "start_col_offset_idx": 3,
+              "end_col_offset_idx": 4,
+              "text": "Product category",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            }
+          ],
+          [
+            {
+              "bbox": {
+                "l": 74.20650032688282,
+                "t": 727.2809325642075,
+                "r": 231.7106878382175,
+                "b": 757.6614075291226,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 4,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "Comprehensive Contract (CMC) Maintenance Frequency",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 233.28837795208597,
+                "t": 727.2809325642075,
+                "r": 308.58013140807753,
+                "b": 751.6597332966226,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 3,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 6,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "Maintenance 1",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 436.01368038675,
+                "t": 743.4854529919576,
+                "r": 456.5776669351322,
+                "b": 751.6597332966226,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 6,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 7,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "233640",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 42.904018158,
+                "t": 732.0822719502075,
+                "r": 84.70717960592063,
+                "b": 740.2565522548726,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 2,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 5,
+              "start_col_offset_idx": 3,
+              "end_col_offset_idx": 4,
+              "text": "Typeofservice",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            }
+          ],
+          [
+            {
+              "bbox": {
+                "l": 42.904018158,
+                "t": 749.4871272244575,
+                "r": 214.37222608516456,
+                "b": 757.6614075291226,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 4,
+              "end_row_offset_idx": 5,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "Preventive Quarterly",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 233.28837795208597,
+                "t": 727.2809325642075,
+                "r": 308.58013140807753,
+                "b": 751.6597332966226,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 3,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 6,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "Maintenance 1",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 436.01368038675,
+                "t": 743.4854529919576,
+                "r": 456.5776669351322,
+                "b": 751.6597332966226,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 6,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 7,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "233640",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 42.904018158,
+                "t": 732.0822719502075,
+                "r": 84.70717960592063,
+                "b": 740.2565522548726,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 2,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 5,
+              "start_col_offset_idx": 3,
+              "end_col_offset_idx": 4,
+              "text": "Typeofservice",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            }
+          ],
+          [
+            {
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 5,
+              "end_row_offset_idx": 6,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 233.28837795208597,
+                "t": 727.2809325642075,
+                "r": 308.58013140807753,
+                "b": 751.6597332966226,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 3,
+              "col_span": 1,
+              "start_row_offset_idx": 3,
+              "end_row_offset_idx": 6,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "Maintenance 1",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 436.01368038675,
+                "t": 743.4854529919576,
+                "r": 456.5776669351322,
+                "b": 751.6597332966226,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 6,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 7,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "233640",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 42.904018158,
+                "t": 762.0906431127075,
+                "r": 100.41131044453594,
+                "b": 770.2649234173726,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 2,
+              "col_span": 1,
+              "start_row_offset_idx": 5,
+              "end_row_offset_idx": 7,
+              "start_col_offset_idx": 3,
+              "end_col_offset_idx": 4,
+              "text": "Manpower Required",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            }
+          ],
+          [
+            {
+              "bbox": {
+                "l": 42.904018158,
+                "t": 774.6941590009575,
+                "r": 181.03067509578986,
+                "b": 792.4711180776226,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 6,
+              "end_row_offset_idx": 7,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "Numberofmonths within the contract period for which serviceisrequired",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 187.54436716125002,
+                "t": 779.4954983869575,
+                "r": 194.37952390278846,
+                "b": 787.6697786916226,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 6,
+              "end_row_offset_idx": 7,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "36",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 436.01368038675,
+                "t": 743.4854529919576,
+                "r": 456.5776669351322,
+                "b": 751.6597332966226,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 6,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 7,
+              "start_col_offset_idx": 2,
+              "end_col_offset_idx": 3,
+              "text": "233640",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 42.904018158,
+                "t": 762.0906431127075,
+                "r": 100.41131044453594,
+                "b": 770.2649234173726,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 2,
+              "col_span": 1,
+              "start_row_offset_idx": 5,
+              "end_row_offset_idx": 7,
+              "start_col_offset_idx": 3,
+              "end_col_offset_idx": 4,
+              "text": "Manpower Required",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            }
+          ]
+        ]
+      },
+      "annotations": []
+    },
+    {
+      "self_ref": "#/tables/3",
+      "parent": {
+        "$ref": "#/body"
+      },
+      "children": [],
+      "content_layer": "body",
+      "label": "table",
+      "prov": [
+        {
+          "page_no": 2,
+          "bbox": {
+            "l": 41.88555145263672,
+            "t": 196.357177734375,
+            "r": 552.6770629882812,
+            "b": 162.53668212890625,
+            "coord_origin": "BOTTOMLEFT"
+          },
+          "charspan": [
+            0,
+            0
+          ]
+        }
+      ],
+      "captions": [],
+      "references": [],
+      "footnotes": [],
+      "data": {
+        "table_cells": [
+          {
+            "bbox": {
+              "l": 44.70452042775,
+              "t": 650.4595069992074,
+              "r": 124.93227583533329,
+              "b": 658.6337873038724,
+              "coord_origin": "TOPLEFT"
+            },
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 0,
+            "end_row_offset_idx": 1,
+            "start_col_offset_idx": 0,
+            "end_col_offset_idx": 1,
+            "text": "| Advisory Bank :",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false,
+            "fillable": false
+          },
+          {
+            "bbox": {
+              "l": 500.23159467450006,
+              "t": 650.4595069992074,
+              "r": 508.5941775082097,
+              "b": 658.6337873038724,
+              "coord_origin": "TOPLEFT"
+            },
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 0,
+            "end_row_offset_idx": 1,
+            "start_col_offset_idx": 1,
+            "end_col_offset_idx": 2,
+            "text": "NA",
+            "column_header": true,
+            "row_header": false,
+            "row_section": false,
+            "fillable": false
+          },
+          {
+            "bbox": {
+              "l": 44.70452042775,
+              "t": 666.6640274269575,
+              "r": 156.60986264374736,
+              "b": 674.8383077316223,
+              "coord_origin": "TOPLEFT"
+            },
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 1,
+            "end_row_offset_idx": 2,
+            "start_col_offset_idx": 0,
+            "end_col_offset_idx": 1,
+            "text": "D\" (%) | ePBG Percentage(%):",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false,
+            "fillable": false
+          },
+          {
+            "bbox": {
+              "l": 500.23159467450006,
+              "t": 666.6640274269575,
+              "r": 508.5941775082097,
+              "b": 674.8383077316223,
+              "coord_origin": "TOPLEFT"
+            },
+            "row_span": 1,
+            "col_span": 1,
+            "start_row_offset_idx": 1,
+            "end_row_offset_idx": 2,
+            "start_col_offset_idx": 1,
+            "end_col_offset_idx": 2,
+            "text": "NA",
+            "column_header": false,
+            "row_header": false,
+            "row_section": false,
+            "fillable": false
+          }
+        ],
+        "num_rows": 2,
+        "num_cols": 2,
+        "grid": [
+          [
+            {
+              "bbox": {
+                "l": 44.70452042775,
+                "t": 650.4595069992074,
+                "r": 124.93227583533329,
+                "b": 658.6337873038724,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "| Advisory Bank :",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 500.23159467450006,
+                "t": 650.4595069992074,
+                "r": 508.5941775082097,
+                "b": 658.6337873038724,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 0,
+              "end_row_offset_idx": 1,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "NA",
+              "column_header": true,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            }
+          ],
+          [
+            {
+              "bbox": {
+                "l": 44.70452042775,
+                "t": 666.6640274269575,
+                "r": 156.60986264374736,
+                "b": 674.8383077316223,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 0,
+              "end_col_offset_idx": 1,
+              "text": "D\" (%) | ePBG Percentage(%):",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            },
+            {
+              "bbox": {
+                "l": 500.23159467450006,
+                "t": 666.6640274269575,
+                "r": 508.5941775082097,
+                "b": 674.8383077316223,
+                "coord_origin": "TOPLEFT"
+              },
+              "row_span": 1,
+              "col_span": 1,
+              "start_row_offset_idx": 1,
+              "end_row_offset_idx": 2,
+              "start_col_offset_idx": 1,
+              "end_col_offset_idx": 2,
+              "text": "NA",
+              "column_header": false,
+              "row_header": false,
+              "row_section": false,
+              "fillable": false
+            }
+          ]
+        ]
+      },
+      "annotations": []
+    }
+  ],
+  "key_value_items": [],
+  "form_items": [],
+  "pages": {
+    "1": {
+      "size": {
+        "width": 595.0,
+        "height": 842.0
+      },
+      "page_no": 1
+    },
+    "2": {
+      "size": {
+        "width": 595.0,
+        "height": 842.0
+      },
+      "page_no": 2
+    },
+    "3": {
+      "size": {
+        "width": 595.0,
+        "height": 842.0
+      },
+      "page_no": 3
+    }
+  }
+}

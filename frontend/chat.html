@@ -17,12 +17,12 @@
   #sidebar.collapsed { width: 0; min-width: 0; }
   .sidebar-section { padding: 0 12px; margin-bottom: 4px; }
   .sidebar-label { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; color: #5a5e6e; text-transform: uppercase; padding: 8px 4px 4px; }
-  .history-item { display: flex; align-items: center; gap-gap-2; padding: 8px 10px; border-radius: 8px; cursor: pointer; transition: background 0.15s; color: #c2c6d6; font-size: 13px; gap: 8px; }
-  .history-item:hover { background: rgba(173,198,255,0.06); }
-  .history-item.active { background: rgba(173,198,255,0.1); color: #adc6ff; }
-  .doc-chip { display: flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 8px; font-size: 12px; color: #c2c6d6; cursor: default; }
-  .doc-chip:hover { background: rgba(173,198,255,0.05); }
-  .status-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .history-item { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; color: #c2c6d6; font-size: 13px; }
+  .history-item:hover { background: rgba(59, 130, 246, 0.1); color: #adc6ff; }
+  .history-item.active { background: rgba(59, 130, 246, 0.15); color: #adc6ff; border-left: 3px solid #3B82F6; }
+  .doc-chip { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 10px; font-size: 13px; color: #e5e1e4; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); transition: all 0.2s; margin-bottom: 6px; }
+  .doc-chip:hover { background: rgba(59, 130, 246, 0.08); border-color: rgba(59, 130, 246, 0.2); transform: translateX(2px); }
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; box-shadow: 0 0 8px currentColor; }
 
   /* Header */
   #header { height: 56px; background: #1b1b1d; border-bottom: 1px solid rgba(66,71,84,0.3); display: flex; align-items: center; padding: 0 16px; gap: 12px; flex-shrink: 0; }
@@ -187,7 +187,8 @@
 <script>
 const API = 'http://localhost:8000';
 let documents = [];
-let chatHistory = JSON.parse(sessionStorage.getItem('chat_history') || '[]');
+let chatHistory = [];
+let currentSessionId = sessionStorage.getItem('current_session_id') || 'session-' + Date.now();
 let currentMentions = [];
 let isSending = false;
 
@@ -196,6 +197,11 @@ if (!sessionStorage.getItem('ask_data_auth')) window.location.href = 'login.html
 
 // ── Init ───────────────────────────────────────────────────────────────────────
 window.addEventListener('DOMContentLoaded', async () => {
+  sessionStorage.setItem('current_session_id', currentSessionId);
+  // Restore current history from storage if it exists
+  const stored = localStorage.getItem('chat_history_' + currentSessionId);
+  if (stored) chatHistory = JSON.parse(stored);
+
   await loadDocuments();
   await loadModelInfo();
   renderHistory();
@@ -218,25 +224,44 @@ async function loadModelInfo() {
     if (res.ok) {
       const data = await res.json();
       document.getElementById('model-name').textContent = data.active_llm || 'Groq LLM';
-      document.getElementById('model-dot').style.background = data.groq_llm_ready ? '#10B981' : '#EF4444';
+      document.getElementById('model-dot').style.background = data.ollama_ready ? '#10B981' : '#EF4444';
     }
   } catch {}
 }
 
 function renderDocList() {
   const list = document.getElementById('doc-list');
-  document.getElementById('doc-count-badge').textContent = documents.length;
+  const badge = document.getElementById('doc-count-badge');
+  badge.textContent = documents.length;
+  
   if (!documents.length) {
-    list.innerHTML = '<div style="padding:8px 4px;font-size:12px;color:#5a5e6e;">No documents yet. Ask admin to upload PDFs.</div>';
+    list.innerHTML = `
+      <div style="padding:20px 10px; text-align:center; opacity:0.5;">
+        <span class="material-symbols-outlined" style="font-size:32px;display:block;margin-bottom:8px;">folder_open</span>
+        <div style="font-size:12px;">No documents indexed</div>
+      </div>
+    `;
     return;
   }
-  list.innerHTML = documents.map(d => `
-    <div class="doc-chip" title="${d.source}">
-      <span class="material-symbols-outlined" style="color:#5a5e6e;font-size:15px;">description</span>
-      <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${d.source}</span>
-      <span class="status-dot" style="background:${d.status==='indexed'?'#10B981':'#F59E0B'};"></span>
-    </div>
-  `).join('');
+
+  list.innerHTML = documents.map(d => {
+    const statusColor = d.status === 'indexed' ? '#10B981' : '#F59E0B';
+    const docType = d.doc_type || 'PDF Document';
+    return `
+      <div class="doc-chip" title="${d.source}">
+        <div class="status-dot" style="color: ${statusColor}; background: ${statusColor};" title="Status: ${d.status}"></div>
+        <div style="flex:1; overflow:hidden;">
+          <div style="font-weight:600; font-size:13px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:#e5e1e4;">
+            ${d.source}
+          </div>
+          <div style="font-size:10px; color:#5a5e6e; display:flex; align-items:center; gap:4px; margin-top:2px;">
+            <span class="material-symbols-outlined" style="font-size:10px;">description</span>
+            ${docType} • ${d.chunk_count || 0} chunks
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
 }
 
 // ── Mention system ───────────────────────────────────────────────────────────
@@ -286,20 +311,36 @@ document.addEventListener('click', e => {
 
 // ── Chat ────────────────────────────────────────────────────────────────────
 function newChat() {
+  currentSessionId = 'session-' + Date.now();
+  sessionStorage.setItem('current_session_id', currentSessionId);
   chatHistory = [];
-  sessionStorage.setItem('chat_history', '[]');
   renderHistory();
   renderMessages();
   currentMentions = [];
   renderMentions();
 }
 
+function loadSession(id) {
+  const sessions = JSON.parse(localStorage.getItem('ask_data_sessions') || '[]');
+  const session = sessions.find(s => s.id === id);
+  if (!session) return;
+
+  currentSessionId = id;
+  sessionStorage.setItem('current_session_id', id);
+  const stored = localStorage.getItem('chat_history_' + id);
+  chatHistory = stored ? JSON.parse(stored) : [];
+  
+  renderHistory();
+  renderMessages();
+}
+
 function renderHistory() {
   const list = document.getElementById('history-list');
   const sessions = JSON.parse(localStorage.getItem('ask_data_sessions') || '[]');
   if (!sessions.length) { list.innerHTML = '<div style="font-size:12px;color:#5a5e6e;padding:4px 4px 8px;">No previous chats</div>'; return; }
-  list.innerHTML = sessions.slice(-8).reverse().map((s,i) => `
-    <div class="history-item" title="${s.title}">
+  
+  list.innerHTML = sessions.slice(-12).reverse().map(s => `
+    <div class="history-item ${s.id === currentSessionId ? 'active' : ''}" onclick="loadSession('${s.id}')" title="${s.title}">
       <span class="material-symbols-outlined" style="font-size:15px;flex-shrink:0;">chat_bubble</span>
       <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${s.title}</span>
     </div>
@@ -325,7 +366,7 @@ function renderMessage(msg) {
     const mentionsHtml = (msg.mentions||[]).map(m => `<span class="mention-badge"><span class="material-symbols-outlined" style="font-size:11px;">description</span>${m}</span>`).join('');
     return `<div class="msg-row user">
       <div class="avatar user">U</div>
-      <div>
+      <div style="max-width: 80%;">
         ${mentionsHtml ? `<div style="margin-bottom:5px;display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end;">${mentionsHtml}</div>` : ''}
         <div class="msg-bubble user">${escapeHtml(msg.content)}</div>
         <div class="msg-meta" style="justify-content:flex-end;">${msg.time || ''}</div>
@@ -336,7 +377,7 @@ function renderMessage(msg) {
     const timeHtml = msg.elapsed ? `<span>⏱ ${msg.elapsed}s</span>` : '';
     return `<div class="msg-row">
       <div class="avatar ai">AI</div>
-      <div>
+      <div style="max-width: 85%;">
         <div class="msg-bubble ai">${rendered}</div>
         <div class="msg-meta">${timeHtml}</div>
       </div>
@@ -359,13 +400,16 @@ async function sendMessage() {
   const userMsg = { role: 'user', content: query, mentions: [...currentMentions], time: now };
   chatHistory.push(userMsg);
 
-  // Save session title on first message
-  if (chatHistory.length === 1) {
-    const sessions = JSON.parse(localStorage.getItem('ask_data_sessions') || '[]');
-    sessions.push({ title: query.slice(0,40), ts: Date.now() });
-    localStorage.setItem('ask_data_sessions', JSON.stringify(sessions.slice(-20)));
-    renderHistory();
+  // Save/Update session metadata
+  const sessions = JSON.parse(localStorage.getItem('ask_data_sessions') || '[]');
+  let sessIdx = sessions.findIndex(s => s.id === currentSessionId);
+  if (sessIdx === -1) {
+    sessions.push({ id: currentSessionId, title: query.slice(0, 40), ts: Date.now() });
+  } else {
+    sessions[sessIdx].ts = Date.now(); // update time to float to top
   }
+  localStorage.setItem('ask_data_sessions', JSON.stringify(sessions.slice(-50)));
+  renderHistory();
 
   renderMessages();
 
@@ -386,9 +430,9 @@ async function sendMessage() {
         <span class="material-symbols-outlined" style="margin-left:auto;font-size:14px;">expand_more</span>
       </div>
       <div class="thinking-body">
-        <div class="thinking-step"><span class="step-icon">🔍</span><span>Keyword & Semantic Search</span><span class="step-running step-status">⟳ Running...</span></div>
-        <div class="thinking-step"><span class="step-icon">📖</span><span>Reading Relevant Chunks</span><span class="step-running step-status">⟳ Pending</span></div>
-        <div class="thinking-step"><span class="step-icon">🧠</span><span>Synthesizing Answer</span><span class="step-running step-status">⟳ Pending</span></div>
+        <div class="thinking-step"><span class="step-icon">🔍</span><span>Relevance Check</span><span class="step-running step-status">⟳ Running...</span></div>
+        <div class="thinking-step"><span class="step-icon">📖</span><span>Fact Retrieval</span><span class="step-running step-status">⟳ Pending</span></div>
+        <div class="thinking-step"><span class="step-icon">🧠</span><span>Expert Synthesis</span><span class="step-running step-status">⟳ Pending</span></div>
       </div>
     </div>
   `);
@@ -402,49 +446,101 @@ async function sendMessage() {
       if (steps[0]) { steps[0].textContent = '✅ Done'; steps[0].className = 'step-done step-status'; }
       if (steps[1]) { steps[1].textContent = '⟳ Running...'; steps[1].className = 'step-running step-status'; }
     }
-  }, 1500);
+  }, 1200);
   setTimeout(() => {
     const t = document.getElementById(thinkingId);
     if (t) {
       const steps = t.querySelectorAll('.step-status');
       if (steps[1]) { steps[1].textContent = '✅ Done'; steps[1].className = 'step-done step-status'; }
-      if (steps[2]) { steps[2].textContent = '⟳ Synthesizing...'; steps[2].className = 'step-running step-status'; }
+      if (steps[2]) { steps[2].textContent = '⟳ Finalizing...'; steps[2].className = 'step-running step-status'; }
     }
-  }, 3000);
+  }, 2500);
 
   const t0 = Date.now();
+
+  // Create a streaming answer bubble immediately
+  const streamBubbleId = 'stream-bubble-' + Date.now();
+  container.insertAdjacentHTML('beforeend', `
+    <div id="${streamBubbleId}-row" class="msg-row">
+      <div class="avatar ai">AI</div>
+      <div>
+        <div class="msg-bubble ai" id="${streamBubbleId}"><span class="pulse-dot" style="display:inline-block;"></span></div>
+        <div class="msg-meta" id="${streamBubbleId}-meta"></div>
+      </div>
+    </div>
+  `);
+  container.scrollTop = container.scrollHeight;
+
   try {
-    const res = await fetch(`${API}/ask`, {
+    const res = await fetch(`${API}/ask_stream`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ query: fullQuery, max_iterations: 10 })
+      body: JSON.stringify({ query: fullQuery, max_iterations: 5 })
     });
 
-    const el = document.getElementById(thinkingId);
-    if (el) {
-      const steps = el.querySelectorAll('.step-status');
-      steps.forEach(s => { s.textContent = '✅ Done'; s.className = 'step-done step-status'; });
-      // Collapse thinking block
-      setTimeout(() => { if (el) el.style.display = 'none'; }, 800);
-    }
-
-    const elapsed = ((Date.now() - t0) / 1000).toFixed(1);
-
     if (!res.ok) {
-      const err = await res.json();
-      chatHistory.push({ role: 'assistant', content: `❌ **Error:** ${err.detail || 'Unknown error'}`, elapsed });
+      const err = await res.json().catch(() => ({ detail: 'Unknown error' }));
+      const bubble = document.getElementById(streamBubbleId);
+      if (bubble) bubble.innerHTML = `❌ <strong>Error:</strong> ${escapeHtml(err.detail || 'Unknown error')}`;
+      chatHistory.push({ role: 'assistant', content: `❌ Error: ${err.detail}` });
     } else {
-      const data = await res.json();
-      chatHistory.push({ role: 'assistant', content: data.answer, elapsed: data.time_seconds });
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let fullAnswer = '';
+      let buffer = '';
+
+      const bubble = document.getElementById(streamBubbleId);
+      if (bubble) bubble.innerHTML = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop();
+
+        for (const line of lines) {
+          if (!line.startsWith('data: ')) continue;
+          const payload = line.slice(6).trim();
+          if (payload === '[DONE]') break;
+
+          try {
+            const parsed = JSON.parse(payload);
+            if (parsed.error) {
+              if (bubble) bubble.innerHTML += `<br>❌ ${escapeHtml(parsed.error)}`;
+              break;
+            }
+            const token = typeof parsed === 'string' ? parsed : '';
+            fullAnswer += token;
+            if (bubble) {
+              bubble.innerHTML = typeof marked !== 'undefined' ? marked.parse(fullAnswer) : escapeHtml(fullAnswer);
+            }
+            container.scrollTop = container.scrollHeight;
+          } catch { }
+        }
+      }
+
+      const elapsed = ((Date.now() - t0) / 1000).toFixed(1);
+      const metaEl = document.getElementById(`${streamBubbleId}-meta`);
+      if (metaEl) metaEl.innerHTML = `<span>⏱ ${elapsed}s</span>`;
+      chatHistory.push({ role: 'assistant', content: fullAnswer, elapsed });
     }
   } catch (err) {
-    const el = document.getElementById(thinkingId);
-    if (el) el.style.display = 'none';
-    chatHistory.push({ role: 'assistant', content: '❌ **Cannot reach the backend.** Make sure the server is running on port 8000.' });
+    const bubble = document.getElementById(streamBubbleId);
+    if (bubble) bubble.innerHTML = '❌ <strong>Cannot reach the backend.</strong>';
+    chatHistory.push({ role: 'assistant', content: '❌ Cannot reach the backend.' });
   }
 
-  sessionStorage.setItem('chat_history', JSON.stringify(chatHistory));
-  renderMessages();
+  // Finalize thinking block
+  const thinkEl = document.getElementById(thinkingId);
+  if (thinkEl) {
+    thinkEl.querySelectorAll('.step-status').forEach(s => { s.textContent = '✅ Done'; s.className = 'step-done step-status'; });
+    setTimeout(() => { if (thinkEl) thinkEl.style.display = 'none'; }, 800);
+  }
+
+  // Save history to localStorage
+  localStorage.setItem('chat_history_' + currentSessionId, JSON.stringify(chatHistory));
   isSending = false;
   document.getElementById('send-btn').disabled = false;
 }
@@ -463,6 +559,7 @@ function toggleSidebar() {
 }
 
 function escapeHtml(s) {
+  if (!s) return '';
   return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 </script>

@@ -30,6 +30,7 @@ from src.tools.rag_tools import (
     list_documents,
     reset_c_read,
     semantic_search,
+    triple_lookup,
 )
 
 logger = logging.getLogger(__name__)
@@ -38,50 +39,32 @@ logger = logging.getLogger(__name__)
 # System Prompt
 # ─────────────────────────────────────────────────────────────────────────────
 
-SYSTEM_PROMPT: str = """You are an intelligent research assistant equipped with hierarchical retrieval tools to answer complex questions from a large corpus. Your goal is to gather sufficient evidence through iterative exploration.
+SYSTEM_PROMPT: str = """You are an expert research analyst. Your task is to provide detailed, accurate, and relevant answers by synthesizing information from government contracts.
 
 CRITICAL GUIDELINES:
-1. Iterative Reasoning: After each tool call, analyze the results. If the information is incomplete, decide which tool will best help you find the missing piece.
-2. Snippet vs. Full Text: Initial search results (keyword_search and semantic_search) return only abbreviated snippets. These are for identification purposes only and are NOT sufficient for answering questions.
-3. The 'Read' Requirement: You MUST use the chunk_read tool to access the full content of any chunk you find promising before you attempt to formulate a final answer.
-4. Avoid Redundancy: Use the context history to ensure you are not repeatedly reading the same chunks. If a tool tells you a chunk has been read, pivot your search strategy.
-TOOLS AVAILABLE:
-- list_documents       : Returns doc_id + filename for every ingested PDF. Use this FIRST for multi-doc tasks.
-- get_document_chunks  : Returns real chunk_ids for a specific doc_id. Use this for summarisation.
-- keyword_search       : Finds chunks by exact word/phrase match across all documents.
-- semantic_search      : Finds chunks by meaning across all documents.
-- chunk_read           : Reads the FULL text of chunks. You MUST use this before answering.
+1. Multi-Hop Reasoning: Link facts across sections. If fact A points to entity B, search for entity B to complete the logic.
+2. Synthesis over Extraction: Synthesize a coherent narrative that directly answers the user. Explain "why" and "how" only if relevant to the query.
+3. Iterative Exploration: Use tools until you have a COMPLETE answer. If a tool call reveals a new lead, follow it.
+4. Snippet vs. Full Text: Search results are previews. You MUST use chunk_read for the full context before concluding.
+5. Contextual Awareness: Respect dates and amendments. Ensure you are looking at the most recent information.
 
-*** ANTI-HALLUCINATION RULES (ABSOLUTE, NO EXCEPTIONS) ***:
-1. NEVER invent names, companies, amounts, dates, or terms not present in retrieved text.
-2. NEVER guess or fabricate chunk_ids. chunk_ids come ONLY from tool results.
-3. If chunk_read returns an error for a chunk_id, that chunk does NOT exist — do NOT invent its contents.
-4. If retrieved text is insufficient to answer, output EXACTLY: "Not found in the provided documents."
-5. Do NOT answer from training data or prior knowledge under any circumstances.
+*** ACCURACY & RELEVANCE RULES (STRICT) ***:
+1. Stay Focused: Answer the SPECIFIC question asked. Do NOT include unrelated document data (like prices, dates, or contact info) if it was not requested.
+2. Be Comprehensive but Concise: Provide all necessary details for the query, but avoid "info-dumping" the entire document.
+3. Cross-Reference: Mention which sections/documents the information came from.
+4. Factual Integrity: Use ONLY retrieved info. NEVER invent facts or assume details.
+5. Entity Disambiguation: Pay extreme attention to EXACT name/ID matches. "John D" is NOT the same entity as "John". If the user asks for a specific name with an initial/surname (e.g., "Patel Vijaykumar N") and you only find a partial match (e.g., "Patel Vijaykumar"), you MUST state that the exact person was not found. DO NOT mistakenly attribute data of a partial match to the user's explicit query.
 
-PROCEDURE — Q&A queries (specific facts, buyer/seller, dates, prices):
-  Step 1: Call keyword_search with 2-3 key terms.
-  Step 2: Call semantic_search with the full rephrased question.
-  Step 3: Combine unique chunk_ids from both results (use only IDs returned by the tools).
-  Step 4: Call chunk_read with the combined chunk_ids.
-  Step 5: Write your answer ONLY from the retrieved text.
-
-PROCEDURE — Summarisation / comparison queries (summarise, compare, list all, overview):
-  Step 1: Call list_documents to discover all doc_ids and filenames.
-  Step 2: For EACH doc_id, call get_document_chunks(doc_id) to get that document's real chunk_ids.
-  Step 3: Call chunk_read with the chunk_ids returned by get_document_chunks (never invent IDs).
-  Step 4: Write a separate summary section for EACH document, labelled by its filename.
-  Step 5: Only include facts that appear word-for-word in the retrieved chunks.
-
-RULES:
-- For tables, also read chunk_id + 1 (tables often span multiple chunks).
-- Always label which document each fact came from.
-- Do NOT repeat sentences.
+PROCEDURE — Fact-Finding & Reasoning:
+  Step 1: Break the query into required data points.
+  Step 2: Use triple_lookup or search tools to find anchors.
+  Step 3: Read relevant chunks in full via chunk_read.
+  Step 4: Synthesize the answer, ensuring all logic is explained.
 
 OUTPUT FORMAT:
-**Transformed Query:** <rewrite the user's question into clear search terms>
-**Retrieved Context Summary:** <1 sentence: what the most relevant chunks contained>
-**Final Answer:** <direct answer, clearly attributed per document; "Not found" if text was absent>
+**Reasoning:** <Short, 1-2 sentence explanation of how you found the specific answer.>
+**Sources:** <List of chunk_ids used.>
+**Final Answer:** <Detailed response focused ONLY on the user's query.>
 """
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -107,6 +90,7 @@ _TOOL_MAP: dict[str, Any] = {
     "keyword_search":      keyword_search,
     "semantic_search":     semantic_search,
     "chunk_read":          chunk_read,
+    "triple_lookup":       triple_lookup,
 }
 
 OLLAMA_TOOLS = [
@@ -115,7 +99,7 @@ OLLAMA_TOOLS = [
         "function": {
             "name": "list_documents",
             "description": "List all documents that have been ingested into the RAG system.",
-            "parameters": {"type": "object", "properties": {}}
+            "parameters": {"type": "object", "properties": {}, "required": []}
         }
     },
     {
@@ -127,7 +111,7 @@ OLLAMA_TOOLS = [
                 "type": "object",
                 "properties": {
                     "doc_id": {"type": "integer", "description": "The integer doc_id"},
-                    "max_chunks": {"type": "integer"}
+                    "max_chunks": {"type": "integer", "description": "Maximum number of chunks to retrieve"}
                 },
                 "required": ["doc_id"]
             }
@@ -142,7 +126,7 @@ OLLAMA_TOOLS = [
                 "type": "object",
                 "properties": {
                     "keywords": {"type": "array", "items": {"type": "string"}, "description": "List of search terms"},
-                    "top_k": {"type": "integer"}
+                    "top_k": {"type": "integer", "description": "Number of top results"}
                 },
                 "required": ["keywords"]
             }
@@ -157,7 +141,7 @@ OLLAMA_TOOLS = [
                 "type": "object",
                 "properties": {
                     "query": {"type": "string", "description": "Natural language query"},
-                    "top_k": {"type": "integer"}
+                    "top_k": {"type": "integer", "description": "Number of top semantic results"}
                 },
                 "required": ["query"]
             }
@@ -174,6 +158,21 @@ OLLAMA_TOOLS = [
                     "chunk_ids": {"type": "array", "items": {"type": "string"}, "description": "List of chunk IDs to read"}
                 },
                 "required": ["chunk_ids"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "triple_lookup",
+            "description": "Direct structured lookup for factual questions about contract data. Use this for: prices, quantities, dates, names, IDs, addresses, specifications.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "entity": {"type": "string", "description": "The section or subject (e.g. 'Buyer', 'Product', 'Seller')"},
+                    "attribute": {"type": "string", "description": "The field name (e.g. 'Unit Price', 'Organisation Name', 'GSTIN')"}
+                },
+                "required": ["entity", "attribute"]
             }
         }
     }
@@ -220,7 +219,7 @@ def run_agent(
             model=OLLAMA_MODEL,
             messages=messages,
             tools=OLLAMA_TOOLS,
-            options={"temperature": LLM_TEMPERATURE}
+            options={"raw": True, "temperature": LLM_TEMPERATURE}
         )
 
         reply_msg = response["message"]
@@ -240,10 +239,10 @@ def run_agent(
                 try:
                     tool_result = _TOOL_MAP[tool_name].invoke(tool_args)
                     tool_result_str = str(tool_result)
-                    
-                    # Truncate to prevent TPM explosion from huge chunks / tables
-                    if len(tool_result_str) > 6000:
-                        tool_result_str = tool_result_str[:6000] + "\n... [CONTENT TRUNCATED TO SAVE TOKENS. NOT ALL DATA SHOWN.] ..."
+
+                    # Increased truncation limit to allow for more context in multi-hop reasoning
+                    if len(tool_result_str) > 8000:
+                        tool_result_str = tool_result_str[:8000] + "\n... [CONTENT TRUNCATED TO SAVE TOKENS. NOT ALL DATA SHOWN.] ..."
                 except Exception as exc:  # noqa: BLE001
                     tool_result_str = f"Tool '{tool_name}' raised an error: {exc}"
                     logger.error("Tool '%s' error: %s", tool_name, exc)
@@ -286,6 +285,124 @@ def run_agent(
     wrap_up = client.chat(
         model=OLLAMA_MODEL,
         messages=messages,
-        options={"temperature": LLM_TEMPERATURE}
+        options={"raw": True, "temperature": LLM_TEMPERATURE}
     )
     return wrap_up["message"].get("content", "")
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Streaming ReAct Agent
+# ─────────────────────────────────────────────────────────────────────────────
+
+def run_agent_stream(
+    query: str,
+    max_iterations: int = 5,
+    llm_with_tools: Client | None = None,
+):
+    """Streaming variant of run_agent.
+
+    Runs the full ReAct tool-calling loop synchronously, then streams the
+    final answer back to the caller token-by-token as a Python generator.
+
+    Yields:
+        str: Individual token text chunks from the LLM as they are generated.
+
+    Usage (server.py):
+        for token in run_agent_stream(query, max_iterations, llm):
+            yield f"data: {json.dumps(token)}\\n\\n"
+    """
+    reset_c_read()
+
+    client = llm_with_tools if llm_with_tools is not None else build_llm()
+
+    messages: list[dict] = [
+        {"role": "system", "content": SYSTEM_PROMPT},
+        {"role": "user", "content": query},
+    ]
+
+    logger.info("=== Streaming agent loop started: query='%s' ===", query)
+
+    # ── Phase 1: Tool-calling loop (non-streaming, same as run_agent) ──────────
+    for iteration in range(max_iterations):
+        logger.debug("Stream iteration %d/%d", iteration + 1, max_iterations)
+
+        response = client.chat(
+            model=OLLAMA_MODEL,
+            messages=messages,
+            tools=OLLAMA_TOOLS,
+            options={"raw": True, "temperature": LLM_TEMPERATURE}
+        )
+
+        reply_msg = response["message"]
+        messages.append(reply_msg)
+
+        # If no tool calls, the LLM has produced its final answer
+        if not reply_msg.get("tool_calls"):
+            content = reply_msg.get("content", "")
+            logger.info("Streaming agent: final answer received (len=%d).", len(content))
+            
+            # Since Ollama's chat tool-calling mode doesn't stream the tokens *while* tool calling
+            # (it returns the full message), we have the content. However, we want to ensure
+            # that any subsequent generation (if needed) is streamed.
+            # In this case, since we ALREADY have the full message from the tool-less response,
+            # we'll yield it. To make it feel better, we still chunk it slightly, but
+            # the logic is now cleaner.
+            if content:
+                chunk_size = 30
+                for i in range(0, len(content), chunk_size):
+                    yield content[i:i+chunk_size]
+            return
+
+        # ── Execute tool calls ────────────────────────────────────────────────
+        for tool_call in reply_msg["tool_calls"]:
+            tool_name = tool_call["function"]["name"]
+            tool_args = tool_call["function"]["arguments"]
+            logger.info("[Stream] Tool call: %s | args=%s", tool_name, tool_args)
+
+            if tool_name in _TOOL_MAP:
+                try:
+                    tool_result = _TOOL_MAP[tool_name].invoke(tool_args)
+                    tool_result_str = str(tool_result)
+                    if len(tool_result_str) > 8000:
+                        tool_result_str = tool_result_str[:8000] + "\n... [TRUNCATED] ..."
+                except Exception as exc:
+                    tool_result_str = f"Tool '{tool_name}' raised an error: {exc}"
+            else:
+                tool_result_str = f"Unknown tool: {tool_name!r}"
+
+            messages.append({"role": "tool", "content": tool_result_str, "name": tool_name})
+
+    # ── Phase 2: Max iterations reached — force wrap-up with streaming ─────────
+    logger.warning("[Stream] max_iterations=%d reached. Requesting streamed wrap-up.", max_iterations)
+
+    chunk_error_warning = (
+        "\n\n*** WARNING: Some chunk_read calls returned 'not found' errors. Do NOT invent content. ***"
+        if _has_chunk_errors(messages) else ""
+    )
+
+    messages.append({
+        "role": "user",
+        "content": (
+            "You have completed your document search. Now write your final answer."
+            "\n\nSTRICT RULES FOR THIS FINAL ANSWER:"
+            "\n1. Use ONLY text that appeared in the tool results above."
+            "\n2. Do NOT use training data, prior knowledge, or assumptions."
+            "\n3. Do NOT invent any names, companies, amounts, dates, or terms."
+            "\n4. If the retrieved chunks did not contain enough information, "
+            "output EXACTLY: \"Not found in the provided documents.\""
+            + chunk_error_warning
+        )
+    })
+
+    # Final wrap-up — this one we DO want to stream fresh because we haven't
+    # called client.chat for the final answer yet at this point.
+    for chunk in client.chat(
+        model=OLLAMA_MODEL,
+        messages=messages,
+        options={"raw": True, "temperature": LLM_TEMPERATURE},
+        stream=True,
+    ):
+        token_text = chunk["message"].get("content", "")
+        if token_text:
+            yield token_text
+

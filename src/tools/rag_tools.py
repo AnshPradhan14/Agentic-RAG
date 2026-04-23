@@ -44,6 +44,7 @@ from src.core.database import (
     fetch_chunk_by_id,
     get_parent_chunk_id,
     get_sentence_text,
+    get_connection,
 )
 
 logger = logging.getLogger(__name__)
@@ -350,3 +351,31 @@ def chunk_read(chunk_ids: list[str]) -> dict:
                 logger.warning("chunk_read: chunk_id=%s not found.", cid)
 
     return results
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Tool 6 — Triple Lookup (Change 5)
+# ─────────────────────────────────────────────────────────────────────────────
+
+@tool
+def triple_lookup(entity: str = "", attribute: str = "") -> str:
+    """Direct structured lookup for factual questions about contract data.
+    Use this for: prices, quantities, dates, names, IDs, addresses, specifications.
+    entity: the section or subject (e.g. 'Buyer', 'Product', 'Seller')
+    attribute: the field name (e.g. 'Unit Price', 'Organisation Name', 'GSTIN')
+    Returns matching values from the entity_triples table.
+    """
+    logger.info("triple_lookup called: entity='%s', attribute='%s'", entity, attribute)
+    conn = get_connection()
+    try:
+        rows = conn.execute(
+            """SELECT entity, attribute, value FROM entity_triples
+               WHERE entity LIKE ? AND attribute LIKE ?
+               LIMIT 10""",
+            (f"%{entity}%", f"%{attribute}%")
+        ).fetchall()
+        if not rows:
+            return "No structured match found. Try semantic_search instead."
+        return "\n".join([f"{r[0]} | {r[1]}: {r[2]}" for r in rows])
+    finally:
+        conn.close()

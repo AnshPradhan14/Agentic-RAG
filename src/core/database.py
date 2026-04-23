@@ -8,9 +8,10 @@ This module owns ALL database concerns:
 
 Schema overview
 ───────────────
-  documents  : one row per ingested PDF  (Layer 0 writes, Layer 3 reads indirectly)
-  chunks     : one row per text chunk    (Layer 1 writes, Layer 3 reads via fetch_chunk_by_id)
-  sentences  : one row per sentence      (Layer 1 writes, FAISS row mapping lives here)
+  documents      : one row per ingested PDF  (Layer 0 writes, Layer 3 reads indirectly)
+  chunks         : one row per text chunk    (Layer 1 writes, Layer 3 reads via fetch_chunk_by_id)
+  sentences      : one row per sentence      (Layer 1 writes, FAISS row mapping lives here)
+  entity_triples : one row per table triple  (Layer 0 writes, triple_lookup tool reads)
 
 Usage:
     from database import init_db, fetch_all_chunks, fetch_chunk_by_id
@@ -88,8 +89,29 @@ def init_db() -> None:
             );
         """)
 
+        # ── entity_triples table (Layer 0 writes, triple_lookup reads) ────────
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS entity_triples (
+                id        INTEGER PRIMARY KEY AUTOINCREMENT,
+                doc_id    TEXT    NOT NULL,
+                chunk_id  INTEGER NOT NULL,
+                entity    TEXT    NOT NULL,
+                attribute TEXT    NOT NULL,
+                value     TEXT    NOT NULL
+            );
+        """)
+
         conn.commit()
-        logger.info("Database schema ready (documents / chunks / sentences).")
+
+        # ── Add section column to chunks if not present (idempotent) ──────────
+        try:
+            conn.execute("ALTER TABLE chunks ADD COLUMN section TEXT DEFAULT 'General';")
+            conn.commit()
+            logger.info("Added 'section' column to chunks table.")
+        except Exception:  # Column already exists — safe to ignore
+            pass
+
+        logger.info("Database schema ready (documents / chunks / sentences / entity_triples).")
     except sqlite3.Error as exc:
         logger.error("Failed to initialise database: %s", exc)
         conn.rollback()
@@ -164,6 +186,7 @@ def insert_chunk(
     markdown_text: str,
     start_page: int | None,
     metadata_json: str,
+    section: str = "General",
 ) -> None:
     """Insert one chunk row into the chunks table.
 
@@ -173,6 +196,7 @@ def insert_chunk(
         markdown_text : Full Markdown text of this chunk.
         start_page    : Starting page number within the source PDF (or None).
         metadata_json : JSON-serialised metadata dict (inherited from document + chunk fields).
+        section       : Section label from context_aware_chunk (default 'General').
 
     Raises:
         sqlite3.Error: Rolls back and re-raises on any DB failure.
@@ -182,13 +206,13 @@ def insert_chunk(
         conn.execute(
             """
             INSERT OR REPLACE INTO chunks
-                (chunk_id, doc_id, markdown_text, start_page, metadata_json)
-            VALUES (?, ?, ?, ?, ?)
+                (chunk_id, doc_id, markdown_text, start_page, metadata_json, section)
+            VALUES (?, ?, ?, ?, ?, ?)
             """,
-            (chunk_id, doc_id, markdown_text, start_page, metadata_json),
+            (chunk_id, doc_id, markdown_text, start_page, metadata_json, section),
         )
         conn.commit()
-        logger.debug("Inserted chunk_id=%s for doc_id=%d", chunk_id, doc_id)
+        logger.debug("Inserted chunk_id=%s for doc_id=%d (section=%s)", chunk_id, doc_id, section)
     except sqlite3.Error as exc:
         logger.error("insert_chunk failed for chunk_id=%s: %s", chunk_id, exc)
         conn.rollback()
@@ -399,6 +423,7 @@ def clear_all_data() -> None:
         conn.execute("DELETE FROM sentences;")
         conn.execute("DELETE FROM chunks;")
         conn.execute("DELETE FROM documents;")
+        conn.execute("DELETE FROM entity_triples;")
         conn.execute("DELETE FROM sqlite_sequence;")
         conn.commit()
         logger.info("Cleared ALL data from DB (including documents and sequences).")
@@ -408,3 +433,39 @@ def clear_all_data() -> None:
         raise
     finally:
         conn.close()
+
+
+# ── Entity Triple helpers ─────────────────────────────────────────────────────
+
+def save_triples(triples: list[dict]) -> None:
+    """Insert a batch of entity-attribute-value triples into entity_triples.
+
+    Args:
+        triples: List of dicts produced by extract_triples(), each with keys:
+                 doc_id, chunk_id, entity, attribute, value.
+
+    Raises:
+        sqlite3.Error: Rolls back and re-raises on any DB failure.
+    """
+    if not triples:
+        return
+    conn = _get_connection()
+    try:
+        conn.executemany(
+            "INSERT INTO entity_triples (doc_id, chunk_id, entity, attribute, value) "
+            "VALUES (:doc_id, :chunk_id, :entity, :attribute, :value)",
+            triples,
+        )
+        conn.commit()
+        logger.debug("Saved %d entity triples to DB.", len(triples))
+    except sqlite3.Error as exc:
+        logger.error("save_triples failed: %s", exc)
+        conn.rollback()
+        raise
+    finally:
+        conn.close()
+
+
+def get_connection() -> sqlite3.Connection:
+    """Public alias for _get_connection — used by triple_lookup tool."""
+    return _get_connection()

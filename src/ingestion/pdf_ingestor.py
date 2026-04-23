@@ -24,16 +24,19 @@ Usage (standalone):
 import argparse
 import json
 import logging
+import re
 import sys
 from pathlib import Path
 
 from src.core.config import PARSED_DIR, RAW_DIR
-from src.core.database import init_db, insert_document
+from src.core.database import init_db, insert_document, save_triples
+from src.ingestion.table_relation_extractor import extract_triples
 
 # ── Module logger ─────────────────────────────────────────────────────────────
 logger = logging.getLogger(__name__)
 
 
+from src.ingestion.markdown_cleaner import MarkdownCleaner
 # ─────────────────────────────────────────────────────────────────────────────
 # Step 1 — PDF Parsing
 # ─────────────────────────────────────────────────────────────────────────────
@@ -46,15 +49,6 @@ def parse_pdf_with_docling(pdf_path: str) -> tuple[Path, Path]:
 
     Returns:
         (md_path, json_path): Paths to the saved .md and .json files.
-
-    Side effects:
-        - Creates data/parsed/ if it does not exist.
-        - Writes <doc_name>.md and <doc_name>.json into data/parsed/.
-        - Logs output paths at INFO level.
-
-    Raises:
-        FileNotFoundError : If pdf_path does not exist.
-        RuntimeError      : If Docling fails to produce both output files.
     """
     pdf_path_obj = Path(pdf_path).resolve()
 
@@ -71,21 +65,91 @@ def parse_pdf_with_docling(pdf_path: str) -> tuple[Path, Path]:
     PARSED_DIR.mkdir(parents=True, exist_ok=True)
 
     try:
-        from docling.document_converter import DocumentConverter  # lazy import
+        from docling.document_converter import DocumentConverter, PdfFormatOption
+        from docling.datamodel.base_models import InputFormat
+        from docling.datamodel.pipeline_options import (
+            PdfPipelineOptions, 
+            TableStructureOptions, 
+            TableFormerMode
+        )
 
-        converter = DocumentConverter()
+        # ── Advanced Configuration for Table-Heavy / Complex Layouts ───────────
+        pipeline_options = PdfPipelineOptions()
+        
+        # 1. Table Recognition: Use 'ACCURATE' for better table reconstruction
+        pipeline_options.do_table_structure = True
+        pipeline_options.table_structure_options = TableStructureOptions(
+            do_cell_matching=True,
+            mode=TableFormerMode.ACCURATE
+        )
+
+        # 2. Text Recovery: Disable OCR for better stability on large digital PDFs
+        # Digital PDFs don't need OCR, and it saves massive amounts of RAM.
+        pipeline_options.do_ocr = False
+        
+        # 3. Apply options to the converter
+        converter = DocumentConverter(
+            format_options={
+                InputFormat.PDF: PdfFormatOption(pipeline_options=pipeline_options)
+            }
+        )
+
+        logger.info("Starting Docling conversion for: %s", pdf_path_obj.name)
         result = converter.convert(str(pdf_path_obj))
 
+        # 4. Export results
         markdown_text: str = result.document.export_to_markdown()
+        
+        # Fallback: if no text was extracted (no alphanumeric chars), it might be a scanned PDF. Retry with OCR enabled.
+        import re
+        if not re.search(r'[a-zA-Z0-9]', markdown_text):
+            logger.info("No readable text found (possibly scanned PDF with empty tables). Retrying with full-page OCR enabled...")
+            
+            try:
+                from docling.datamodel.pipeline_options import EasyOcrOptions
+                pipeline_options.do_ocr = True
+                pipeline_options.ocr_options = EasyOcrOptions(force_full_page_ocr=True)
+            except ImportError:
+                # Fallback if EasyOcrOptions is not available
+                pipeline_options.do_ocr = True
+                
+            pipeline_options.generate_page_images = True 
+            
+            converter = DocumentConverter(
+                format_options={
+                    InputFormat.PDF: PdfFormatOption(pipeline_options=pipeline_options)
+                }
+            )
+            result = converter.convert(str(pdf_path_obj))
+            markdown_text = result.document.export_to_markdown()
+
         json_data: dict = result.document.export_to_dict()
 
+        # Log metadata for debugging (safe for docling v2.x — body has no .children)
+        try:
+            num_pages = len(result.document.pages) if result.document.pages else "unknown"
+        except Exception:
+            num_pages = "unknown"
+        logger.info(
+            "Docling Conversion Finished for %s. Pages: %s",
+            pdf_path_obj.name,
+            str(num_pages),
+        )
+
+        logger.info("Markdown extracted: %d chars for %s.", len(markdown_text), pdf_path_obj.name)
+
     except Exception as exc:  # noqa: BLE001
-        logger.error("Docling failed for %s: %s", pdf_path_obj, exc)
-        raise RuntimeError(
-            f"Docling converter raised an error for '{pdf_path_obj}': {exc}"
-        ) from exc
+        logger.error("Docling failed for %s: %s", pdf_path_obj, exc, exc_info=True)
+        # Re-raise as RuntimeError with context to be caught by the top-level ingest orchestrator
+        raise RuntimeError(f"Docling conversion failed: {exc}") from exc
+
 
     doc_stem = pdf_path_obj.stem  # filename without extension
+
+    # ── Apply Cleaner (fixes Hindi, artifacts, broken words) ──────────────────
+    markdown_text = MarkdownCleaner.clean_text(markdown_text)
+    json_data = MarkdownCleaner.clean_json(json_data)
+    logger.info("Markdown and JSON outputs cleaned of artifacts and noise.")
 
     # ── Write Markdown ─────────────────────────────────────────────────────────
     md_path = PARSED_DIR / f"{doc_stem}.md"
@@ -108,7 +172,7 @@ def parse_pdf_with_docling(pdf_path: str) -> tuple[Path, Path]:
             f"Expected: {md_path} and {json_path}"
         )
 
-    logger.info("Docling output saved → %s, %s", md_path, json_path)
+    logger.info("Docling output saved (cleaned) → %s, %s", md_path, json_path)
     return md_path, json_path
 
 
@@ -281,14 +345,69 @@ def ingest_pdf(pdf_path: str) -> int:
         1. parse_pdf_with_docling(pdf_path) → (md_path, json_path)
         2. extract_metadata(json_path)      → metadata dict
         3. store_document(md_path, json_path, metadata) → doc_id
-        4. Log success
-        5. Return doc_id
+        4. Extract entity triples from tables and store them
+        5. Log success
+        6. Return doc_id
     """
     logger.info("=== Layer 0: ingest_pdf started for '%s' ===", pdf_path)
 
     md_path, json_path = parse_pdf_with_docling(pdf_path)
     metadata            = extract_metadata(json_path)
     doc_id              = store_document(md_path, json_path, metadata)
+
+    # ── Extract and store entity triples from Docling tables ──────────────────
+    try:
+        raw_json = json.loads(json_path.read_text(encoding="utf-8"))
+        tables = raw_json.get("tables", [])
+
+        all_triples = []
+        for chunk_idx, table in enumerate(tables):
+            # ---- Docling v2.x JSON format ----------------------------------------
+            # Each table entry has:
+            #   "data": { "table_cells": [...], "num_rows": N, "num_cols": M }
+            # Each cell: { "row_span": 1, "col_span": 1, "start_row_offset_idx": R,
+            #              "end_row_offset_idx": R, "start_col_offset_idx": C,
+            #              "end_col_offset_idx": C, "text": "...", "column_header": bool }
+            # ---- Legacy / v1 format fallback ------------------------------------
+            # Each table has "rows": [[cell, ...], ...]
+            section_header = table.get("section_header") or "General"
+
+            normalised_rows: list = []
+            data = table.get("data", {})
+            table_cells = data.get("table_cells", []) if isinstance(data, dict) else []
+
+            if table_cells:
+                # Modern docling v2.x: reconstruct a 2D row/col grid from flat cells
+                num_rows = data.get("num_rows", 0)
+                num_cols = data.get("num_cols", 0)
+                if num_rows > 0 and num_cols > 0:
+                    grid: list = [[""] * num_cols for _ in range(num_rows)]
+                    for cell in table_cells:
+                        r = cell.get("start_row_offset_idx", 0)
+                        c = cell.get("start_col_offset_idx", 0)
+                        if r < num_rows and c < num_cols:
+                            grid[r][c] = str(cell.get("text", "")).strip()
+                    normalised_rows = grid
+            else:
+                # Legacy format: rows is already a list of lists
+                raw_rows = table.get("rows", [])
+                for row in raw_rows:
+                    if isinstance(row, list):
+                        normalised_rows.append(
+                            [cell.get("text", str(cell)) if isinstance(cell, dict) else str(cell) for cell in row]
+                        )
+
+            table_dict = {"section_header": section_header, "rows": normalised_rows}
+            triples = extract_triples(table_dict, str(doc_id), chunk_idx)
+            all_triples.extend(triples)
+
+        if all_triples:
+            save_triples(all_triples)
+            logger.info("Stored %d entity triples for doc_id=%d", len(all_triples), doc_id)
+        else:
+            logger.info("No tables/triples found for doc_id=%d", doc_id)
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("Triple extraction failed for doc_id=%d: %s", doc_id, exc)
 
     logger.info(
         "=== Layer 0: Ingested '%s' → doc_id=%d ===",

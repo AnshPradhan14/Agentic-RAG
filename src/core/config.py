@@ -22,8 +22,14 @@ FAISS_INDEX_PATH: Path   = INDEX_DIR / "sentences.index"
 SENTENCES_MAP_PATH: Path = INDEX_DIR / "sentences_map.json"
 
 # ── Embedding Model ───────────────────────────────────────────────────────────
-_LOCAL_MODEL: Path = BASE_DIR / "models" / "multilingual-e5-base"
-EMBEDDING_MODEL_NAME: str = str(_LOCAL_MODEL) if _LOCAL_MODEL.exists() else "intfloat/multilingual-e5-base"
+_LOCAL_E5:     Path = BASE_DIR / "models" / "multilingual-e5-base"
+_LOCAL_MINILM: Path = BASE_DIR / "models" / "all-MiniLM-L6-v2"
+if _LOCAL_E5.exists():
+    EMBEDDING_MODEL_NAME: str = str(_LOCAL_E5)
+elif _LOCAL_MINILM.exists():
+    EMBEDDING_MODEL_NAME: str = str(_LOCAL_MINILM)
+else:
+    EMBEDDING_MODEL_NAME: str = "all-MiniLM-L6-v2"  # fallback: HF Hub download
 
 # ── Chunking ──────────────────────────────────────────────────────────────────
 CHUNK_TOKEN_LIMIT: int = 400
@@ -36,7 +42,7 @@ RETRIEVAL_TOP_K: int = 5
 # Requires: local Ollama app running + `ollama signin`
 # Model runs on Ollama's cloud, routed via local daemon (localhost:11434)
 OLLAMA_MODEL: str      = "qwen3.5:cloud"
-LLM_TEMPERATURE: float = 0.0
+LLM_TEMPERATURE: float = 0.4
 
 # ── Logging ───────────────────────────────────────────────────────────────────
 LOG_LEVEL: str = os.environ.get("LOG_LEVEL", "INFO").upper()

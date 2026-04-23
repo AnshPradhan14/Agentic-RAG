@@ -49,6 +49,8 @@ from src.core.database import (
     clear_sentences_and_chunks,
 )
 
+logger = logging.getLogger(__name__)
+
 # ── NLTK data (safe download) ──────────────────────────────────────────────────
 try:
     nltk.data.find('tokenizers/punkt')
@@ -60,7 +62,96 @@ except LookupError:
     except Exception as e:
         logger.warning(f"NLTK download failed: {e}. Falling back to simple splitting.")
 
-logger = logging.getLogger(__name__)
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Section-Boundary Chunker (Change 4)
+# ─────────────────────────────────────────────────────────────────────────────
+
+SECTION_HEADERS = [
+    "Organisation Details",
+    "Buyer Details",
+    "Seller Details",
+    "Financial Approval",
+    "Paying Authority",
+    "Product Details",
+    "Consignee Detail",
+    "Buyback Item Details",
+    "Terms and Conditions",
+    "ePBG Detail",
+    "Specifications",
+]
+
+
+def context_aware_chunk(parsed_md: str, max_tokens: int = 800) -> list[dict]:
+    """Split Markdown into section-boundary-aligned chunks.
+
+    For each line, check if it contains a known section header or generic md header.  If so,
+    flush the current buffer (as long as it holds at least 50 tokens worth
+    of content) and start a new chunk labelled with the matched section.
+    Long sections are further split at max_tokens. Crucially, restricts splitting inside markdown tables.
+
+    Returns:
+        List of dicts: {section: str, text: str, token_count: int}
+    """
+    import re
+    chunks: list[dict] = []
+    current_section = "General"
+    current_lines: list[str] = []
+    current_tokens = 0
+    in_table = False
+
+    for line in parsed_md.splitlines():
+        # Detect markdown headers natively (e.g. "## Header")
+        header_match = re.match(r'^(#{1,6})\s+(.*)', line)
+        matched_header = None
+        
+        if header_match:
+            matched_header = header_match.group(2).strip()
+        else:
+            matched_header = next(
+                (h for h in SECTION_HEADERS if h.lower() in line.lower()), None
+            )
+
+        # Detect if we are inside a Markdown table
+        is_table_line = "|" in line and len(line.split("|")) > 2
+        if is_table_line:
+            in_table = True
+        elif not line.strip():
+            in_table = False
+
+        if matched_header and not in_table:
+            if current_tokens > 50:
+                chunks.append({
+                    "section":     current_section,
+                    "text":        "\n".join(current_lines).strip(),
+                    "token_count": current_tokens,
+                })
+                current_lines = []
+                current_tokens = 0
+            current_section = matched_header
+            current_lines.append(line)
+            current_tokens += len(line.split())
+        else:
+            current_lines.append(line)
+            current_tokens += len(line.split())
+            # Split if we exceed threshold, but ONLY if we aren't mid-table!
+            if current_tokens >= max_tokens and not in_table:
+                chunks.append({
+                    "section":     current_section,
+                    "text":        "\n".join(current_lines).strip(),
+                    "token_count": current_tokens,
+                })
+                current_lines = []
+                current_tokens = 0
+
+    if current_lines:
+        chunks.append({
+            "section":     current_section,
+            "text":        "\n".join(current_lines).strip(),
+            "token_count": current_tokens,
+        })
+
+    return chunks
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -77,11 +168,11 @@ def get_tokens(text: str, enc) -> int:
 
 
 def build_chunks(doc_id: int) -> list[dict[str, Any]]:
-    """Stage 1: Read document Markdown from SQLite and create continuous token-based chunks."""
+    """Stage 1: Read document Markdown from SQLite and create section-aware chunks."""
     import sqlite3
     from src.core.config import DB_PATH
 
-    logger.info("Stage 1 — Building continuous token-based chunks for doc_id=%d", doc_id)
+    logger.info("Stage 1 — Building section-aware chunks for doc_id=%d", doc_id)
 
     # ── Fetch document row ────────────────────────────────────────────────────
     conn = sqlite3.connect(str(DB_PATH))
@@ -109,21 +200,17 @@ def build_chunks(doc_id: int) -> list[dict[str, Any]]:
         "severity":    row["severity"],
     }
 
-    # ── Tokenizer ─────────────────────────────────────────────────────────────
-    try:
-        import tiktoken
-        enc = tiktoken.get_encoding("cl100k_base")
-    except Exception:
-        enc = None # Fallback logic used in get_tokens
+    # ── Section-boundary chunking (Change 4) ──────────────────────────────────
+    section_chunks = context_aware_chunk(source_md, max_tokens=CHUNK_TOKEN_LIMIT)
 
-    # ── Helper: create and persist a single chunk ─────────────────────────────
     chunks: list[dict[str, Any]] = []
     chunk_counter = 0
 
-    def _save_chunk(text: str) -> None:
-        nonlocal chunk_counter
+    for sc in section_chunks:
+        text = sc["text"]
+        section = sc["section"]
         if not text.strip():
-            return
+            continue
 
         chunk_id = str(_global_chunk_id_offset(doc_id, chunk_counter))
         chunk_counter += 1
@@ -131,6 +218,7 @@ def build_chunks(doc_id: int) -> list[dict[str, Any]]:
         chunk_meta = {
             **base_meta,
             "chunk_index": chunk_counter - 1,
+            "section":     section,
         }
         meta_json = json.dumps(chunk_meta)
 
@@ -140,48 +228,17 @@ def build_chunks(doc_id: int) -> list[dict[str, Any]]:
             "markdown_text": text,
             "start_page":    None,
             "metadata_json": meta_json,
+            "section":       section,
         }
         chunks.append(chunk_record)
         insert_chunk(
-            chunk_id=chunk_id, doc_id=doc_id, markdown_text=text,
-            start_page=None, metadata_json=meta_json,
+            chunk_id=chunk_id,
+            doc_id=doc_id,
+            markdown_text=text,
+            start_page=None,
+            metadata_json=meta_json,
+            section=section,
         )
-
-    # ── Process continuous sentences ──────────────────────────────────────────
-    try:
-        sentences = nltk.sent_tokenize(source_md.strip())
-    except Exception:
-        sentences = [s.strip() + "." for s in source_md.strip().split(".") if s.strip()]
-
-    current_sentences = []
-    current_tokens = 0
-    
-    for sent in sentences:
-        sent_tokens = get_tokens(sent, enc)
-        
-        if current_tokens + sent_tokens > CHUNK_TOKEN_LIMIT and current_sentences:
-            # Flush current chunk
-            _save_chunk(" ".join(current_sentences))
-            
-            # Handle overlap: keep last N tokens worth of sentences
-            overlap_sents = []
-            overlap_tokens = 0
-            for s in reversed(current_sentences):
-                st = get_tokens(s, enc)
-                if overlap_tokens + st > CHUNK_OVERLAP:
-                    break
-                overlap_sents.insert(0, s)
-                overlap_tokens += st
-            
-            current_sentences = overlap_sents
-            current_tokens = overlap_tokens
-
-        current_sentences.append(sent)
-        current_tokens += sent_tokens
-
-    # Final flush
-    if current_sentences:
-        _save_chunk(" ".join(current_sentences))
 
     logger.info("Stage 1 complete — %d chunks created for doc_id=%d", len(chunks), doc_id)
     return chunks
@@ -232,11 +289,27 @@ def build_embeddings() -> None:
     sentences_meta: list[dict] = []   # {chunk_id, sentence_local_idx}
 
     for chunk in tqdm(all_chunks, desc="Collecting sentences"):
-        sents = nltk.sent_tokenize(chunk["markdown_text"])
+        sents = []
+        for line in chunk["markdown_text"].split("\n"):
+            line = line.strip()
+            if not line:
+                continue
+            # If the line looks like a markdown table row, keep it whole so vectors don't truncate
+            if "|" in line and len(line.split("|")) > 2:
+                sents.append(line)
+            else:
+                sents.extend(nltk.sent_tokenize(line))
+                
+        section_label = chunk.get("section", "General")
         for idx, sent in enumerate(sents):
             if sent.strip():
                 sentences_text.append(sent.strip())
-                sentences_meta.append({"chunk_id": chunk["chunk_id"], "local_idx": idx})
+                sentences_meta.append({
+                    "chunk_id": chunk["chunk_id"],
+                    "local_idx": idx,
+                    "section": section_label,
+                    "doc_id": str(chunk.get("doc_id", "")),
+                })
 
     if not sentences_text:
         logger.warning("No sentences extracted from chunks.")
@@ -280,6 +353,8 @@ def build_embeddings() -> None:
             "faiss_row":   faiss_row,
             "sentence_id": sentence_id,
             "chunk_id":    sent_meta["chunk_id"],
+            "section":     sent_meta.get("section", "General"),
+            "doc_id":      sent_meta.get("doc_id", ""),
         })
 
     # ── Persist FAISS index to disk ───────────────────────────────────────────
