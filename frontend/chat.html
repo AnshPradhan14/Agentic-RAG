@@ -185,6 +185,10 @@
 </div>
 
 <script>
+// Configure marked.js to render single newlines as line breaks (<br>)
+if (typeof marked !== 'undefined') {
+  marked.use({ breaks: true, gfm: true });
+}
 const API = 'http://localhost:8000';
 let documents = [];
 let chatHistory = [];

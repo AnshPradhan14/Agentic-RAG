@@ -38,10 +38,14 @@ CHUNK_OVERLAP: int     = 100
 # ── Retrieval ─────────────────────────────────────────────────────────────────
 RETRIEVAL_TOP_K: int = 5
 
-# ── LLM — Ollama (local daemon, cloud-tagged model) ───────────────────────────
-# Requires: local Ollama app running + `ollama signin`
-# Model runs on Ollama's cloud, routed via local daemon (localhost:11434)
-OLLAMA_MODEL: str      = "qwen3.5:cloud"
+# ── LLM Configuration (Ollama / Groq) ──────────────────────────────────────────
+# Set LLM_PROVIDER in .env to switch between 'ollama' and 'groq'
+LLM_PROVIDER: str      = os.environ.get("LLM_PROVIDER", "ollama").lower()
+GROQ_MODEL: str        = os.environ.get("GROQ_MODEL", "llama-3.1-70b-versatile")
+GROQ_API_KEY: str      = os.environ.get("GROQ_API_KEY", "")
+
+# Ollama fallback (requires local Ollama app running)
+OLLAMA_MODEL: str      = os.environ.get("OLLAMA_MODEL", "qwen3.5:cloud")
 LLM_TEMPERATURE: float = 0.4
 
 # ── Logging ───────────────────────────────────────────────────────────────────

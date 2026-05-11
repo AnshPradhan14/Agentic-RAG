@@ -16,6 +16,8 @@ faiss-cpu>=1.8.0                # IndexFlatIP + normalize_L2 (Fix 1) — CPU onl
 langchain>=0.3.0                # Core: @tool, AgentExecutor, message history
 langchain-ollama>=0.2.0         # ChatOllama wrapper for local LLM
 langchain-core>=0.3.0           # Base abstractions (messages, tools, runnables)
+langchain-text-splitters>=0.3.0 # Required by PaddleOCR internally
+groq>=0.5.0                     # Groq Python client for LLM access
 
 # ── Storage ───────────────────────────────────────────────────────────────────
 # sqlite3 is part of Python stdlib — no pip install needed

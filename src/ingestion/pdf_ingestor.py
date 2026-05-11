@@ -1,25 +1,24 @@
 """
-layer0_ingest.py — Layer 0: Data Ingestion & Processing
-
-Responsibility:
-    PDF → Docling (offline) → Markdown + JSON files on disk → SQLite `documents` table.
+pdf_ingestor.py — Layer 0: Data Ingestion & Processing
 
 Pipeline for a single PDF:
-    1. parse_pdf_with_docling()  — run Docling, write .md and .json to data/parsed/
-    2. extract_metadata()        — read JSON, pull document-level metadata fields
-    3. store_document()          — read full Markdown, INSERT into SQLite `documents`
-    4. ingest_pdf()              — orchestrator that wires steps 1-3 together
+    1. parse_pdf()       — new modular parser (Docling + PaddleOCR fallback)
+    2. extract_metadata()— pull document-level metadata from structured JSON
+    3. store_document()  — INSERT into SQLite `documents` table
+    4. ingest_pdf()      — orchestrator that wires steps 1-3 + triple extraction
 
-Notes:
-    - page_number and section_path are chunk-level attributes; do NOT extract here.
-      They are populated by Layer 1 (layer1_indexer.py) using the saved JSON file.
-    - data/parsed/ is auto-created if it does not exist.
-    - The .md / .json files are a human-readable audit trail.  Even if deleted,
-      SQLite still holds the full parsed content.
+The new parser (src.ingestion.parser) handles:
+    - Bilingual Hindi/English documents (pipe-split + Devanagari removal)
+    - Complex structured tables (not flattened — stored as JSON)
+    - Noisy / OCR-based PDFs (PaddleOCR fallback when Docling yields <50 words)
+    - Government-style key-value + mixed layout documents
 
-Usage (standalone):
-    python layer0_ingest.py --pdf data/raw/my_document.pdf
+Output artefacts written to data/parsed/:
+    - <stem>.md   — human-readable markdown (for audit trail)
+    - <stem>.json — structured sections + chunks (for indexing)
 """
+
+from __future__ import annotations
 
 import argparse
 import json
@@ -31,149 +30,102 @@ from pathlib import Path
 from src.core.config import PARSED_DIR, RAW_DIR
 from src.core.database import init_db, insert_document, save_triples
 from src.ingestion.table_relation_extractor import extract_triples
+from src.ingestion.utils_cleaning import table_to_markdown
 
-# ── Module logger ─────────────────────────────────────────────────────────────
 logger = logging.getLogger(__name__)
 
 
-from src.ingestion.markdown_cleaner import MarkdownCleaner
 # ─────────────────────────────────────────────────────────────────────────────
-# Step 1 — PDF Parsing
+# Step 1 — PDF Parsing (delegates to new modular parser)
 # ─────────────────────────────────────────────────────────────────────────────
 
-def parse_pdf_with_docling(pdf_path: str) -> tuple[Path, Path]:
-    """Run Docling on a single PDF and persist Markdown + JSON to data/parsed/.
+def parse_pdf(pdf_path: str) -> tuple[Path, Path]:
+    """
+    Run the modular parsing pipeline on a single PDF.
 
-    Args:
-        pdf_path: Absolute or relative path to the source PDF file.
+    Uses src.ingestion.parser.parse_and_chunk which:
+      - Tries Docling first (layout-aware, table-preserving)
+      - Falls back to PaddleOCR if Docling yields insufficient text
+      - Applies bilingual cleaning (Hindi|English → English only)
+      - Extracts KV pairs, preserves table structure
+
+    Writes:
+      - data/parsed/<stem>.md   — markdown representation (audit trail)
+      - data/parsed/<stem>.json — structured sections + chunks
 
     Returns:
-        (md_path, json_path): Paths to the saved .md and .json files.
+        (md_path, json_path)
     """
     pdf_path_obj = Path(pdf_path).resolve()
-
-    # ── Guard: source file must exist ─────────────────────────────────────────
     if not pdf_path_obj.exists():
-        raise FileNotFoundError(
-            f"PDF not found: {pdf_path_obj}\n"
-            f"Place the file in {RAW_DIR} and retry."
-        )
+        raise FileNotFoundError(f"PDF not found: {pdf_path_obj}")
 
-    logger.info("Starting Docling ingestion: %s", pdf_path_obj)
-
-    # ── Ensure output directory exists ────────────────────────────────────────
     PARSED_DIR.mkdir(parents=True, exist_ok=True)
+    logger.info("[Layer0] Parsing: %s", pdf_path_obj.name)
 
     try:
-        from docling.document_converter import DocumentConverter, PdfFormatOption
-        from docling.datamodel.base_models import InputFormat
-        from docling.datamodel.pipeline_options import (
-            PdfPipelineOptions, 
-            TableStructureOptions, 
-            TableFormerMode
-        )
+        from src.ingestion.parser import parse_and_chunk
+        doc, chunks = parse_and_chunk(str(pdf_path_obj))
+    except Exception as exc:
+        logger.error("[Layer0] Parser failed for %s: %s", pdf_path_obj, exc, exc_info=True)
+        raise RuntimeError(f"Parsing failed: {exc}") from exc
 
-        # ── Advanced Configuration for Table-Heavy / Complex Layouts ───────────
-        pipeline_options = PdfPipelineOptions()
-        
-        # 1. Table Recognition: Use 'ACCURATE' for better table reconstruction
-        pipeline_options.do_table_structure = True
-        pipeline_options.table_structure_options = TableStructureOptions(
-            do_cell_matching=True,
-            mode=TableFormerMode.ACCURATE
-        )
+    doc_stem = pdf_path_obj.stem
 
-        # 2. Text Recovery: Disable OCR for better stability on large digital PDFs
-        # Digital PDFs don't need OCR, and it saves massive amounts of RAM.
-        pipeline_options.do_ocr = False
-        
-        # 3. Apply options to the converter
-        converter = DocumentConverter(
-            format_options={
-                InputFormat.PDF: PdfFormatOption(pipeline_options=pipeline_options)
-            }
-        )
+    # ── Build markdown text from structured sections ──────────────────────────
+    md_lines: list[str] = []
+    for block in doc.get("sections", []):
+        btype   = block.get("type", "text")
+        content = block.get("content", "")
+        section = block.get("section", "")
 
-        logger.info("Starting Docling conversion for: %s", pdf_path_obj.name)
-        result = converter.convert(str(pdf_path_obj))
+        if section:
+            md_lines.append(f"\n## {section}\n")
 
-        # 4. Export results
-        markdown_text: str = result.document.export_to_markdown()
-        
-        # Fallback: if no text was extracted (no alphanumeric chars), it might be a scanned PDF. Retry with OCR enabled.
-        import re
-        if not re.search(r'[a-zA-Z0-9]', markdown_text):
-            logger.info("No readable text found (possibly scanned PDF with empty tables). Retrying with full-page OCR enabled...")
-            
-            try:
-                from docling.datamodel.pipeline_options import EasyOcrOptions
-                pipeline_options.do_ocr = True
-                pipeline_options.ocr_options = EasyOcrOptions(force_full_page_ocr=True)
-            except ImportError:
-                # Fallback if EasyOcrOptions is not available
-                pipeline_options.do_ocr = True
-                
-            pipeline_options.generate_page_images = True 
-            
-            converter = DocumentConverter(
-                format_options={
-                    InputFormat.PDF: PdfFormatOption(pipeline_options=pipeline_options)
-                }
-            )
-            result = converter.convert(str(pdf_path_obj))
-            markdown_text = result.document.export_to_markdown()
+        if btype == "table" and isinstance(content, dict):
+            md_lines.append(table_to_markdown(content))
+        elif btype == "kv" and isinstance(content, dict):
+            for k, v in content.items():
+                md_lines.append(f"**{k}**: {v}")
+        else:
+            md_lines.append(str(content))
 
-        json_data: dict = result.document.export_to_dict()
+    markdown_text = "\n\n".join(md_lines).strip()
 
-        # Log metadata for debugging (safe for docling v2.x — body has no .children)
-        try:
-            num_pages = len(result.document.pages) if result.document.pages else "unknown"
-        except Exception:
-            num_pages = "unknown"
-        logger.info(
-            "Docling Conversion Finished for %s. Pages: %s",
-            pdf_path_obj.name,
-            str(num_pages),
-        )
+    # ── Build JSON output (sections + chunks) ─────────────────────────────────
+    json_data = {
+        "source":   doc.get("source", pdf_path_obj.name),
+        "sections": doc.get("sections", []),
+        "chunks":   chunks,
+        # Keep raw Docling JSON for triple extraction downstream
+        "_docling": doc.get("_raw_json", {}),
+    }
 
-        logger.info("Markdown extracted: %d chars for %s.", len(markdown_text), pdf_path_obj.name)
+    # ── Write files ────────────────────────────────────────────────────────────
+    md_path   = PARSED_DIR / f"{doc_stem}.md"
+    json_path = PARSED_DIR / f"{doc_stem}.json"
 
-    except Exception as exc:  # noqa: BLE001
-        logger.error("Docling failed for %s: %s", pdf_path_obj, exc, exc_info=True)
-        # Re-raise as RuntimeError with context to be caught by the top-level ingest orchestrator
-        raise RuntimeError(f"Docling conversion failed: {exc}") from exc
-
-
-    doc_stem = pdf_path_obj.stem  # filename without extension
-
-    # ── Apply Cleaner (fixes Hindi, artifacts, broken words) ──────────────────
-    markdown_text = MarkdownCleaner.clean_text(markdown_text)
-    json_data = MarkdownCleaner.clean_json(json_data)
-    logger.info("Markdown and JSON outputs cleaned of artifacts and noise.")
-
-    # ── Write Markdown ─────────────────────────────────────────────────────────
-    md_path = PARSED_DIR / f"{doc_stem}.md"
     try:
         md_path.write_text(markdown_text, encoding="utf-8")
     except OSError as exc:
-        raise RuntimeError(f"Could not write Markdown file {md_path}: {exc}") from exc
+        raise RuntimeError(f"Cannot write {md_path}: {exc}") from exc
 
-    # ── Write JSON ─────────────────────────────────────────────────────────────
-    json_path = PARSED_DIR / f"{doc_stem}.json"
     try:
-        json_path.write_text(json.dumps(json_data, indent=2, ensure_ascii=False), encoding="utf-8")
-    except OSError as exc:
-        raise RuntimeError(f"Could not write JSON file {json_path}: {exc}") from exc
-
-    # ── Validate outputs ──────────────────────────────────────────────────────
-    if not md_path.exists() or not json_path.exists():
-        raise RuntimeError(
-            f"Docling did not produce expected output files for '{pdf_path_obj}'. "
-            f"Expected: {md_path} and {json_path}"
+        json_path.write_text(
+            json.dumps(json_data, indent=2, ensure_ascii=False), encoding="utf-8"
         )
+    except OSError as exc:
+        raise RuntimeError(f"Cannot write {json_path}: {exc}") from exc
 
-    logger.info("Docling output saved (cleaned) → %s, %s", md_path, json_path)
+    logger.info(
+        "[Layer0] Parsed %d sections → %d chunks | md=%s json=%s",
+        len(doc["sections"]), len(chunks), md_path.name, json_path.name,
+    )
     return md_path, json_path
+
+
+# Keep old name as alias so existing code that calls parse_pdf_with_docling still works
+parse_pdf_with_docling = parse_pdf
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -181,50 +133,40 @@ def parse_pdf_with_docling(pdf_path: str) -> tuple[Path, Path]:
 # ─────────────────────────────────────────────────────────────────────────────
 
 def extract_metadata(json_path: Path) -> dict:
-    """Read the Docling JSON output and extract DOCUMENT-LEVEL metadata fields.
+    """
+    Read the parsed JSON and extract DOCUMENT-LEVEL metadata.
 
-    Only document-level fields are extracted here.  Chunk-level fields
-    (page_number, section_path) are the responsibility of Layer 1.
-
-    Args:
-        json_path: Path to the saved .json file in data/parsed/.
+    Reads from the new structured JSON (source, sections, chunks).
+    Falls back gracefully for all missing fields.
 
     Returns:
-        Dict with keys: source, date_issued, tags, version, doc_type, severity.
-        All values use safe defaults — this function never raises on missing fields.
-
-    Notes:
-        - Uses .get() with safe defaults throughout; Docling JSON structure varies.
-        - Logs extracted metadata at INFO, full dict at DEBUG.
-        - Returns empty / None values gracefully — downstream layers handle blanks.
+        Dict with: source, date_issued, tags, version, doc_type, severity
     """
     try:
         raw_json = json.loads(json_path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
-        logger.error("Could not read/parse JSON at %s: %s", json_path, exc)
+        logger.error("Cannot read JSON at %s: %s", json_path, exc)
         raise
 
-    # ── Docling JSON top-level keys vary by version; inspect both common roots ─
-    # Docling may nest metadata under "description" or directly at root level.
-    doc_meta: dict = raw_json.get("description", raw_json)
+    # Try to find metadata from KV chunks (new parser extracts these)
+    kv_combined: dict = {}
+    for chunk in raw_json.get("chunks", []):
+        if chunk.get("metadata", {}).get("type") == "kv":
+            kv_combined.update(chunk.get("metadata", {}))
 
-    # ── Pull document-level fields with safe defaults ──────────────────────────
-    source: str = json_path.stem + ".pdf"   # reconstruct source filename from stem
+    # Also check old Docling metadata location for backward compat
+    docling_meta = raw_json.get("_docling", {}).get("description", {})
 
-    # date_issued: look in common Docling metadata locations
-    date_issued: str | None = (
-        doc_meta.get("date_issued")
-        or doc_meta.get("dateIssued")
-        or raw_json.get("date_issued")
+    source: str = json_path.stem + ".pdf"
+
+    date_issued = (
+        kv_combined.get("date_issued")
+        or docling_meta.get("date_issued")
+        or docling_meta.get("dateIssued")
         or None
     )
 
-    # tags: accept list or string; normalise to list[str]
-    raw_tags = (
-        doc_meta.get("tags")
-        or raw_json.get("tags")
-        or []
-    )
+    raw_tags = kv_combined.get("tags") or docling_meta.get("tags") or []
     if isinstance(raw_tags, str):
         try:
             raw_tags = json.loads(raw_tags)
@@ -232,24 +174,9 @@ def extract_metadata(json_path: Path) -> dict:
             raw_tags = [raw_tags]
     tags: list[str] = raw_tags if isinstance(raw_tags, list) else []
 
-    version: str | None = (
-        doc_meta.get("version")
-        or raw_json.get("version")
-        or None
-    )
-
-    doc_type: str | None = (
-        doc_meta.get("doc_type")
-        or doc_meta.get("docType")
-        or raw_json.get("doc_type")
-        or None
-    )
-
-    severity: str | None = (
-        doc_meta.get("severity")
-        or raw_json.get("severity")
-        or None
-    )
+    version  = kv_combined.get("version")  or docling_meta.get("version")  or None
+    doc_type = kv_combined.get("doc_type") or docling_meta.get("doc_type") or None
+    severity = kv_combined.get("severity") or docling_meta.get("severity") or None
 
     metadata = {
         "source":      source,
@@ -259,11 +186,7 @@ def extract_metadata(json_path: Path) -> dict:
         "doc_type":    doc_type,
         "severity":    severity,
     }
-
-    logger.info(
-        "Metadata extracted: source=%s, tags=%s", metadata["source"], metadata["tags"]
-    )
-    logger.debug("Full metadata dict: %s", metadata)
+    logger.info("[Layer0] Metadata: source=%s", source)
     return metadata
 
 
@@ -272,39 +195,17 @@ def extract_metadata(json_path: Path) -> dict:
 # ─────────────────────────────────────────────────────────────────────────────
 
 def store_document(md_path: Path, json_path: Path, metadata: dict) -> int:
-    """Insert a parsed document record into the SQLite `documents` table.
-
-    Args:
-        md_path   : Path to the .md file (stored as md_filepath in the DB).
-        json_path : Path to the .json file (stored as json_filepath in the DB).
-        metadata  : Dict returned by extract_metadata().
-
-    Returns:
-        doc_id (int): Auto-incremented primary key of the inserted row.
-
-    Side effects:
-        - Reads the full Markdown text from md_path.
-        - Inserts one row into `documents` with all metadata + full_markdown_text.
-        - Commits the transaction.
-
-    Raises:
-        OSError       : If the Markdown file cannot be read.
-        sqlite3.Error : On DB failure (raised after rollback by database.insert_document).
-    """
-    # ── Read full Markdown content ─────────────────────────────────────────────
+    """Insert parsed document into SQLite `documents` table."""
     try:
         full_markdown_text = md_path.read_text(encoding="utf-8")
     except OSError as exc:
-        raise OSError(f"Cannot read Markdown file {md_path}: {exc}") from exc
+        raise OSError(f"Cannot read {md_path}: {exc}") from exc
 
-    # ── Relative paths for portability ────────────────────────────────────────
-    # Store relative-to-project-root paths so the DB is portable across machines.
     try:
         from src.core.config import BASE_DIR
         md_rel   = str(md_path.relative_to(BASE_DIR))
         json_rel = str(json_path.relative_to(BASE_DIR))
     except ValueError:
-        # Paths outside BASE_DIR — store absolute as fallback
         md_rel   = str(md_path)
         json_rel = str(json_path)
 
@@ -319,106 +220,89 @@ def store_document(md_path: Path, json_path: Path, metadata: dict) -> int:
         json_filepath      = json_rel,
         full_markdown_text = full_markdown_text,
     )
-
-    logger.info("Stored to DB: doc_id=%d, source=%s", doc_id, metadata["source"])
+    logger.info("[Layer0] Stored → doc_id=%d, source=%s", doc_id, metadata["source"])
     return doc_id
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# Step 4 — Full Layer 0 Pipeline Orchestrator
+# Step 4 — Full Layer 0 Orchestrator
 # ─────────────────────────────────────────────────────────────────────────────
 
 def ingest_pdf(pdf_path: str) -> int:
-    """Full Layer 0 pipeline for a single PDF.
-
-    Orchestrates parse → extract → store in a single call.  The returned
-    doc_id is passed to Layer 1 (layer1_indexer.build_chunks) to create
-    sentence-aligned chunks and FAISS embeddings.
-
-    Args:
-        pdf_path: Path to the raw PDF in data/raw/ (or any valid path).
+    """
+    Full Layer 0 pipeline: parse → metadata → store → extract triples.
 
     Returns:
         doc_id (int): SQLite primary key of the stored document row.
-
-    Flow:
-        1. parse_pdf_with_docling(pdf_path) → (md_path, json_path)
-        2. extract_metadata(json_path)      → metadata dict
-        3. store_document(md_path, json_path, metadata) → doc_id
-        4. Extract entity triples from tables and store them
-        5. Log success
-        6. Return doc_id
     """
     logger.info("=== Layer 0: ingest_pdf started for '%s' ===", pdf_path)
 
-    md_path, json_path = parse_pdf_with_docling(pdf_path)
-    metadata            = extract_metadata(json_path)
-    doc_id              = store_document(md_path, json_path, metadata)
+    md_path, json_path = parse_pdf(pdf_path)
+    metadata           = extract_metadata(json_path)
+    doc_id             = store_document(md_path, json_path, metadata)
 
-    # ── Extract and store entity triples from Docling tables ──────────────────
+    # ── Extract entity triples from structured tables ─────────────────────────
     try:
         raw_json = json.loads(json_path.read_text(encoding="utf-8"))
-        tables = raw_json.get("tables", [])
 
-        all_triples = []
-        for chunk_idx, table in enumerate(tables):
-            # ---- Docling v2.x JSON format ----------------------------------------
-            # Each table entry has:
-            #   "data": { "table_cells": [...], "num_rows": N, "num_cols": M }
-            # Each cell: { "row_span": 1, "col_span": 1, "start_row_offset_idx": R,
-            #              "end_row_offset_idx": R, "start_col_offset_idx": C,
-            #              "end_col_offset_idx": C, "text": "...", "column_header": bool }
-            # ---- Legacy / v1 format fallback ------------------------------------
-            # Each table has "rows": [[cell, ...], ...]
-            section_header = table.get("section_header") or "General"
+        # New format: tables are in sections with type=="table"
+        all_triples: list[dict] = []
+        chunk_idx = 0
 
-            normalised_rows: list = []
-            data = table.get("data", {})
+        for section in raw_json.get("sections", []):
+            if section.get("type") != "table":
+                continue
+            content = section.get("content", {})
+            if not isinstance(content, dict):
+                continue
+
+            rows = [content.get("headers", [])] + content.get("rows", [])
+            table_dict = {
+                "section_header": section.get("section", "General"),
+                "rows": rows,
+            }
+            triples = extract_triples(table_dict, str(doc_id), chunk_idx)
+            all_triples.extend(triples)
+            chunk_idx += 1
+
+        # Also try old Docling JSON format for backward compat
+        docling_tables = raw_json.get("_docling", {}).get("tables", [])
+        for tbl in docling_tables:
+            section_header = tbl.get("section_header") or "General"
+            data = tbl.get("data", {})
             table_cells = data.get("table_cells", []) if isinstance(data, dict) else []
-
+            normalised_rows: list = []
             if table_cells:
-                # Modern docling v2.x: reconstruct a 2D row/col grid from flat cells
                 num_rows = data.get("num_rows", 0)
                 num_cols = data.get("num_cols", 0)
                 if num_rows > 0 and num_cols > 0:
-                    grid: list = [[""] * num_cols for _ in range(num_rows)]
+                    grid = [[""] * num_cols for _ in range(num_rows)]
                     for cell in table_cells:
                         r = cell.get("start_row_offset_idx", 0)
                         c = cell.get("start_col_offset_idx", 0)
                         if r < num_rows and c < num_cols:
                             grid[r][c] = str(cell.get("text", "")).strip()
                     normalised_rows = grid
-            else:
-                # Legacy format: rows is already a list of lists
-                raw_rows = table.get("rows", [])
-                for row in raw_rows:
-                    if isinstance(row, list):
-                        normalised_rows.append(
-                            [cell.get("text", str(cell)) if isinstance(cell, dict) else str(cell) for cell in row]
-                        )
-
-            table_dict = {"section_header": section_header, "rows": normalised_rows}
-            triples = extract_triples(table_dict, str(doc_id), chunk_idx)
-            all_triples.extend(triples)
+            if normalised_rows:
+                table_dict = {"section_header": section_header, "rows": normalised_rows}
+                triples = extract_triples(table_dict, str(doc_id), chunk_idx)
+                all_triples.extend(triples)
+                chunk_idx += 1
 
         if all_triples:
             save_triples(all_triples)
-            logger.info("Stored %d entity triples for doc_id=%d", len(all_triples), doc_id)
+            logger.info("[Layer0] Stored %d triples for doc_id=%d", len(all_triples), doc_id)
         else:
-            logger.info("No tables/triples found for doc_id=%d", doc_id)
-    except Exception as exc:  # noqa: BLE001
-        logger.warning("Triple extraction failed for doc_id=%d: %s", doc_id, exc)
+            logger.info("[Layer0] No triples found for doc_id=%d", doc_id)
+    except Exception as exc:
+        logger.warning("[Layer0] Triple extraction failed for doc_id=%d: %s", doc_id, exc)
 
-    logger.info(
-        "=== Layer 0: Ingested '%s' → doc_id=%d ===",
-        metadata["source"],
-        doc_id,
-    )
+    logger.info("=== Layer 0: Ingested '%s' → doc_id=%d ===", metadata["source"], doc_id)
     return doc_id
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# CLI entry-point (standalone usage)
+# CLI
 # ─────────────────────────────────────────────────────────────────────────────
 
 def _configure_logging(level: str = "INFO") -> None:
@@ -430,25 +314,13 @@ def _configure_logging(level: str = "INFO") -> None:
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(
-        description="Layer 0 — Ingest a single PDF into the RAG pipeline."
-    )
-    parser.add_argument(
-        "--pdf",
-        required=True,
-        help="Path to the PDF file to ingest (e.g. data/raw/my_doc.pdf).",
-    )
-    parser.add_argument(
-        "--log-level",
-        default="INFO",
-        choices=["DEBUG", "INFO", "WARNING", "ERROR"],
-        help="Logging verbosity (default: INFO).",
-    )
+    parser = argparse.ArgumentParser(description="Layer 0 — Ingest a single PDF.")
+    parser.add_argument("--pdf", required=True, help="Path to the PDF file.")
+    parser.add_argument("--log-level", default="INFO",
+                        choices=["DEBUG", "INFO", "WARNING", "ERROR"])
     args = parser.parse_args()
 
     _configure_logging(args.log_level)
-
-    # Ensure schema exists before ingesting
     init_db()
 
     try:

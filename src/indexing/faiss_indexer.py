@@ -168,17 +168,17 @@ def get_tokens(text: str, enc) -> int:
 
 
 def build_chunks(doc_id: int) -> list[dict[str, Any]]:
-    """Stage 1: Read document Markdown from SQLite and create section-aware chunks."""
+    """Stage 1: Load pre-computed chunks from the parsed JSON and insert them into SQLite."""
     import sqlite3
-    from src.core.config import DB_PATH
+    from src.core.config import DB_PATH, BASE_DIR, PARSED_DIR
 
-    logger.info("Stage 1 — Building section-aware chunks for doc_id=%d", doc_id)
+    logger.info("Stage 1 — Loading pre-computed chunks for doc_id=%d", doc_id)
 
     # ── Fetch document row ────────────────────────────────────────────────────
     conn = sqlite3.connect(str(DB_PATH))
     conn.row_factory = sqlite3.Row
     row = conn.execute(
-        "SELECT source, date_issued, tags, version, doc_type, severity, full_markdown_text "
+        "SELECT source, date_issued, tags, version, doc_type, severity, json_filepath "
         "FROM documents WHERE doc_id = ?",
         (doc_id,),
     ).fetchone()
@@ -187,46 +187,53 @@ def build_chunks(doc_id: int) -> list[dict[str, Any]]:
     if row is None:
         raise ValueError(f"No document found with doc_id={doc_id}")
 
-    source_md: str = row["full_markdown_text"]
+    json_filepath = row["json_filepath"]
+    if not json_filepath:
+        raise ValueError(f"No json_filepath found for doc_id={doc_id}. Please re-ingest.")
+        
+    full_json_path = BASE_DIR / json_filepath
+    if not full_json_path.exists():
+        # Fallback to checking in data/parsed directly just in case
+        full_json_path = PARSED_DIR / Path(json_filepath).name
+        
+    try:
+        parsed_data = json.loads(full_json_path.read_text(encoding="utf-8"))
+    except Exception as exc:
+        raise RuntimeError(f"Could not read parsed JSON for doc_id={doc_id}: {exc}")
 
-    # ── Base metadata ─────────────────────────────────────────────────────────
-    base_meta: dict[str, Any] = {
-        "doc_id":      doc_id,
-        "source":      row["source"],
-        "date_issued": row["date_issued"],
-        "tags":        json.loads(row["tags"] or "[]"),
-        "version":     row["version"],
-        "doc_type":    row["doc_type"],
-        "severity":    row["severity"],
-    }
-
-    # ── Section-boundary chunking (Change 4) ──────────────────────────────────
-    section_chunks = context_aware_chunk(source_md, max_tokens=CHUNK_TOKEN_LIMIT)
-
+    # The new parser stores chunks in the JSON
+    precomputed_chunks = parsed_data.get("chunks", [])
+    
     chunks: list[dict[str, Any]] = []
-    chunk_counter = 0
 
-    for sc in section_chunks:
-        text = sc["text"]
-        section = sc["section"]
+    for c in precomputed_chunks:
+        text = c.get("text", "")
         if not text.strip():
             continue
+            
+        chunk_meta = c.get("metadata", {})
+        chunk_idx = chunk_meta.get("chunk_index", 0)
+        section = chunk_meta.get("section", "General")
+        
+        # update metadata with doc-level fields
+        chunk_meta.update({
+            "doc_id":      doc_id,
+            "source":      row["source"],
+            "date_issued": row["date_issued"],
+            "tags":        json.loads(row["tags"] or "[]"),
+            "version":     row["version"],
+            "doc_type":    row["doc_type"],
+            "severity":    row["severity"],
+        })
 
-        chunk_id = str(_global_chunk_id_offset(doc_id, chunk_counter))
-        chunk_counter += 1
-
-        chunk_meta = {
-            **base_meta,
-            "chunk_index": chunk_counter - 1,
-            "section":     section,
-        }
+        chunk_id = str(_global_chunk_id_offset(doc_id, chunk_idx))
         meta_json = json.dumps(chunk_meta)
 
         chunk_record: dict[str, Any] = {
             "chunk_id":      chunk_id,
             "doc_id":        doc_id,
             "markdown_text": text,
-            "start_page":    None,
+            "start_page":    chunk_meta.get("page", None),
             "metadata_json": meta_json,
             "section":       section,
         }
@@ -235,12 +242,12 @@ def build_chunks(doc_id: int) -> list[dict[str, Any]]:
             chunk_id=chunk_id,
             doc_id=doc_id,
             markdown_text=text,
-            start_page=None,
+            start_page=chunk_meta.get("page", None),
             metadata_json=meta_json,
             section=section,
         )
 
-    logger.info("Stage 1 complete — %d chunks created for doc_id=%d", len(chunks), doc_id)
+    logger.info("Stage 1 complete — %d chunks loaded for doc_id=%d", len(chunks), doc_id)
     return chunks
 
 

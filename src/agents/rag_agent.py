@@ -22,7 +22,7 @@ from typing import Any
 
 from ollama import Client
 
-from src.core.config import OLLAMA_MODEL, LLM_TEMPERATURE
+from src.core.config import LLM_PROVIDER, GROQ_MODEL, GROQ_API_KEY, OLLAMA_MODEL, LLM_TEMPERATURE
 from src.tools.rag_tools import (
     chunk_read,
     get_document_chunks,
@@ -31,6 +31,7 @@ from src.tools.rag_tools import (
     reset_c_read,
     semantic_search,
     triple_lookup,
+    parse_document,
 )
 
 logger = logging.getLogger(__name__)
@@ -63,7 +64,9 @@ PROCEDURE — Fact-Finding & Reasoning:
 
 OUTPUT FORMAT:
 **Reasoning:** <Short, 1-2 sentence explanation of how you found the specific answer.>
+
 **Sources:** <List of chunk_ids used.>
+
 **Final Answer:** <Detailed response focused ONLY on the user's query.>
 """
 
@@ -91,6 +94,7 @@ _TOOL_MAP: dict[str, Any] = {
     "semantic_search":     semantic_search,
     "chunk_read":          chunk_read,
     "triple_lookup":       triple_lookup,
+    "parse_document":      parse_document,
 }
 
 OLLAMA_TOOLS = [
@@ -175,6 +179,20 @@ OLLAMA_TOOLS = [
                 "required": ["entity", "attribute"]
             }
         }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "parse_document",
+            "description": "Parse a PDF document into structured sections and embedding-ready chunks. Use this to inspect raw document structure, extract tables, handle bilingual text, or diagnose extraction issues.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "pdf_path": {"type": "string", "description": "Absolute or relative path to the PDF file (e.g. 'data/raw/contract.pdf')"}
+                },
+                "required": ["pdf_path"]
+            }
+        }
     }
 ]
 
@@ -182,13 +200,19 @@ OLLAMA_TOOLS = [
 # LLM Factory
 # ─────────────────────────────────────────────────────────────────────────────
 
-def build_llm() -> Client:
-    """Instantiate the Ollama Client.
-    """
-    logger.info("Building Ollama client: model=%s, temperature=%s", OLLAMA_MODEL, LLM_TEMPERATURE)
-    client = Client() # connects to localhost:11434
-    logger.info("Ollama client ready with tools.")
-    return client
+def build_llm() -> Any:
+    """Instantiate the LLM Client."""
+    if LLM_PROVIDER == "groq":
+        import groq
+        logger.info("Building Groq client: model=%s, temperature=%s", GROQ_MODEL, LLM_TEMPERATURE)
+        client = groq.Groq(api_key=GROQ_API_KEY)
+        logger.info("Groq client ready with tools.")
+        return client
+    else:
+        logger.info("Building Ollama client: model=%s, temperature=%s", OLLAMA_MODEL, LLM_TEMPERATURE)
+        client = Client() # connects to localhost:11434
+        logger.info("Ollama client ready with tools.")
+        return client
 
 # ─────────────────────────────────────────────────────────────────────────────
 # ReAct Agent Loop
@@ -197,7 +221,7 @@ def build_llm() -> Client:
 def run_agent(
     query: str,
     max_iterations: int = 10,
-    llm_with_tools: Client | None = None,
+    llm_with_tools: Any | None = None,
 ) -> str:
     """Run the ReAct agent loop using native Ollama library."""
 
@@ -215,14 +239,39 @@ def run_agent(
     for iteration in range(max_iterations):
         logger.debug("Iteration %d/%d — invoking LLM ...", iteration + 1, max_iterations)
 
-        response = client.chat(
-            model=OLLAMA_MODEL,
-            messages=messages,
-            tools=OLLAMA_TOOLS,
-            options={"raw": True, "temperature": LLM_TEMPERATURE}
-        )
+        if LLM_PROVIDER == "groq":
+            response = client.chat.completions.create(
+                model=GROQ_MODEL,
+                messages=messages,
+                tools=OLLAMA_TOOLS,
+                temperature=LLM_TEMPERATURE
+            )
+            reply_msg_obj = response.choices[0].message
+            reply_msg = {"role": "assistant"}
+            if reply_msg_obj.content:
+                reply_msg["content"] = reply_msg_obj.content
+            
+            tool_calls = []
+            if reply_msg_obj.tool_calls:
+                for tc in reply_msg_obj.tool_calls:
+                    tool_calls.append({
+                        "id": tc.id,
+                        "type": "function",
+                        "function": {
+                            "name": tc.function.name,
+                            "arguments": tc.function.arguments
+                        }
+                    })
+                reply_msg["tool_calls"] = tool_calls
+        else:
+            response = client.chat(
+                model=OLLAMA_MODEL,
+                messages=messages,
+                tools=OLLAMA_TOOLS,
+                options={"raw": True, "temperature": LLM_TEMPERATURE}
+            )
+            reply_msg = response["message"]
 
-        reply_msg = response["message"]
         messages.append(reply_msg)
 
         if not reply_msg.get("tool_calls"):
@@ -231,7 +280,8 @@ def run_agent(
 
         for tool_call in reply_msg["tool_calls"]:
             tool_name = tool_call["function"]["name"]
-            tool_args = tool_call["function"]["arguments"]
+            tool_args_raw = tool_call["function"]["arguments"]
+            tool_args = json.loads(tool_args_raw) if isinstance(tool_args_raw, str) else tool_args_raw
 
             logger.info("Tool call: %s | args=%s", tool_name, tool_args)
 
@@ -250,13 +300,15 @@ def run_agent(
                 tool_result_str = f"Unknown tool: {tool_name!r}"
                 logger.warning("Unknown tool requested by LLM: %s", tool_name)
 
-            messages.append(
-                {
-                    "role": "tool",
-                    "content": tool_result_str,
-                    "name": tool_name
-                }
-            )
+            tool_result_msg = {
+                "role": "tool",
+                "content": tool_result_str,
+                "name": tool_name
+            }
+            if LLM_PROVIDER == "groq" and "id" in tool_call:
+                tool_result_msg["tool_call_id"] = tool_call["id"]
+                
+            messages.append(tool_result_msg)
             logger.debug("Tool '%s' result appended to messages.", tool_name)
 
     logger.warning("max_iterations=%d reached without final answer. Requesting wrap-up.", max_iterations)
@@ -282,12 +334,20 @@ def run_agent(
         )
     })
 
-    wrap_up = client.chat(
-        model=OLLAMA_MODEL,
-        messages=messages,
-        options={"raw": True, "temperature": LLM_TEMPERATURE}
-    )
-    return wrap_up["message"].get("content", "")
+    if LLM_PROVIDER == "groq":
+        wrap_up = client.chat.completions.create(
+            model=GROQ_MODEL,
+            messages=messages,
+            temperature=LLM_TEMPERATURE
+        )
+        return wrap_up.choices[0].message.content or ""
+    else:
+        wrap_up = client.chat(
+            model=OLLAMA_MODEL,
+            messages=messages,
+            options={"raw": True, "temperature": LLM_TEMPERATURE}
+        )
+        return wrap_up["message"].get("content", "")
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -297,19 +357,12 @@ def run_agent(
 def run_agent_stream(
     query: str,
     max_iterations: int = 5,
-    llm_with_tools: Client | None = None,
+    llm_with_tools: Any | None = None,
 ):
     """Streaming variant of run_agent.
 
     Runs the full ReAct tool-calling loop synchronously, then streams the
     final answer back to the caller token-by-token as a Python generator.
-
-    Yields:
-        str: Individual token text chunks from the LLM as they are generated.
-
-    Usage (server.py):
-        for token in run_agent_stream(query, max_iterations, llm):
-            yield f"data: {json.dumps(token)}\\n\\n"
     """
     reset_c_read()
 
@@ -326,14 +379,39 @@ def run_agent_stream(
     for iteration in range(max_iterations):
         logger.debug("Stream iteration %d/%d", iteration + 1, max_iterations)
 
-        response = client.chat(
-            model=OLLAMA_MODEL,
-            messages=messages,
-            tools=OLLAMA_TOOLS,
-            options={"raw": True, "temperature": LLM_TEMPERATURE}
-        )
+        if LLM_PROVIDER == "groq":
+            response = client.chat.completions.create(
+                model=GROQ_MODEL,
+                messages=messages,
+                tools=OLLAMA_TOOLS,
+                temperature=LLM_TEMPERATURE
+            )
+            reply_msg_obj = response.choices[0].message
+            reply_msg = {"role": "assistant"}
+            if reply_msg_obj.content:
+                reply_msg["content"] = reply_msg_obj.content
+                
+            tool_calls = []
+            if reply_msg_obj.tool_calls:
+                for tc in reply_msg_obj.tool_calls:
+                    tool_calls.append({
+                        "id": tc.id,
+                        "type": "function",
+                        "function": {
+                            "name": tc.function.name,
+                            "arguments": tc.function.arguments
+                        }
+                    })
+                reply_msg["tool_calls"] = tool_calls
+        else:
+            response = client.chat(
+                model=OLLAMA_MODEL,
+                messages=messages,
+                tools=OLLAMA_TOOLS,
+                options={"raw": True, "temperature": LLM_TEMPERATURE}
+            )
+            reply_msg = response["message"]
 
-        reply_msg = response["message"]
         messages.append(reply_msg)
 
         # If no tool calls, the LLM has produced its final answer
@@ -341,12 +419,6 @@ def run_agent_stream(
             content = reply_msg.get("content", "")
             logger.info("Streaming agent: final answer received (len=%d).", len(content))
             
-            # Since Ollama's chat tool-calling mode doesn't stream the tokens *while* tool calling
-            # (it returns the full message), we have the content. However, we want to ensure
-            # that any subsequent generation (if needed) is streamed.
-            # In this case, since we ALREADY have the full message from the tool-less response,
-            # we'll yield it. To make it feel better, we still chunk it slightly, but
-            # the logic is now cleaner.
             if content:
                 chunk_size = 30
                 for i in range(0, len(content), chunk_size):
@@ -356,7 +428,8 @@ def run_agent_stream(
         # ── Execute tool calls ────────────────────────────────────────────────
         for tool_call in reply_msg["tool_calls"]:
             tool_name = tool_call["function"]["name"]
-            tool_args = tool_call["function"]["arguments"]
+            tool_args_raw = tool_call["function"]["arguments"]
+            tool_args = json.loads(tool_args_raw) if isinstance(tool_args_raw, str) else tool_args_raw
             logger.info("[Stream] Tool call: %s | args=%s", tool_name, tool_args)
 
             if tool_name in _TOOL_MAP:
@@ -370,7 +443,15 @@ def run_agent_stream(
             else:
                 tool_result_str = f"Unknown tool: {tool_name!r}"
 
-            messages.append({"role": "tool", "content": tool_result_str, "name": tool_name})
+            tool_result_msg = {
+                "role": "tool",
+                "content": tool_result_str,
+                "name": tool_name
+            }
+            if LLM_PROVIDER == "groq" and "id" in tool_call:
+                tool_result_msg["tool_call_id"] = tool_call["id"]
+                
+            messages.append(tool_result_msg)
 
     # ── Phase 2: Max iterations reached — force wrap-up with streaming ─────────
     logger.warning("[Stream] max_iterations=%d reached. Requesting streamed wrap-up.", max_iterations)
@@ -394,15 +475,23 @@ def run_agent_stream(
         )
     })
 
-    # Final wrap-up — this one we DO want to stream fresh because we haven't
-    # called client.chat for the final answer yet at this point.
-    for chunk in client.chat(
-        model=OLLAMA_MODEL,
-        messages=messages,
-        options={"raw": True, "temperature": LLM_TEMPERATURE},
-        stream=True,
-    ):
-        token_text = chunk["message"].get("content", "")
-        if token_text:
-            yield token_text
-
+    if LLM_PROVIDER == "groq":
+        stream = client.chat.completions.create(
+            model=GROQ_MODEL,
+            messages=messages,
+            temperature=LLM_TEMPERATURE,
+            stream=True
+        )
+        for chunk in stream:
+            if chunk.choices[0].delta.content is not None:
+                yield chunk.choices[0].delta.content
+    else:
+        for chunk in client.chat(
+            model=OLLAMA_MODEL,
+            messages=messages,
+            options={"raw": True, "temperature": LLM_TEMPERATURE},
+            stream=True,
+        ):
+            token_text = chunk["message"].get("content", "")
+            if token_text:
+                yield token_text

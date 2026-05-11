@@ -1,0 +1,31 @@
+{
+  "sections": [
+    {
+      "name": "Organisation Details",
+      "data": {
+        "Type": "Central Autonomous",
+        "Ministry": "Ministry of Science and Technology",
+        "Department": "Department of Biotechnology",
+        "Organisation Name": "Institute for Plasma Research"
+      }
+    },
+    {
+      "name": "Product Details",
+      "type": "table",
+      "data": {
+        "headers": ["Item Name", "Quantity", "Unit Price"],
+        "rows": [
+          ["UPS 40 KVA", "1", "150000"],
+          ["Battery", "64", "5000"]
+        ]
+      }
+    },
+    {
+      "name": "Address Details",
+      "data": {
+        "Address": "line1, line2, line3",
+        "Pincode": "382428"
+      }
+    }
+  ]
+}

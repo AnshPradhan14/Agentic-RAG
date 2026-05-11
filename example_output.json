@@ -1,0 +1,69 @@
+{
+  "source": "contract_example.pdf",
+  "sections": [
+    {
+      "type": "text",
+      "content": "GOVERNMENT E-MARKETPLACE (GeM)\nContract Document",
+      "page": 1,
+      "section": "General"
+    },
+    {
+      "type": "kv",
+      "content": {
+        "contract_no": "GEMC-511687756706424",
+        "date_issued": "05-Aug-2023",
+        "buyer_name": "Ministry of Defence",
+        "seller_name": "Tech Corp Ltd",
+        "total_value": "INR 1,50,000"
+      },
+      "page": 1,
+      "section": "General"
+    },
+    {
+      "type": "table",
+      "content": {
+        "type": "table",
+        "section": "Product Details",
+        "headers": ["Item ID", "Description", "Quantity", "Unit Price"],
+        "rows": [
+          ["101", "Battery 12V 100Ah", "10", "5000"],
+          ["102", "UPS Bypass Module", "5", "20000"]
+        ]
+      },
+      "page": 2,
+      "section": "Product Details"
+    }
+  ],
+  "chunks": [
+    {
+      "text": "GOVERNMENT E-MARKETPLACE (GeM)\nContract Document",
+      "metadata": {
+        "source": "contract_example.pdf",
+        "page": 1,
+        "type": "text",
+        "section": "General",
+        "chunk_index": 0
+      }
+    },
+    {
+      "text": "contract_no: GEMC-511687756706424\ndate_issued: 05-Aug-2023\nbuyer_name: Ministry of Defence\nseller_name: Tech Corp Ltd\ntotal_value: INR 1,50,000",
+      "metadata": {
+        "source": "contract_example.pdf",
+        "page": 1,
+        "type": "kv",
+        "section": "General",
+        "chunk_index": 1
+      }
+    },
+    {
+      "text": "| Item ID | Description | Quantity | Unit Price |\n| --- | --- | --- | --- |\n| 101 | Battery 12V 100Ah | 10 | 5000 |\n| 102 | UPS Bypass Module | 5 | 20000 |",
+      "metadata": {
+        "source": "contract_example.pdf",
+        "page": 2,
+        "type": "table",
+        "section": "Product Details",
+        "chunk_index": 2
+      }
+    }
+  ]
+}

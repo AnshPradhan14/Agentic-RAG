@@ -357,6 +357,69 @@ def chunk_read(chunk_ids: list[str]) -> dict:
 # Tool 6 — Triple Lookup (Change 5)
 # ─────────────────────────────────────────────────────────────────────────────
 
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Tool 7 — Parse Document (new modular parser exposed as agent tool)
+# ─────────────────────────────────────────────────────────────────────────────
+
+@tool
+def parse_document(pdf_path: str) -> dict:
+    """Parse a PDF document into structured sections and embedding-ready chunks.
+
+    Use this tool when you need to:
+    - Inspect the raw structure of a newly uploaded document before indexing
+    - Extract tables, key-value pairs, and paragraphs from a PDF
+    - Handle bilingual (Hindi/English) government documents
+    - Diagnose why a document is not being retrieved correctly
+
+    The parser automatically:
+    - Cleans bilingual text (Hindi|English → English only)
+    - Preserves table structure (NOT flattened)
+    - Extracts key-value pairs (e.g. Contract No: GEMC-XXXX)
+    - Falls back to PaddleOCR for scanned/image-only PDFs
+
+    Args:
+        pdf_path: Absolute or relative path to the PDF file
+                  (e.g. 'data/raw/contract.pdf').
+
+    Returns:
+        Dict with:
+            source   (str)  : PDF filename.
+            sections (list) : List of structured blocks (text/table/kv).
+            chunks   (list) : Embedding-ready chunks with metadata.
+            summary  (dict) : Counts by block type.
+    """
+    logger.info("[Tool:parse_document] Called for: %s", pdf_path)
+    try:
+        from src.ingestion.parser import parse_and_chunk
+        doc, chunks = parse_and_chunk(pdf_path)
+
+        # Build summary stats
+        type_counts: dict[str, int] = {}
+        for s in doc.get("sections", []):
+            t = s.get("type", "unknown")
+            type_counts[t] = type_counts.get(t, 0) + 1
+
+        chunk_type_counts: dict[str, int] = {}
+        for c in chunks:
+            t = c.get("metadata", {}).get("type", "unknown")
+            chunk_type_counts[t] = chunk_type_counts.get(t, 0) + 1
+
+        return {
+            "source":   doc.get("source"),
+            "sections": doc.get("sections", []),
+            "chunks":   chunks,
+            "summary": {
+                "total_sections":    len(doc.get("sections", [])),
+                "total_chunks":      len(chunks),
+                "sections_by_type":  type_counts,
+                "chunks_by_type":    chunk_type_counts,
+            },
+        }
+    except Exception as exc:
+        logger.error("[Tool:parse_document] Failed: %s", exc, exc_info=True)
+        return {"error": str(exc), "pdf_path": pdf_path}
+
 @tool
 def triple_lookup(entity: str = "", attribute: str = "") -> str:
     """Direct structured lookup for factual questions about contract data.
