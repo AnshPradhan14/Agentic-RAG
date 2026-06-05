@@ -20,7 +20,7 @@ import json
 import logging
 from typing import Any
 
-from ollama import Client
+import os
 
 from src.core.config import OLLAMA_MODEL, LLM_TEMPERATURE
 from src.tools.rag_tools import (
@@ -39,32 +39,46 @@ logger = logging.getLogger(__name__)
 # System Prompt
 # ─────────────────────────────────────────────────────────────────────────────
 
-SYSTEM_PROMPT: str = """You are an expert research analyst. Your task is to provide detailed, accurate, and relevant answers by synthesizing information from government contracts.
+SYSTEM_PROMPT: str = """You are an expert research assistant with access to a document corpus through retrieval tools.
 
-CRITICAL GUIDELINES:
-1. Multi-Hop Reasoning: Link facts across sections. If fact A points to entity B, search for entity B to complete the logic.
-2. Synthesis over Extraction: Synthesize a coherent narrative that directly answers the user. Explain "why" and "how" only if relevant to the query.
-3. Iterative Exploration: Use tools until you have a COMPLETE answer. If a tool call reveals a new lead, follow it.
-4. Snippet vs. Full Text: Search results are previews. You MUST use chunk_read for the full context before concluding.
-5. Contextual Awareness: Respect dates and amendments. Ensure you are looking at the most recent information.
+Your goal is to answer questions accurately using ONLY retrieved document evidence.
 
-*** ACCURACY & RELEVANCE RULES (STRICT) ***:
-1. Stay Focused: Answer the SPECIFIC question asked. Do NOT include unrelated document data (like prices, dates, or contact info) if it was not requested.
-2. Be Comprehensive but Concise: Provide all necessary details for the query, but avoid "info-dumping" the entire document.
-3. Cross-Reference: Mention which sections/documents the information came from.
-4. Factual Integrity: Use ONLY retrieved info. NEVER invent facts or assume details.
-5. Entity Disambiguation: Pay extreme attention to EXACT name/ID matches. "John D" is NOT the same entity as "John". If the user asks for a specific name with an initial/surname (e.g., "Patel Vijaykumar N") and you only find a partial match (e.g., "Patel Vijaykumar"), you MUST state that the exact person was not found. DO NOT mistakenly attribute data of a partial match to the user's explicit query.
+Retrieval Strategy
+Analyze the user's question and identify all required information.
+For simple factual questions, retrieve only the necessary evidence.
+For multi-hop questions, decompose the query into sub-questions and retrieve evidence for each.
+Connect related facts across chunks when needed.
+Continue retrieval only until all required evidence is found.
+Tool Usage
+Use keyword search for IDs, names, contract numbers, clauses, and exact terms.
+Use semantic search for concepts, obligations, requirements, summaries, and relationships.
+Read full chunks only when snippets are incomplete or additional context is required.
+Prefer parallel searches when multiple independent facts are needed.
+Reasoning Rules
+Synthesize information; do not simply extract text.
+Combine evidence from multiple chunks when necessary.
+Follow references, entities, and clauses that lead to additional required information.
+Answer only the question asked.
+Grounding Rules
+Use only retrieved information.
+Never invent facts or fill gaps with assumptions.
+If information is unavailable, explicitly state that it was not found in the retrieved documents.
+Pay close attention to exact entity names, IDs, dates, quantities, and clause references.
+Efficiency Rules
+Minimize tool calls.
+Stop searching as soon as sufficient evidence is gathered.
+Do not retrieve redundant information.
+Do not read chunks unnecessarily.
+Output Format
 
-PROCEDURE — Fact-Finding & Reasoning:
-  Step 1: Break the query into required data points.
-  Step 2: Use triple_lookup or search tools to find anchors.
-  Step 3: Read relevant chunks in full via chunk_read.
-  Step 4: Synthesize the answer, ensuring all logic is explained.
+Reasoning:
+Brief explanation of how the answer was derived.
 
-OUTPUT FORMAT:
-**Reasoning:** <Short, 1-2 sentence explanation of how you found the specific answer.>
-**Sources:** <List of chunk_ids used.>
-**Final Answer:** <Detailed response focused ONLY on the user's query.>
+Sources:
+List of supporting chunk IDs.
+
+Final Answer:
+Clear, concise, evidence-based answer.
 """
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -182,13 +196,91 @@ OLLAMA_TOOLS = [
 # LLM Factory
 # ─────────────────────────────────────────────────────────────────────────────
 
-def build_llm() -> Client:
-    """Instantiate the Ollama Client.
-    """
-    logger.info("Building Ollama client: model=%s, temperature=%s", OLLAMA_MODEL, LLM_TEMPERATURE)
-    client = Client() # connects to localhost:11434
-    logger.info("Ollama client ready with tools.")
-    return client
+def _unified_chat(messages: list[dict], tools: list[dict] | None = None, stream: bool = False) -> Any:
+    """Unified chat completion interface supporting both Groq and Ollama."""
+    provider = os.environ.get("LLM_PROVIDER", "groq").strip().lower()
+
+    if provider == "groq":
+        from groq import Groq
+        api_key = os.environ.get("GROQ_API_KEY", "").strip()
+        client = Groq(api_key=api_key)
+        model = os.environ.get("GROQ_MODEL", "llama-3.3-70b-versatile")
+        
+        # Groq strict validation: ensure tool messages have string content
+        safe_messages = []
+        for m in messages:
+            safe_m = dict(m)
+            if safe_m.get("role") == "tool" and not isinstance(safe_m.get("content"), str):
+                safe_m["content"] = str(safe_m.get("content"))
+            safe_messages.append(safe_m)
+
+        if stream:
+            response = client.chat.completions.create(
+                model=model,
+                messages=safe_messages,
+                temperature=LLM_TEMPERATURE,
+                stream=True
+            )
+            for chunk in response:
+                if chunk.choices[0].delta.content:
+                    yield chunk.choices[0].delta.content
+            return
+
+        response = client.chat.completions.create(
+            model=model,
+            messages=safe_messages,
+            tools=tools if tools else None,
+            temperature=LLM_TEMPERATURE,
+        )
+        
+        msg = response.choices[0].message
+        result_msg = {"role": msg.role, "content": msg.content or ""}
+        
+        if msg.tool_calls:
+            result_msg["tool_calls"] = []
+            for tc in msg.tool_calls:
+                try:
+                    args = json.loads(tc.function.arguments)
+                except Exception:
+                    args = {}
+                result_msg["tool_calls"].append({
+                    "id": tc.id,
+                    "function": {
+                        "name": tc.function.name,
+                        "arguments": args
+                    }
+                })
+        return result_msg
+
+    elif provider == "ollama":
+        from ollama import Client
+        host = os.environ.get("OLLAMA_HOST", "http://localhost:11434")
+        client = Client(host=host)
+        model = OLLAMA_MODEL
+        
+        if stream:
+            response = client.chat(
+                model=model,
+                messages=messages,
+                options={"raw": True, "temperature": LLM_TEMPERATURE, "num_think": 0},
+                stream=True
+            )
+            for chunk in response:
+                content = chunk["message"].get("content")
+                if content:
+                    yield content
+            return
+        
+        response = client.chat(
+            model=model,
+            messages=messages,
+            tools=tools if tools else None,
+            options={"raw": True, "temperature": LLM_TEMPERATURE, "num_think": 0}
+        )
+        return response["message"]
+    
+    else:
+        raise ValueError(f"Unsupported LLM_PROVIDER: {provider}")
 
 # ─────────────────────────────────────────────────────────────────────────────
 # ReAct Agent Loop
@@ -197,13 +289,10 @@ def build_llm() -> Client:
 def run_agent(
     query: str,
     max_iterations: int = 10,
-    llm_with_tools: Client | None = None,
 ) -> str:
-    """Run the ReAct agent loop using native Ollama library."""
+    """Run the ReAct agent loop using unified LLM client."""
 
     reset_c_read()
-
-    client = llm_with_tools if llm_with_tools is not None else build_llm()
 
     messages: list[dict] = [
         {"role": "system", "content": SYSTEM_PROMPT},
@@ -215,14 +304,11 @@ def run_agent(
     for iteration in range(max_iterations):
         logger.debug("Iteration %d/%d — invoking LLM ...", iteration + 1, max_iterations)
 
-        response = client.chat(
-            model=OLLAMA_MODEL,
+        reply_msg = _unified_chat(
             messages=messages,
             tools=OLLAMA_TOOLS,
-            options={"raw": True, "temperature": LLM_TEMPERATURE}
+            stream=False
         )
-
-        reply_msg = response["message"]
         messages.append(reply_msg)
 
         if not reply_msg.get("tool_calls"):
@@ -254,7 +340,8 @@ def run_agent(
                 {
                     "role": "tool",
                     "content": tool_result_str,
-                    "name": tool_name
+                    "name": tool_name,
+                    "tool_call_id": tool_call.get("id", f"call_{tool_name}")
                 }
             )
             logger.debug("Tool '%s' result appended to messages.", tool_name)
@@ -282,12 +369,11 @@ def run_agent(
         )
     })
 
-    wrap_up = client.chat(
-        model=OLLAMA_MODEL,
+    wrap_up = _unified_chat(
         messages=messages,
-        options={"raw": True, "temperature": LLM_TEMPERATURE}
+        stream=False
     )
-    return wrap_up["message"].get("content", "")
+    return wrap_up.get("content", "")
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -297,7 +383,6 @@ def run_agent(
 def run_agent_stream(
     query: str,
     max_iterations: int = 5,
-    llm_with_tools: Client | None = None,
 ):
     """Streaming variant of run_agent.
 
@@ -308,12 +393,10 @@ def run_agent_stream(
         str: Individual token text chunks from the LLM as they are generated.
 
     Usage (server.py):
-        for token in run_agent_stream(query, max_iterations, llm):
+        for token in run_agent_stream(query, max_iterations):
             yield f"data: {json.dumps(token)}\\n\\n"
     """
     reset_c_read()
-
-    client = llm_with_tools if llm_with_tools is not None else build_llm()
 
     messages: list[dict] = [
         {"role": "system", "content": SYSTEM_PROMPT},
@@ -326,14 +409,11 @@ def run_agent_stream(
     for iteration in range(max_iterations):
         logger.debug("Stream iteration %d/%d", iteration + 1, max_iterations)
 
-        response = client.chat(
-            model=OLLAMA_MODEL,
+        reply_msg = _unified_chat(
             messages=messages,
             tools=OLLAMA_TOOLS,
-            options={"raw": True, "temperature": LLM_TEMPERATURE}
+            stream=False
         )
-
-        reply_msg = response["message"]
         messages.append(reply_msg)
 
         # If no tool calls, the LLM has produced its final answer
@@ -370,7 +450,12 @@ def run_agent_stream(
             else:
                 tool_result_str = f"Unknown tool: {tool_name!r}"
 
-            messages.append({"role": "tool", "content": tool_result_str, "name": tool_name})
+            messages.append({
+                "role": "tool", 
+                "content": tool_result_str, 
+                "name": tool_name,
+                "tool_call_id": tool_call.get("id", f"call_{tool_name}")
+            })
 
     # ── Phase 2: Max iterations reached — force wrap-up with streaming ─────────
     logger.warning("[Stream] max_iterations=%d reached. Requesting streamed wrap-up.", max_iterations)
@@ -394,15 +479,8 @@ def run_agent_stream(
         )
     })
 
-    # Final wrap-up — this one we DO want to stream fresh because we haven't
-    # called client.chat for the final answer yet at this point.
-    for chunk in client.chat(
-        model=OLLAMA_MODEL,
-        messages=messages,
-        options={"raw": True, "temperature": LLM_TEMPERATURE},
-        stream=True,
-    ):
-        token_text = chunk["message"].get("content", "")
+    # Final wrap-up — this one we DO want to stream fresh
+    for token_text in _unified_chat(messages=messages, stream=True):
         if token_text:
             yield token_text
 

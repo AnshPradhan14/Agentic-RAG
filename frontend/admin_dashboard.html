@@ -284,6 +284,8 @@ function handleDrop(e) {
   handleFiles(e.dataTransfer.files);
 }
 
+let pendingFiles = [];
+
 function handleFiles(files) {
   for (const file of files) {
     if (!file.name.toLowerCase().endsWith('.pdf')) {
@@ -321,8 +323,9 @@ async function uploadFile(file) {
   };
 
   // Animate progress
-  setTimeout(() => setStatus('Parsing Document...', 35), 800);
-  setTimeout(() => setStatus('Generating Embeddings...', 65), 3000);
+  setTimeout(() => setStatus('Extracting text (Docling)...', 25), 800);
+  setTimeout(() => setStatus('Restructuring via LLM...', 55), 4000);
+  setTimeout(() => setStatus('Generating embeddings...', 80), 10000);
 
   try {
     const formData = new FormData();
@@ -372,5 +375,7 @@ function showToast(msg, type='info') {
   setTimeout(() => { t.style.display = 'none'; }, 4000);
 }
 </script>
+
+
 </body>
 </html>

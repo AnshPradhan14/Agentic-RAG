@@ -1,0 +1,280 @@
+{
+  "title": "Organisation Details",
+  "total_sections": 21,
+  "sections": [
+    {
+      "id": "section_001",
+      "heading": "Organisation Details",
+      "level": 1,
+      "heading_path": "Organisation Details",
+      "parent_id": null,
+      "children": [
+        "section_002",
+        "section_003",
+        "section_004",
+        "section_005",
+        "section_006",
+        "section_007",
+        "section_008",
+        "section_009",
+        "section_010",
+        "section_011",
+        "section_012",
+        "section_013",
+        "section_014",
+        "section_015",
+        "section_016",
+        "section_017",
+        "section_018",
+        "section_019",
+        "section_020",
+        "section_021"
+      ],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_002",
+      "heading": "Financial Approval Detail",
+      "level": 2,
+      "heading_path": "Organisation Details > Financial Approval Detail",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_003",
+      "heading": "Seller Details",
+      "level": 2,
+      "heading_path": "Organisation Details > Seller Details",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_004",
+      "heading": "GST/TAXGST / Tax invoice to be raised in the name of - Buyer",
+      "level": 2,
+      "heading_path": "Organisation Details > GST/TAXGST / Tax invoice to be raised in the name of - Buyer",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_005",
+      "heading": "Product Details",
+      "level": 2,
+      "heading_path": "Organisation Details > Product Details",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_006",
+      "heading": "Contract",
+      "level": 2,
+      "heading_path": "Organisation Details > Contract",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_007",
+      "heading": "Buyer Details",
+      "level": 2,
+      "heading_path": "Organisation Details > Buyer Details",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_008",
+      "heading": "Paying Authority Details",
+      "level": 2,
+      "heading_path": "Organisation Details > Paying Authority Details",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_009",
+      "heading": "3.1 Generic:",
+      "level": 2,
+      "heading_path": "Organisation Details > 3.1 Generic:",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_010",
+      "heading": "3.2 Scope of Supply:",
+      "level": 2,
+      "heading_path": "Organisation Details > 3.2 Scope of Supply:",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_011",
+      "heading": "3.3 Generic:",
+      "level": 2,
+      "heading_path": "Organisation Details > 3.3 Generic:",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_012",
+      "heading": "3.4 Generic:",
+      "level": 2,
+      "heading_path": "Organisation Details > 3.4 Generic:",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_013",
+      "heading": "3.5 Certificates:",
+      "level": 2,
+      "heading_path": "Organisation Details > 3.5 Certificates:",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_014",
+      "heading": "3.6 Warranty:",
+      "level": 2,
+      "heading_path": "Organisation Details > 3.6 Warranty:",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_015",
+      "heading": "3.7 Forms of EMD and PBG :",
+      "level": 2,
+      "heading_path": "Organisation Details > 3.7 Forms of EMD and PBG :",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_016",
+      "heading": "3.8 Forms of EMD and PBG :",
+      "level": 2,
+      "heading_path": "Organisation Details > 3.8 Forms of EMD and PBG :",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_017",
+      "heading": "3.9 Buyback for Non PFMS / Non GPA :",
+      "level": 2,
+      "heading_path": "Organisation Details > 3.9 Buyback for Non PFMS / Non GPA :",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_018",
+      "heading": "3.10 Buyer Added Bid Specific ATC :",
+      "level": 2,
+      "heading_path": "Organisation Details > 3.10 Buyer Added Bid Specific ATC :",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_019",
+      "heading": "2. Inspection:",
+      "level": 2,
+      "heading_path": "Organisation Details > 2. Inspection:",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_020",
+      "heading": "6. RECTIFICATION AND REPLACEMENT OF DEFECTIVE STORES:",
+      "level": 2,
+      "heading_path": "Organisation Details > 6. RECTIFICATION AND REPLACEMENT OF DEFECTIVE STORES:",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_021",
+      "heading": "3.11 Buyer Added Bid Specific ATC :",
+      "level": 2,
+      "heading_path": "Organisation Details > 3.11 Buyer Added Bid Specific ATC :",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    }
+  ],
+  "source_file": "Contract-GEMC-11.pdf"
+}

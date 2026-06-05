@@ -9,3 +9,7 @@ mcp-config.json
 dewnload_frontend.py
 Untitled.md
 models/
+__pycache__/
+*.pyc
+modi.txt
+scratch/

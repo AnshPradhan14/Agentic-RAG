@@ -25,13 +25,13 @@ import sys
 import time
 from contextlib import asynccontextmanager
 from pathlib import Path
-from typing import AsyncGenerator
+from typing import AsyncGenerator, Optional
 
 from dotenv import load_dotenv
 load_dotenv()
 
 import uvicorn
-from fastapi import FastAPI, HTTPException, UploadFile, File
+from fastapi import FastAPI, HTTPException, UploadFile, File, Form, BackgroundTasks
 from fastapi.concurrency import run_in_threadpool
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, StreamingResponse
@@ -92,12 +92,12 @@ async def lifespan(app: FastAPI):
     except FileNotFoundError:
         logger.warning("⚠️  FAISS index not found. Ingest a PDF first.")
 
-    from src.agents.rag_agent import build_llm
     try:
-        _state["llm"] = build_llm()
-        logger.info("✅ Ollama client ready.")
+        # LLM client is built per-request via _unified_chat now.
+        _state["llm"] = "ready"
+        logger.info("✅ LLM ready (unified chat).")
     except Exception as exc:
-        logger.error("⚠️ Failed to build LLM client: %s", exc)
+        logger.error("⚠️ Failed to setup LLM state: %s", exc)
         _state["llm"] = None
 
     _state["startup_time"] = round(time.time() - t0, 2)
@@ -141,6 +141,7 @@ class AskResponse(BaseModel):
 
 class IngestRequest(BaseModel):
     pdf_path: str
+    is_gemc: Optional[bool] = None
 
 
 class IngestResponse(BaseModel):
@@ -154,14 +155,16 @@ class IngestResponse(BaseModel):
 
 @app.get("/health")
 def health_check():
-    from src.core.config import OLLAMA_MODEL, EMBEDDING_MODEL_NAME
+    from src.core.config import LLM_PROVIDER, ACTIVE_MODEL, EMBEDDING_MODEL_NAME
     return {
         "status": "ok",
         "embedding_model_loaded": _state["embedding_model_loaded"],
         "faiss_index_loaded": _state["faiss_index_loaded"],
         "ollama_ready": _state["llm"] is not None,
         "startup_time_seconds": _state["startup_time"],
-        "active_llm": OLLAMA_MODEL,
+        "active_llm": f"{LLM_PROVIDER.upper()}: {ACTIVE_MODEL}",
+        "llm_provider": LLM_PROVIDER,
+        "active_model": ACTIVE_MODEL,
         "embedding_model": EMBEDDING_MODEL_NAME,
         "query_count": _state["query_count"],
     }
@@ -171,7 +174,7 @@ def health_check():
 def get_stats():
     """Return overall system stats for the admin dashboard."""
     from src.core.database import fetch_all_documents, fetch_all_chunks
-    from src.core.config import OLLAMA_MODEL, EMBEDDING_MODEL_NAME
+    from src.core.config import LLM_PROVIDER, ACTIVE_MODEL, EMBEDDING_MODEL_NAME
 
     docs = fetch_all_documents()
     chunks = fetch_all_chunks()
@@ -180,7 +183,9 @@ def get_stats():
         "total_documents": len(docs),
         "total_chunks": len(chunks),
         "total_queries": _state["query_count"],
-        "active_llm": OLLAMA_MODEL,
+        "active_llm": f"{LLM_PROVIDER.upper()}: {ACTIVE_MODEL}",
+        "llm_provider": LLM_PROVIDER,
+        "active_model": ACTIVE_MODEL,
         "embedding_model": EMBEDDING_MODEL_NAME,
         "faiss_index_loaded": _state["faiss_index_loaded"],
         "embedding_model_loaded": _state["embedding_model_loaded"],
@@ -215,162 +220,158 @@ def list_documents():
 
 
 @app.delete("/documents/{doc_id}")
-def delete_document(doc_id: int):
+def delete_document(doc_id: int, background_tasks: BackgroundTasks):
     """
     Delete a document and all its associated artifacts (DB rows, physical files, and FAISS vectors).
-    Fixes:
-    - Deletes source PDF from data/raw/
-    - Deletes parsed JSON/MD from data/parsed/
-    - Cleans up sentences, chunks, and entity triples
-    - Resets sqlite_sequence if the DB is empty
-    - Rebuilds or removes FAISS index to prevent stale searches
     """
-    from src.core.config import DB_PATH, RAW_DIR, BASE_DIR
-    from src.indexing.faiss_indexer import build_embeddings
+    from src.core.config import DB_PATH, RAW_DIR, PARSED_DIR
     from src.tools.rag_tools import _get_faiss_index
     import sqlite3
 
     conn = sqlite3.connect(str(DB_PATH), check_same_thread=False)
     conn.execute("PRAGMA foreign_keys=ON;")
     try:
-        # ── 1. Fetch paths before deletion ─────────────────────────────────────
+        # 1. Fetch metadata before deletion
         row = conn.execute(
-            "SELECT source, md_filepath, json_filepath FROM documents WHERE doc_id=?",
-            (doc_id,)
+            "SELECT source FROM documents WHERE doc_id=?", (doc_id,)
         ).fetchone()
         
         if row is None:
             raise HTTPException(status_code=404, detail=f"Document {doc_id} not found")
 
-        source, md_filepath, json_filepath = row[0], row[1], row[2]
-        source_pdf_path = RAW_DIR / source
+        source_filename = row[0]
 
-        # ── 2. Delete DB rows ──────────────────────────────────────────────────
-        # Chunks and Sentences will cascade if FKs are set, but we be explicit
-        conn.execute("DELETE FROM entity_triples WHERE doc_id=?", (str(doc_id),))
+        # 2. Delete DB records
+        conn.execute("DELETE FROM entity_triples WHERE doc_id=?", (doc_id,))
         conn.execute("DELETE FROM sentences WHERE chunk_id IN (SELECT chunk_id FROM chunks WHERE doc_id=?)", (doc_id,))
         conn.execute("DELETE FROM chunks WHERE doc_id=?", (doc_id,))
         conn.execute("DELETE FROM documents WHERE doc_id=?", (doc_id,))
-        
-        # Check if DB is now empty to reset sequences (Fixes user request)
         doc_count = conn.execute("SELECT COUNT(*) FROM documents").fetchone()[0]
         if doc_count == 0:
             logger.info("Database is empty. Resetting AUTOINCREMENT sequences.")
-            conn.execute("DELETE FROM sqlite_sequence WHERE name IN ('documents', 'sentences', 'entity_triples')")
-        
+            conn.execute(
+                "DELETE FROM sqlite_sequence WHERE name IN ('documents', 'sentences', 'entity_triples')"
+            )
         conn.commit()
-        logger.info("Deleted DB records for doc_id=%d (%s)", doc_id, source)
-
-        # ── 3. Delete physical files from disk ─────────────────────────────────
-        deleted_files = []
-        
-        # Files to delete: [Source PDF, Parsed MD, Parsed JSON]
-        file_paths_to_clean = [source_pdf_path]
-        for fpath in [md_filepath, json_filepath]:
-            if fpath:
-                p = Path(fpath)
-                if not p.is_absolute():
-                    p = BASE_DIR / p
-                file_paths_to_clean.append(p)
-
-        for p in file_paths_to_clean:
-            if p.exists():
-                p.unlink()
-                deleted_files.append(str(p))
-                logger.info("Deleted physical file: %s", p)
-            else:
-                logger.warning("File not found for deletion: %s", p)
-
-        # ── 4. Fix FAISS Inconsistency (Crucial) ──────────────────────────────
-        # If we delete a doc but leave its vectors in FAISS, search results will be broken.
-        _get_faiss_index.cache_clear() # Clear the singleton cache
-        
-        if doc_count > 0:
-            logger.info("Rebuilding FAISS index for remaining %d documents...", doc_count)
-            # This is a bit slow but ensures 100% consistency. 
-            # In a production app, we'd use faiss.remove_ids.
-            build_embeddings() 
-            _state["faiss_index_loaded"] = True
-        else:
-            logger.info("No documents left. Clearing FAISS index files.")
-            from src.core.config import FAISS_INDEX_PATH, SENTENCES_MAP_PATH
-            if FAISS_INDEX_PATH.exists(): FAISS_INDEX_PATH.unlink()
-            if SENTENCES_MAP_PATH.exists(): SENTENCES_MAP_PATH.unlink()
-            _state["faiss_index_loaded"] = False
-
-        return {
-            "message": f"Document '{source}' and all related data deleted successfully",
-            "doc_id": doc_id,
-            "deleted_files": deleted_files,
-            "system_reset": doc_count == 0
-        }
+        logger.info("Deleted DB records for doc_id=%d (%s)", doc_id, source_filename)
 
     except HTTPException:
         raise
     except Exception as exc:
         conn.rollback()
-        logger.exception("Failed to delete document %d: %s", doc_id, exc)
+        logger.exception("Failed to delete DB records for doc_id=%d: %s", doc_id, exc)
         raise HTTPException(status_code=500, detail=str(exc))
     finally:
         conn.close()
 
+    # ── 3. Delete physical files (best-effort — never raise 500 here) ─────────
+    from src.core.config import FINAL_TEXT_DIR
+    pdf_stem = Path(source_filename).stem
+    deleted_files: list[str] = []
+    files_to_delete = [
+        RAW_DIR        / source_filename,
+        PARSED_DIR     / f"{pdf_stem}_raw.md",
+        FINAL_TEXT_DIR / f"{pdf_stem}_structured.md",
+        FINAL_TEXT_DIR / f"{pdf_stem}_chunks.json",
+        FINAL_TEXT_DIR / f"{pdf_stem}_metadata.json",
+    ]
+    for p in files_to_delete:
+        try:
+            if p.exists():
+                p.unlink()
+                deleted_files.append(str(p))
+                logger.info("Deleted physical file: %s", p)
+            else:
+                logger.warning("File not found for deletion (skipping): %s", p)
+        except Exception as exc:
+            logger.warning("Could not delete file %s: %s", p, exc)
+
+    # ── 4. Schedule FAISS rebuild in background ───────────────────────────────
+    _get_faiss_index.cache_clear()
+    from ingestion.store import rebuild_faiss_index
+    
+    def _background_rebuild():
+        try:
+            remaining = rebuild_faiss_index()
+            logger.info("FAISS index rebuilt in background with %d remaining vector(s).", remaining)
+            _state["faiss_index_loaded"] = remaining > 0
+        except Exception as exc:
+            logger.error("FAISS background rebuild failed after deletion of doc_id=%d: %s", doc_id, exc)
+            
+    background_tasks.add_task(_background_rebuild)
+
+    return {
+        "message": f"Document '{source_filename}' deleted successfully",
+        "doc_id": doc_id,
+        "deleted_files": deleted_files,
+        "system_reset": doc_count == 0,
+    }
+
+
 
 @app.post("/upload")
-async def upload_pdf(file: UploadFile = File(...)):
+async def upload_pdf(file: UploadFile = File(...), is_gemc: Optional[bool] = Form(None)):
     """
     Upload a PDF file directly via multipart form.
     Saves it to data/raw/, then runs the full ingestion pipeline.
     Heavy I/O work is offloaded to a thread pool via run_in_threadpool to avoid
     blocking the FastAPI event loop.
     """
-    from src.core.config import RAW_DIR
-    from src.ingestion.pdf_ingestor import ingest_pdf
-    from src.indexing.faiss_indexer import build_chunks, build_embeddings
-    from src.tools.rag_tools import _get_faiss_index
+    from src.core.config import RAW_DIR, PARSED_DIR
+    from ingestion.pipeline import run_ingestion
+    from src.core.database import get_connection
 
-    # Validate file type
-    if not file.filename or not file.filename.lower().endswith(".pdf"):
-        raise HTTPException(status_code=400, detail="Only PDF files are allowed.")
-
-    # Check for duplicate
-    dest = RAW_DIR / file.filename
-    if dest.exists():
-        raise HTTPException(
-            status_code=409,
-            detail=f"Error: Document '{file.filename}' already exists in the database."
-        )
-
-    # Save uploaded file to data/raw/
+    # Save to RAW_DIR
+    RAW_DIR.mkdir(parents=True, exist_ok=True)
+    dest_path = RAW_DIR / file.filename
     try:
-        with open(dest, "wb") as f:
-            shutil.copyfileobj(file.file, f)
-        logger.info("Uploaded PDF saved to: %s", dest)
+        with open(dest_path, "wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
     except Exception as exc:
-        raise HTTPException(status_code=500, detail=f"Failed to save file: {exc}")
+        logger.error(f"Failed to save uploaded file {file.filename}: {exc}")
+        raise HTTPException(status_code=500, detail=f"Failed to save uploaded file: {exc}")
 
-    # Run ingestion pipeline in a thread pool to avoid blocking the event loop
+    # Run ingestion
     try:
-        doc_id   = await run_in_threadpool(ingest_pdf, str(dest))
-        chunks   = await run_in_threadpool(build_chunks, doc_id)
-        await run_in_threadpool(build_embeddings)
+        summary = await run_in_threadpool(run_ingestion, str(dest_path), str(PARSED_DIR))
+        
+        if summary.get("status") == "skipped_duplicate":
+            conn = get_connection()
+            try:
+                row = conn.execute("SELECT doc_id FROM documents WHERE source=?", (file.filename,)).fetchone()
+                doc_id = row[0] if row else -1
+            finally:
+                conn.close()
+            return IngestResponse(
+                doc_id=doc_id,
+                source=file.filename,
+                chunks_created=0,
+                message="Skipped: Document already ingested."
+            )
 
-        # Reload FAISS index
+        if summary.get("errors") and not summary.get("total_chunks"):
+            raise HTTPException(status_code=500, detail=f"Ingestion failed: {summary['errors']}")
+
+        # Clear FAISS index cache in the server so next query loads updated index
+        from src.tools.rag_tools import _get_faiss_index
         _get_faiss_index.cache_clear()
-        await run_in_threadpool(_get_faiss_index)
         _state["faiss_index_loaded"] = True
 
-        logger.info("Upload & ingestion complete: doc_id=%d, chunks=%d", doc_id, len(chunks))
-        return {
-            "doc_id": doc_id,
-            "source": file.filename,
-            "chunks_created": len(chunks),
-            "message": f"✅ Successfully ingested '{file.filename}'",
-        }
+        conn = get_connection()
+        try:
+            row = conn.execute("SELECT doc_id FROM documents WHERE source=?", (file.filename,)).fetchone()
+            doc_id = row[0] if row else -1
+        finally:
+            conn.close()
+
+        return IngestResponse(
+            doc_id=doc_id,
+            source=file.filename,
+            chunks_created=summary.get("total_chunks", 0),
+            message="Document uploaded and ingested successfully."
+        )
     except Exception as exc:
-        # Clean up the uploaded file if ingestion fails
-        if dest.exists():
-            dest.unlink()
-        logger.exception("Ingestion failed for %s: %s", file.filename, exc)
+        logger.exception("Error during upload/ingestion: %s", exc)
         raise HTTPException(status_code=500, detail=str(exc))
 
 
@@ -390,18 +391,16 @@ def ask(request: AskRequest):
             detail="No FAISS index found. Ingest at least one PDF first via POST /upload"
         )
 
-    from src.agents.rag_agent import build_llm, run_agent
+    from src.agents.rag_agent import run_agent
 
     t0 = time.time()
     logger.info("Received query: '%s'", request.query)
     _state["query_count"] += 1
 
     try:
-        llm = build_llm()
         answer = run_agent(
             query=request.query,
             max_iterations=request.max_iterations,
-            llm_with_tools=llm,
         )
         elapsed = round(time.time() - t0, 2)
         logger.info("Query answered in %.2fs", elapsed)
@@ -444,18 +443,16 @@ def ask_stream(request: AskRequest):
             detail="No FAISS index found. Ingest at least one PDF first via POST /upload"
         )
 
-    from src.agents.rag_agent import build_llm, run_agent_stream
+    from src.agents.rag_agent import run_agent_stream
 
     logger.info("Received streaming query: '%s'", request.query)
     _state["query_count"] += 1
 
     def event_generator():
         try:
-            llm = build_llm()
             for token in run_agent_stream(
                 query=request.query,
                 max_iterations=request.max_iterations,
-                llm_with_tools=llm,
             ):
                 # SSE format: each event is "data: <payload>\n\n"
                 yield f"data: {json.dumps(token)}\n\n"
@@ -478,31 +475,55 @@ def ask_stream(request: AskRequest):
 @app.post("/ingest", response_model=IngestResponse)
 def ingest(request: IngestRequest):
     """Ingest a PDF already on disk by providing its path."""
-    from src.ingestion.pdf_ingestor import ingest_pdf
-    from src.indexing.faiss_indexer import build_chunks, build_embeddings
-    from src.tools.rag_tools import _get_faiss_index
+    from src.core.config import PARSED_DIR
+    from ingestion.pipeline import run_ingestion
+    from src.core.database import get_connection
 
     pdf_path = Path(request.pdf_path)
     if not pdf_path.exists():
-        raise HTTPException(status_code=404, detail=f"PDF not found: {pdf_path}")
+        raise HTTPException(status_code=404, detail=f"PDF file not found at path: {request.pdf_path}")
 
+    filename = pdf_path.name
     try:
-        doc_id = ingest_pdf(str(pdf_path))
-        chunks = build_chunks(doc_id)
-        build_embeddings()
+        summary = run_ingestion(str(pdf_path), str(PARSED_DIR))
+        
+        if summary.get("status") == "skipped_duplicate":
+            conn = get_connection()
+            try:
+                row = conn.execute("SELECT doc_id FROM documents WHERE source=?", (filename,)).fetchone()
+                doc_id = row[0] if row else -1
+            finally:
+                conn.close()
+            return IngestResponse(
+                doc_id=doc_id,
+                source=filename,
+                chunks_created=0,
+                message="Skipped: Document already ingested."
+            )
 
+        if summary.get("errors") and not summary.get("total_chunks"):
+            raise HTTPException(status_code=500, detail=f"Ingestion failed: {summary['errors']}")
+
+        # Clear FAISS index cache in the server so next query loads updated index
+        from src.tools.rag_tools import _get_faiss_index
         _get_faiss_index.cache_clear()
-        _get_faiss_index()
         _state["faiss_index_loaded"] = True
+
+        conn = get_connection()
+        try:
+            row = conn.execute("SELECT doc_id FROM documents WHERE source=?", (filename,)).fetchone()
+            doc_id = row[0] if row else -1
+        finally:
+            conn.close()
 
         return IngestResponse(
             doc_id=doc_id,
-            source=str(pdf_path),
-            chunks_created=len(chunks),
-            message=f"✅ Successfully ingested '{pdf_path.name}'",
+            source=filename,
+            chunks_created=summary.get("total_chunks", 0),
+            message="Document ingested successfully."
         )
     except Exception as exc:
-        logger.exception("Ingestion failed: %s", exc)
+        logger.exception("Error during disk ingestion: %s", exc)
         raise HTTPException(status_code=500, detail=str(exc))
 
 

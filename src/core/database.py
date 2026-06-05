@@ -122,6 +122,20 @@ def init_db() -> None:
 
 # ── Document helpers ──────────────────────────────────────────────────────────
 
+def document_exists(source: str) -> bool:
+    """Check if a document with the given source filename already exists."""
+    conn = _get_connection()
+    try:
+        cur = conn.execute("SELECT 1 FROM documents WHERE source = ? LIMIT 1", (source,))
+        return cur.fetchone() is not None
+    except sqlite3.Error as exc:
+        logger.error("Database error while checking document existence: %s", exc)
+        return False
+    finally:
+        conn.close()
+
+
+
 def insert_document(
     source: str,
     date_issued: str | None,

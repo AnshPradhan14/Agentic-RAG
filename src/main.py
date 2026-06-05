@@ -50,48 +50,50 @@ def _configure_logging(level: str = "INFO") -> None:
 def cmd_ingest(args: argparse.Namespace) -> int:
     """Handler for the 'ingest' subcommand.
 
-    Runs Layer 0 (PDF → Docling → SQLite) then Layer 1 (chunks + FAISS)
-    unless --skip-embeddings is passed.
+    Wires in the new Docling-based pipeline (ingestion/pipeline.py).
 
     Returns:
         Exit code (0 = success, non-zero = failure).
     """
-    from src.core.database import init_db
-    from src.ingestion.pdf_ingestor import ingest_pdf
-    from src.indexing.faiss_indexer import build_chunks, build_embeddings
+    from pathlib import Path
+    from src.core.config import PARSED_DIR
+    from ingestion.pipeline import run_ingestion
 
-    init_db()
-
-    try:
-        logger.info("=== Ingestion started for: %s ===", args.pdf)
-        doc_id = ingest_pdf(args.pdf)
-        print(f"✅ Layer 0 complete — doc_id={doc_id}, source='{args.pdf}'")
-
-        logger.info("=== Building chunks for doc_id=%d ===", doc_id)
-        chunks = build_chunks(doc_id)
-        print(f"✅ Layer 1 chunking complete — {len(chunks)} chunks created.")
-
-        if not args.skip_embeddings:
-            logger.info("=== Building FAISS embeddings ===")
-            build_embeddings()
-            print("✅ Layer 1 embedding complete — FAISS index updated.")
-        else:
-            print("⚠️  Embeddings skipped (--skip-embeddings). Run 'python layer1_indexer.py --rebuild-all' later.")
-
-        return 0
-
-    except FileNotFoundError as exc:
-        logger.error("File not found: %s", exc)
-        print(f"❌ Error: {exc}", file=sys.stderr)
+    pdf_path = Path(args.pdf)
+    if not pdf_path.exists():
+        print(f"❌ PDF file not found at path: {args.pdf}", file=sys.stderr)
         return 1
-    except RuntimeError as exc:
-        logger.error("Ingestion failed: %s", exc)
-        print(f"❌ Ingestion error: {exc}", file=sys.stderr)
-        return 2
-    except Exception as exc:  # noqa: BLE001
-        logger.exception("Unexpected error during ingestion: %s", exc)
-        print(f"❌ Unexpected error: {exc}", file=sys.stderr)
-        return 3
+
+    print(f"⏳ Starting ingestion for {pdf_path.name}...")
+    try:
+        summary = run_ingestion(str(pdf_path), str(PARSED_DIR))
+        
+        if summary.get("status") == "skipped_duplicate":
+            print(f"⚠️ Skipped: Document '{pdf_path.name}' has already been ingested.")
+            return 0
+
+        errors = summary.get("errors", [])
+        if errors and not summary.get("total_chunks"):
+            print(f"❌ Ingestion failed with errors: {errors}", file=sys.stderr)
+            return 1
+
+        print("─" * 60)
+        print("✅ Ingestion Complete!")
+        print(f"   Source file:       {summary.get('source_file')}")
+        print(f"   Total Pages:       {summary.get('total_pages')}")
+        print(f"   Batches Processed: {summary.get('batches_processed')}")
+        print(f"   Total Sections:    {summary.get('total_sections')}")
+        print(f"   Total Chunks:      {summary.get('total_chunks')}")
+        print(f"   Chunks w/ Tables:  {summary.get('chunks_with_tables')}")
+        print(f"   Hindi Paras Del:   {summary.get('hindi_paragraphs_removed')}")
+        if errors:
+            print(f"   Warnings/Errors:   {len(errors)} occurred (check logs)")
+        print("─" * 60)
+        return 0
+    except Exception as exc:
+        print(f"❌ Ingestion failed with exception: {exc}", file=sys.stderr)
+        logger.exception("Ingestion failed")
+        return 1
 
 
 def cmd_ask(args: argparse.Namespace) -> int:
@@ -230,4 +232,10 @@ def main() -> None:
 
 
 if __name__ == "__main__":
+    import sys
+    if sys.stdout.encoding != 'utf-8':
+        try:
+            sys.stdout.reconfigure(encoding='utf-8')
+        except Exception:
+            pass
     main()

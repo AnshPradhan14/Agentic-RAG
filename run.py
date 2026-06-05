@@ -52,4 +52,10 @@ def main():
         subprocess.run([sys.executable, str(project_root / "src" / "main.py"), cmd] + args, env=env)
 
 if __name__ == "__main__":
+    import sys
+    if sys.stdout.encoding != 'utf-8':
+        try:
+            sys.stdout.reconfigure(encoding='utf-8')
+        except Exception:
+            pass
     main()

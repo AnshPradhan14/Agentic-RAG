@@ -4,10 +4,14 @@ docling>=2.5.0                  # Offline PDF → Markdown + JSON (MIT license)
 # ── NLP & Tokenization ───────────────────────────────────────────────────────
 nltk>=3.8.1                     # sent_tokenize for Fix 2 & Fix 3
 tiktoken>=0.7.0                 # Token counting during chunking (Layer 1)
+langdetect>=1.0.9               # Language detection for filtering
+groq>=0.9.0                     # Groq cloud LLM API client (LLM_PROVIDER=groq)
+regex>=2024.5.15                # Advanced regex support for filtering
+pypdf>=4.1.0                    # PDF splitting for batch processing
+
 
 # ── Embeddings ───────────────────────────────────────────────────────────────
-sentence-transformers>=3.0.0    # all-MiniLM-L6-v2 — local sentence embeddings
-torch>=2.2.0                    # Backend for sentence-transformers (CPU build)
+# (Embeddings are now handled via Ollama API using Qwen3-Embedding-0.6B)
 
 # ── Vector Search ────────────────────────────────────────────────────────────
 faiss-cpu>=1.8.0                # IndexFlatIP + normalize_L2 (Fix 1) — CPU only

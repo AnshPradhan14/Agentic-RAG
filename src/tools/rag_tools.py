@@ -29,7 +29,7 @@ import faiss
 import nltk
 import numpy as np
 from langchain_core.tools import tool
-from sentence_transformers import SentenceTransformer
+import requests
 
 from src.core.config import (
     EMBEDDING_MODEL_NAME,
@@ -91,11 +91,42 @@ def _rerank(results: list[dict], query: str) -> list[dict]:
 # Lazy-loaded singletons (loaded once, reused across all tool calls)
 # ─────────────────────────────────────────────────────────────────────────────
 
+class OllamaEmbedder:
+    """Wrapper to hit Ollama's local embeddings API, mimicking sentence-transformers."""
+    def __init__(self, model_name: str, host: str = "http://localhost:11434"):
+        self.model_name = model_name
+        self.host = host
+
+    def encode(self, texts, convert_to_numpy=True, **kwargs):
+        if isinstance(texts, str):
+            texts = [texts]
+            
+        url = f"{self.host}/api/embed"
+        payload = {
+            "model": self.model_name,
+            "input": texts
+        }
+        
+        try:
+            response = requests.post(url, json=payload)
+            response.raise_for_status()
+            data = response.json()
+            embeddings = data.get("embeddings", [])
+            
+            if convert_to_numpy:
+                import numpy as np
+                return np.array(embeddings, dtype=np.float32)
+            return embeddings
+        except Exception as e:
+            logger.error("Failed to fetch embeddings from Ollama: %s", e)
+            raise
+
+
 @lru_cache(maxsize=1)
-def _get_embedding_model() -> SentenceTransformer:
-    """Load and cache the SentenceTransformer model (loads from disk on first call)."""
-    logger.info("Loading embedding model: %s", EMBEDDING_MODEL_NAME)
-    return SentenceTransformer(EMBEDDING_MODEL_NAME)
+def _get_embedding_model() -> OllamaEmbedder:
+    """Load and cache the OllamaEmbedder."""
+    logger.info("Setting up Ollama embedder for model: %s", EMBEDDING_MODEL_NAME)
+    return OllamaEmbedder(EMBEDDING_MODEL_NAME)
 
 
 @lru_cache(maxsize=1)
