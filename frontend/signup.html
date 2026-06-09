@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Create Account | Ask Data</title>
+<script src="https://cdn.tailwindcss.com?plugins=container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<style>
+  body {
+    background-color: #0D0D0F;
+    background-image: radial-gradient(circle at 60% 40%, rgba(99,102,241,0.08) 0%, transparent 55%),
+                      radial-gradient(circle at 20% 80%, rgba(59,130,246,0.06) 0%, transparent 40%),
+                      radial-gradient(#1b1b1d 0.5px, transparent 0.5px);
+    background-size: 100% 100%, 100% 100%, 24px 24px;
+    font-family: 'Inter', sans-serif;
+  }
+  .glass-card {
+    background: rgba(26,26,30,0.88);
+    backdrop-filter: blur(24px);
+    border: 1px solid rgba(66,71,84,0.4);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 40px rgba(99,102,241,0.06);
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, #3B82F6, #6366f1);
+    transition: all 0.2s ease;
+  }
+  .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 8px 25px rgba(59,130,246,0.35); }
+  .btn-primary:active { transform: scale(0.98); }
+  .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+  .input-wrap { position: relative; }
+  .input-field {
+    width: 100%; padding: 0.875rem 1rem 0.875rem 2.75rem;
+    background: #0e0e10; border: 1px solid rgba(66,71,84,0.4);
+    border-radius: 0.75rem; color: #e5e1e4; font-size: 0.875rem;
+    outline: none; transition: all 0.2s;
+  }
+  .input-field:focus { border-color: rgba(173,198,255,0.5); box-shadow: 0 0 0 3px rgba(173,198,255,0.1); }
+  .input-field.error { border-color: rgba(255,107,107,0.6); box-shadow: 0 0 0 3px rgba(255,107,107,0.1); }
+  .input-field.success { border-color: rgba(16,185,129,0.5); }
+  .input-field::placeholder { color: #5a5e6e; }
+  .field-error { font-size: 11px; color: #ff6b6b; margin-top: 4px; padding-left: 4px; min-height: 16px; }
+  .alert-box { border-radius: 0.75rem; padding: 0.75rem 1rem; font-size: 0.8rem; display: none; }
+  .alert-error { background: rgba(255,180,171,0.1); border: 1px solid rgba(255,180,171,0.3); color: #ffb4ab; }
+  /* Strength bar */
+  .strength-bar-track { height: 3px; background: rgba(66,71,84,0.4); border-radius: 3px; overflow: hidden; margin-top: 8px; }
+  .strength-bar-fill { height: 100%; border-radius: 3px; transition: width 0.3s, background 0.3s; width: 0; }
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+  main { animation: fadeIn 0.4s ease; }
+</style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-6">
+
+<div class="fixed top-[-10%] right-[-10%] w-[500px] h-[500px]" style="background:rgba(99,102,241,0.05);border-radius:50%;filter:blur(120px);pointer-events:none;"></div>
+<div class="fixed bottom-[-10%] left-[-10%] w-[400px] h-[400px]" style="background:rgba(59,130,246,0.05);border-radius:50%;filter:blur(100px);pointer-events:none;"></div>
+
+<main class="w-full max-w-md">
+  <!-- Brand -->
+  <div class="flex flex-col items-center mb-8 text-center">
+    <div class="mb-4 flex items-center justify-center w-14 h-14 rounded-2xl" style="background: linear-gradient(135deg,rgba(59,130,246,0.2),rgba(99,102,241,0.2)); border: 1px solid rgba(173,198,255,0.2);">
+      <span class="material-symbols-outlined text-3xl" style="color:#adc6ff;">hub</span>
+    </div>
+    <h1 class="text-3xl font-bold tracking-tight mb-1" style="color:#e5e1e4;">Create Account</h1>
+    <p class="text-xs font-medium uppercase tracking-widest" style="color:#8c909f;">Ask Data · Intelligent Document Intelligence</p>
+  </div>
+
+  <!-- Card -->
+  <div class="glass-card rounded-2xl p-8">
+    <div id="alert-box" class="alert-box alert-error mb-5">
+      <span class="material-symbols-outlined text-sm align-middle mr-1">error</span>
+      <span id="alert-msg"></span>
+    </div>
+
+    <form id="signup-form" class="space-y-4" onsubmit="handleSignup(event)" novalidate>
+
+      <!-- Username -->
+      <div class="space-y-1">
+        <label class="block text-[11px] font-semibold uppercase tracking-widest px-1" style="color:#8c909f;" for="username">Username</label>
+        <div class="input-wrap">
+          <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+            <span class="material-symbols-outlined text-lg" style="color:#5a5e6e;">person</span>
+          </div>
+          <input class="input-field" id="username" name="username" placeholder="min. 3 characters" required type="text" autocomplete="username"
+                 oninput="validateUsername()" onblur="validateUsername()"/>
+        </div>
+        <div class="field-error" id="username-err"></div>
+      </div>
+
+      <!-- Password -->
+      <div class="space-y-1">
+        <label class="block text-[11px] font-semibold uppercase tracking-widest px-1" style="color:#8c909f;" for="password">Password</label>
+        <div class="input-wrap">
+          <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+            <span class="material-symbols-outlined text-lg" style="color:#5a5e6e;">lock</span>
+          </div>
+          <input class="input-field" id="password" name="password" placeholder="min. 8 characters" required type="password" autocomplete="new-password"
+                 oninput="validatePassword(); validateConfirm()"/>
+          <button class="absolute inset-y-0 right-0 pr-3.5 flex items-center" type="button" onclick="togglePass('password', this)">
+            <span class="material-symbols-outlined text-lg" style="color:#5a5e6e;">visibility</span>
+          </button>
+        </div>
+        <!-- Strength indicator -->
+        <div class="strength-bar-track"><div class="strength-bar-fill" id="strength-bar"></div></div>
+        <div class="field-error" id="password-err"></div>
+      </div>
+
+      <!-- Confirm Password -->
+      <div class="space-y-1">
+        <label class="block text-[11px] font-semibold uppercase tracking-widest px-1" style="color:#8c909f;" for="confirm-password">Confirm Password</label>
+        <div class="input-wrap">
+          <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+            <span class="material-symbols-outlined text-lg" style="color:#5a5e6e;">lock</span>
+          </div>
+          <input class="input-field" id="confirm-password" name="confirm-password" placeholder="Re-enter your password" required type="password" autocomplete="new-password"
+                 oninput="validateConfirm()" onblur="validateConfirm()"/>
+          <button class="absolute inset-y-0 right-0 pr-3.5 flex items-center" type="button" onclick="togglePass('confirm-password', this)">
+            <span class="material-symbols-outlined text-lg" style="color:#5a5e6e;">visibility</span>
+          </button>
+        </div>
+        <div class="field-error" id="confirm-err"></div>
+      </div>
+
+      <!-- Submit -->
+      <button id="signup-btn" class="btn-primary w-full flex items-center justify-center gap-2 py-3.5 px-4 rounded-xl text-sm font-bold text-white mt-2" type="submit">
+        <span class="material-symbols-outlined text-base">person_add</span>
+        <span id="btn-text">Create Account</span>
+        <span id="btn-spinner" class="material-symbols-outlined text-base animate-spin hidden">progress_activity</span>
+      </button>
+    </form>
+
+    <!-- Sign In link -->
+    <div class="mt-6 pt-5 border-t border-white/5 text-center">
+      <p class="text-sm" style="color:#5a5e6e;">
+        Already have an account?
+        <a href="login.html" class="font-semibold ml-1 transition-opacity hover:opacity-80" style="color:#adc6ff;">Sign in</a>
+      </p>
+    </div>
+  </div>
+</main>
+
+<script>
+const API = 'http://localhost:8000';
+let usernameValid = false;
+let passwordValid = false;
+let confirmValid = false;
+
+function togglePass(id, btn) {
+  const inp = document.getElementById(id);
+  const icon = btn.querySelector('.material-symbols-outlined');
+  if (inp.type === 'password') { inp.type = 'text'; icon.textContent = 'visibility_off'; }
+  else { inp.type = 'password'; icon.textContent = 'visibility'; }
+}
+
+function setFieldState(fieldId, errId, isValid, msg) {
+  const field = document.getElementById(fieldId);
+  const err = document.getElementById(errId);
+  field.classList.toggle('error', !isValid && msg !== '');
+  field.classList.toggle('success', isValid);
+  err.textContent = msg;
+}
+
+function validateUsername() {
+  const val = document.getElementById('username').value.trim();
+  if (val.length === 0) { setFieldState('username', 'username-err', false, ''); usernameValid = false; return; }
+  if (val.length < 3) { setFieldState('username', 'username-err', false, 'Username must be at least 3 characters.'); usernameValid = false; return; }
+  if (!/^[a-zA-Z0-9_-]+$/.test(val)) { setFieldState('username', 'username-err', false, 'Only letters, numbers, - and _ allowed.'); usernameValid = false; return; }
+  setFieldState('username', 'username-err', true, '');
+  usernameValid = true;
+}
+
+function getPasswordStrength(pw) {
+  let score = 0;
+  if (pw.length >= 8) score++;
+  if (pw.length >= 12) score++;
+  if (/[A-Z]/.test(pw)) score++;
+  if (/[0-9]/.test(pw)) score++;
+  if (/[^A-Za-z0-9]/.test(pw)) score++;
+  return score;
+}
+
+function validatePassword() {
+  const val = document.getElementById('password').value;
+  const bar = document.getElementById('strength-bar');
+  const strength = getPasswordStrength(val);
+  const pct = Math.min(100, (strength / 5) * 100);
+  const colors = ['#EF4444', '#F59E0B', '#F59E0B', '#10B981', '#10B981'];
+  bar.style.width = val.length ? pct + '%' : '0';
+  bar.style.background = val.length ? colors[Math.max(0, strength - 1)] : 'transparent';
+
+  if (val.length === 0) { setFieldState('password', 'password-err', false, ''); passwordValid = false; return; }
+  if (val.length < 8) { setFieldState('password', 'password-err', false, 'Password must be at least 8 characters.'); passwordValid = false; return; }
+  setFieldState('password', 'password-err', true, '');
+  passwordValid = true;
+}
+
+function validateConfirm() {
+  const pw = document.getElementById('password').value;
+  const confirm = document.getElementById('confirm-password').value;
+  if (confirm.length === 0) { setFieldState('confirm-password', 'confirm-err', false, ''); confirmValid = false; return; }
+  if (pw !== confirm) { setFieldState('confirm-password', 'confirm-err', false, 'Passwords do not match.'); confirmValid = false; return; }
+  setFieldState('confirm-password', 'confirm-err', true, '');
+  confirmValid = true;
+}
+
+function showAlert(msg) {
+  const box = document.getElementById('alert-box');
+  document.getElementById('alert-msg').textContent = msg;
+  box.style.display = 'block';
+  box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function setLoading(on) {
+  document.getElementById('btn-text').textContent = on ? 'Creating Account...' : 'Create Account';
+  document.getElementById('btn-spinner').classList.toggle('hidden', !on);
+  document.getElementById('signup-btn').disabled = on;
+}
+
+async function handleSignup(e) {
+  e.preventDefault();
+  document.getElementById('alert-box').style.display = 'none';
+
+  // Trigger all validations
+  validateUsername();
+  validatePassword();
+  validateConfirm();
+
+  if (!usernameValid || !passwordValid || !confirmValid) return;
+
+  const username = document.getElementById('username').value.trim();
+  const password = document.getElementById('password').value;
+  const confirm_password = document.getElementById('confirm-password').value;
+
+  setLoading(true);
+  try {
+    const res = await fetch(`${API}/auth/signup`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password, confirm_password }),
+    });
+
+    const data = await res.json().catch(() => ({}));
+
+    if (!res.ok) {
+      setLoading(false);
+      showAlert(data.detail || 'Registration failed. Please try again.');
+      return;
+    }
+
+    // Redirect to login with success flag
+    window.location.href = 'login.html?registered=1';
+
+  } catch {
+    setLoading(false);
+    showAlert('⚠️ Cannot connect to the backend server. Make sure it is running on port 8000.');
+  }
+}
+
+// Guard: redirect if already logged in
+const existingToken = localStorage.getItem('ask_data_token');
+const existingUser = JSON.parse(localStorage.getItem('ask_data_user') || 'null');
+if (existingToken && existingUser) {
+  if (existingUser.role === 'admin') window.location.href = 'admin_dashboard.html';
+  else window.location.href = 'chat.html';
+}
+</script>
+</body>
+</html>
