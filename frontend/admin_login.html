@@ -9,34 +9,63 @@
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <style>
   body {
-    background-color: #0D0D0F;
-    background-image: radial-gradient(circle at 50% 40%, rgba(245,158,11,0.07) 0%, transparent 55%),
-                      radial-gradient(#1b1b1d 0.5px, transparent 0.5px);
-    background-size: 100% 100%, 24px 24px;
+    background-color: #0B0B0E;
+    background-image: radial-gradient(circle at 50% 0%, rgba(245,158,11,0.1) 0%, transparent 60%),
+                      radial-gradient(circle at 80% 80%, rgba(239,68,68,0.1) 0%, transparent 50%),
+                      radial-gradient(#1b1b1d 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 30px 30px;
     font-family: 'Inter', sans-serif;
+    color: #e5e1e4;
   }
   .glass-card {
-    background: rgba(26,26,30,0.85);
-    backdrop-filter: blur(24px);
-    border: 1px solid rgba(100,70,30,0.3);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 40px rgba(245,158,11,0.04);
+    background: rgba(20, 20, 24, 0.7);
+    backdrop-filter: blur(30px);
+    border: 1px solid rgba(245, 158, 11, 0.15);
+    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7), 0 0 30px rgba(245,158,11,0.1);
+    transition: transform 0.3s ease;
   }
+  .glass-card:hover { transform: translateY(-2px); }
   .btn-admin {
     background: linear-gradient(135deg, #F59E0B, #EF4444);
-    transition: all 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 14px 0 rgba(245, 158, 11, 0.39);
   }
-  .btn-admin:hover { opacity:0.9; transform:translateY(-1px); box-shadow:0 8px 25px rgba(245,158,11,0.3); }
-  .btn-admin:active { transform:scale(0.98); }
+  .btn-admin:hover { 
+    opacity: 1; 
+    transform: translateY(-2px); 
+    box-shadow: 0 6px 20px rgba(245, 158, 11, 0.5); 
+  }
+  .btn-admin:active { transform: scale(0.97); }
+  .input-wrap { position: relative; }
   .input-field {
-    width:100%; padding:0.875rem 1rem 0.875rem 2.75rem;
-    background:#0e0e10; border:1px solid rgba(100,70,30,0.35);
-    border-radius:0.75rem; color:#e5e1e4; font-size:0.875rem;
-    outline:none; transition:all 0.2s;
+    width: 100%; 
+    padding: 0.875rem 1rem 0.875rem 3rem !important;
+    background: rgba(0, 0, 0, 0.4) !important; 
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 9999px !important; 
+    color: #ffffff !important; 
+    font-size: 0.875rem;
+    outline: none; 
+    transition: all 0.3s ease;
   }
-  .input-field:focus { border-color:rgba(245,158,11,0.45); box-shadow:0 0 0 3px rgba(245,158,11,0.08); }
-  .input-field::placeholder { color:#5a5e6e; }
-  .error-box { background:rgba(255,180,171,0.1); border:1px solid rgba(255,180,171,0.3); border-radius:0.75rem; padding:0.75rem 1rem; color:#ffb4ab; font-size:0.8rem; display:none; }
-  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  .input-field:-webkit-autofill,
+  .input-field:-webkit-autofill:hover, 
+  .input-field:-webkit-autofill:focus, 
+  .input-field:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px #241a1a inset !important;
+    -webkit-text-fill-color: #ffffff !important;
+    transition: background-color 5000s ease-in-out 0s;
+    border-radius: 9999px !important;
+  }
+  .input-field:focus { 
+    border-color: rgba(245,158,11,0.6) !important; 
+    box-shadow: 0 0 0 4px rgba(245,158,11,0.15) !important; 
+    background: rgba(0,0,0,0.6) !important;
+  }
+  .input-field::placeholder { color: #6b7280 !important; }
+  .error-box { background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.3); border-radius: 0.75rem; padding: 0.75rem 1rem; color: #fca5a5; font-size: 0.8rem; display: none; }
+  .material-symbols-outlined { transition: color 0.3s ease; }
+  .input-wrap:focus-within .material-symbols-outlined { color: #F59E0B !important; }
 </style>
 </head>
 <body class="flex items-center justify-center min-h-screen p-6">
@@ -71,8 +100,8 @@
       <!-- Admin ID -->
       <div class="space-y-1.5">
         <label class="block text-[11px] font-semibold uppercase tracking-widest px-1" style="color:#8c909f;" for="admin-id">Admin ID</label>
-        <div class="relative">
-          <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+        <div class="relative input-wrap">
+          <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
             <span class="material-symbols-outlined text-lg" style="color:#5a5e6e;">admin_panel_settings</span>
           </div>
           <input class="input-field" id="admin-id" name="admin-id" placeholder="Enter admin username" required type="text"/>
@@ -81,12 +110,12 @@
       <!-- Password -->
       <div class="space-y-1.5">
         <label class="block text-[11px] font-semibold uppercase tracking-widest px-1" style="color:#8c909f;" for="admin-password">Password</label>
-        <div class="relative">
-          <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+        <div class="relative input-wrap">
+          <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
             <span class="material-symbols-outlined text-lg" style="color:#5a5e6e;">lock</span>
           </div>
           <input class="input-field" id="admin-password" name="admin-password" placeholder="••••••••" required type="password"/>
-          <button class="absolute inset-y-0 right-0 pr-3.5 flex items-center" type="button" onclick="togglePass()">
+          <button class="absolute inset-y-0 right-0 pr-3.5 flex items-center transition-transform hover:scale-110" type="button" onclick="togglePass()">
             <span class="material-symbols-outlined text-lg" style="color:#5a5e6e;" id="eye-icon">visibility</span>
           </button>
         </div>
@@ -137,20 +166,28 @@ async function handleAdminLogin(e) {
   const u = document.getElementById('admin-id').value.trim();
   const p = document.getElementById('admin-password').value;
 
-  if (u === ADMIN_CREDENTIALS.username && p === ADMIN_CREDENTIALS.password) {
-    setLoading(true);
-    try {
-      const res = await fetch('http://localhost:8000/health');
-      if (!res.ok) throw new Error();
-    } catch {
+  setLoading(true);
+  try {
+    const res = await fetch('http://localhost:8000/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username: u, password: p })
+    });
+    
+    const data = await res.json().catch(() => ({}));
+    
+    if (res.ok && data.role === 'admin') {
+      sessionStorage.setItem('ask_data_auth', data.role);
+      sessionStorage.setItem('ask_data_user_id', data.user_id);
+      sessionStorage.setItem('ask_data_username', data.username);
+      window.location.href = 'admin_dashboard.html';
+    } else {
       setLoading(false);
-      showError('⚠️ Cannot connect to backend on port 8000. Please start the server first.');
-      return;
+      showError(data.detail || 'Invalid admin credentials or insufficient permissions.');
     }
-    sessionStorage.setItem('ask_data_auth', 'admin');
-    window.location.href = 'admin_dashboard.html';
-  } else {
-    showError('Invalid admin credentials.');
+  } catch (err) {
+    setLoading(false);
+    showError('⚠️ Cannot connect to the backend server. Make sure it is running on port 8000.');
   }
 }
 
