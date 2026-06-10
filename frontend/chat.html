@@ -23,6 +23,8 @@
   .doc-chip { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 10px; font-size: 13px; color: #e5e1e4; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); transition: all 0.2s; margin-bottom: 6px; }
   .doc-chip:hover { background: rgba(59, 130, 246, 0.08); border-color: rgba(59, 130, 246, 0.2); transform: translateX(2px); }
   .status-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; box-shadow: 0 0 8px currentColor; }
+  .chat-delete-btn { font-size:15px; cursor:pointer; color:#EF4444; opacity:0; transition:opacity 0.2s; }
+  .history-item:hover .chat-delete-btn { opacity:1; }
 
   /* Header */
   #header { height: 56px; background: #1b1b1d; border-bottom: 1px solid rgba(66,71,84,0.3); display: flex; align-items: center; padding: 0 16px; gap: 12px; flex-shrink: 0; }
@@ -102,38 +104,47 @@
     <span style="font-weight:700;font-size:15px;color:#e5e1e4;">Ask Data</span>
   </div>
 
-  <!-- New Chat -->
-  <div style="padding:12px;">
+  <!-- New Chat & Documents -->
+  <div style="padding:12px; padding-bottom:6px;">
     <button onclick="newChat()" style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:9px;background:linear-gradient(135deg,rgba(59,130,246,0.2),rgba(99,102,241,0.2));border:1px solid rgba(173,198,255,0.2);border-radius:10px;color:#adc6ff;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;">
       <span class="material-symbols-outlined" style="font-size:17px;">add</span> New Chat
     </button>
   </div>
+  <div style="padding:0 12px 12px;">
+    <button onclick="toggleDocModal()" style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:9px;background:rgba(173,198,255,0.05);border:1px solid rgba(173,198,255,0.15);border-radius:10px;color:#adc6ff;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;">
+      <span class="material-symbols-outlined" style="font-size:17px;">folder_open</span> Documents
+    </button>
+  </div>
 
   <!-- Chat History -->
-  <div class="sidebar-section">
+  <div class="sidebar-section" style="flex:1;overflow:hidden;display:flex;flex-direction:column;">
     <div class="sidebar-label">Recent Chats</div>
-    <div id="history-list" style="max-height:160px;overflow-y:auto;"></div>
+    <div id="history-list" style="overflow-y:auto;flex:1;"></div>
   </div>
 
-  <!-- Documents -->
-  <div class="sidebar-section" style="flex:1;overflow:hidden;display:flex;flex-direction:column;">
-    <div class="sidebar-label" style="display:flex;align-items:center;justify-content:space-between;">
-      <span>Documents in DB</span>
-      <span id="doc-count-badge" style="background:rgba(173,198,255,0.1);color:#adc6ff;font-size:10px;padding:1px 6px;border-radius:10px;font-weight:600;">0</span>
-    </div>
-    <div id="doc-list" style="overflow-y:auto;flex:1;"></div>
-  </div>
+
 
   <!-- Footer -->
   <div style="padding:12px;border-top:1px solid rgba(66,71,84,0.2);display:flex;align-items:center;gap:10px;">
-    <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#1E3A5F,#2a4a7f);display:flex;align-items:center;justify-content:center;border:1px solid rgba(59,130,246,0.3);color:#adc6ff;font-size:12px;font-weight:700;">U</div>
+    <div id="user-avatar" style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#1E3A5F,#2a4a7f);display:flex;align-items:center;justify-content:center;border:1px solid rgba(59,130,246,0.3);color:#adc6ff;font-size:12px;font-weight:700;text-transform:uppercase;">U</div>
     <div style="flex:1;">
-      <div style="font-size:13px;font-weight:600;color:#e5e1e4;">User</div>
-      <div style="font-size:11px;color:#5a5e6e;">Standard Access</div>
+      <div id="user-name-display" style="font-size:13px;font-weight:600;color:#e5e1e4;text-transform:capitalize;">User</div>
+      <div id="user-role-display" style="font-size:11px;color:#5a5e6e;text-transform:capitalize;">Standard Access</div>
     </div>
-    <a href="login.html" onclick="sessionStorage.removeItem('ask_data_auth')" title="Logout">
+    <a href="#" onclick="confirmLogout(event)" title="Logout">
       <span class="material-symbols-outlined" style="color:#5a5e6e;font-size:18px;cursor:pointer;">logout</span>
     </a>
+  </div>
+</div>
+
+<!-- Doc Modal -->
+<div id="doc-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); backdrop-filter:blur(4px); z-index:100; align-items:center; justify-content:center;">
+  <div style="background:#1b1b1d; border:1px solid rgba(66,71,84,0.4); border-radius:16px; width:90%; max-width:500px; max-height:80vh; display:flex; flex-direction:column; box-shadow:0 20px 40px rgba(0,0,0,0.4);">
+    <div style="padding:16px 20px; border-bottom:1px solid rgba(66,71,84,0.2); display:flex; justify-content:space-between; align-items:center;">
+      <h2 style="font-size:16px; font-weight:600;">Available Documents</h2>
+      <span class="material-symbols-outlined" style="cursor:pointer; color:#8c909f; transition:color 0.2s;" onclick="toggleDocModal()" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#8c909f'">close</span>
+    </div>
+    <div id="modal-doc-list" style="padding:16px 20px; overflow-y:auto; flex:1;"></div>
   </div>
 </div>
 
@@ -166,12 +177,6 @@
   <!-- Input area -->
   <div id="input-area">
     <div style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;align-items:center;">
-      <div style="position:relative;">
-        <button id="mention-btn" onclick="toggleMentionDropdown()" style="display:flex;align-items:center;gap:5px;padding:5px 10px;background:rgba(173,198,255,0.07);border:1px solid rgba(173,198,255,0.15);border-radius:8px;color:#adc6ff;font-size:12px;font-weight:600;cursor:pointer;">
-          <span class="material-symbols-outlined" style="font-size:14px;">alternate_email</span> Mention
-        </button>
-        <div id="mention-dropdown"></div>
-      </div>
       <div id="active-mentions" style="display:flex;gap:6px;flex-wrap:wrap;"></div>
     </div>
     <div style="position:relative;">
@@ -197,6 +202,13 @@ if (!sessionStorage.getItem('ask_data_auth')) window.location.href = 'login.html
 
 // ── Init ───────────────────────────────────────────────────────────────────────
 window.addEventListener('DOMContentLoaded', async () => {
+  // Setup user info
+  const username = sessionStorage.getItem('ask_data_username') || 'User';
+  const role = sessionStorage.getItem('ask_data_auth') || 'user';
+  document.getElementById('user-name-display').textContent = username;
+  document.getElementById('user-avatar').textContent = username.charAt(0);
+  document.getElementById('user-role-display').textContent = role === 'admin' ? 'Administrator' : 'Standard Access';
+
   sessionStorage.setItem('current_session_id', currentSessionId);
   // Restore current history from storage if it exists
   const stored = localStorage.getItem('chat_history_' + currentSessionId);
@@ -229,16 +241,19 @@ async function loadModelInfo() {
   } catch {}
 }
 
+function toggleDocModal() {
+  const modal = document.getElementById('doc-modal');
+  modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
+}
+
 function renderDocList() {
-  const list = document.getElementById('doc-list');
-  const badge = document.getElementById('doc-count-badge');
-  badge.textContent = documents.length;
+  const list = document.getElementById('modal-doc-list');
   
   if (!documents.length) {
     list.innerHTML = `
-      <div style="padding:20px 10px; text-align:center; opacity:0.5;">
-        <span class="material-symbols-outlined" style="font-size:32px;display:block;margin-bottom:8px;">folder_open</span>
-        <div style="font-size:12px;">No documents indexed</div>
+      <div style="padding:40px 10px; text-align:center; opacity:0.5;">
+        <span class="material-symbols-outlined" style="font-size:48px;display:block;margin-bottom:12px;">folder_open</span>
+        <div style="font-size:14px;">No documents indexed</div>
       </div>
     `;
     return;
@@ -248,17 +263,22 @@ function renderDocList() {
     const statusColor = d.status === 'indexed' ? '#10B981' : '#F59E0B';
     const docType = d.doc_type || 'PDF Document';
     return `
-      <div class="doc-chip" title="${d.source}">
-        <div class="status-dot" style="color: ${statusColor}; background: ${statusColor};" title="Status: ${d.status}"></div>
-        <div style="flex:1; overflow:hidden;">
-          <div style="font-weight:600; font-size:13px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:#e5e1e4;">
-            ${d.source}
-          </div>
-          <div style="font-size:10px; color:#5a5e6e; display:flex; align-items:center; gap:4px; margin-top:2px;">
-            <span class="material-symbols-outlined" style="font-size:10px;">description</span>
-            ${docType} • ${d.chunk_count || 0} chunks
+      <div class="doc-chip" title="${d.source}" style="justify-content:space-between;">
+        <div style="display:flex; align-items:center; gap:8px; cursor:pointer; flex:1; overflow:hidden;" onclick="addMention('${d.source}')">
+          <div class="status-dot" style="color: ${statusColor}; background: ${statusColor};" title="Status: ${d.status}"></div>
+          <div style="flex:1; overflow:hidden;">
+            <div style="font-weight:600; font-size:13px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:#e5e1e4;">
+              ${d.source}
+            </div>
+            <div style="font-size:10px; color:#5a5e6e; display:flex; align-items:center; gap:4px; margin-top:2px;">
+              <span class="material-symbols-outlined" style="font-size:10px;">description</span>
+              ${docType} • Click to Mention
+            </div>
           </div>
         </div>
+        <a href="${API}/raw/${d.source}" target="_blank" style="color:#adc6ff; display:flex; align-items:center; padding:4px;" title="Open PDF">
+          <span class="material-symbols-outlined" style="font-size:18px;">open_in_new</span>
+        </a>
       </div>
     `;
   }).join('');
@@ -281,7 +301,7 @@ function toggleMentionDropdown() {
 }
 
 function addMention(filename) {
-  document.getElementById('mention-dropdown').style.display = 'none';
+  toggleDocModal();
   if (!currentMentions.includes(filename)) {
     currentMentions.push(filename);
     renderMentions();
@@ -340,11 +360,39 @@ function renderHistory() {
   if (!sessions.length) { list.innerHTML = '<div style="font-size:12px;color:#5a5e6e;padding:4px 4px 8px;">No previous chats</div>'; return; }
   
   list.innerHTML = sessions.slice(-12).reverse().map(s => `
-    <div class="history-item ${s.id === currentSessionId ? 'active' : ''}" onclick="loadSession('${s.id}')" title="${s.title}">
-      <span class="material-symbols-outlined" style="font-size:15px;flex-shrink:0;">chat_bubble</span>
-      <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${s.title}</span>
+    <div class="history-item ${s.id === currentSessionId ? 'active' : ''}" style="display:flex; justify-content:space-between; align-items:center;">
+      <div onclick="loadSession('${s.id}')" style="flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; display:flex; align-items:center; gap:8px;" title="${s.title}">
+        <span class="material-symbols-outlined" style="font-size:15px;flex-shrink:0;">chat_bubble</span>
+        <span>${s.title}</span>
+      </div>
+      <span class="material-symbols-outlined chat-delete-btn" onclick="deleteSession('${s.id}', event)" title="Delete Chat">delete</span>
     </div>
   `).join('');
+}
+
+function deleteSession(id, event) {
+  event.stopPropagation();
+  if (!confirm("Are you sure you want to delete this chat?")) return;
+  
+  let sessions = JSON.parse(localStorage.getItem('ask_data_sessions') || '[]');
+  sessions = sessions.filter(s => s.id !== id);
+  localStorage.setItem('ask_data_sessions', JSON.stringify(sessions));
+  localStorage.removeItem('chat_history_' + id);
+  
+  if (currentSessionId === id) {
+    newChat();
+  } else {
+    renderHistory();
+  }
+}
+
+function confirmLogout(event) {
+  event.preventDefault();
+  if (confirm("Are you sure you want to logout?")) {
+    sessionStorage.removeItem('ask_data_auth');
+    sessionStorage.removeItem('ask_data_user_id');
+    window.location.href = 'login.html';
+  }
 }
 
 function renderMessages() {
