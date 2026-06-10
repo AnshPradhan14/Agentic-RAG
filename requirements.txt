@@ -28,3 +28,4 @@ langchain-core>=0.3.0           # Base abstractions (messages, tools, runnables)
 numpy>=1.26.0                   # Array ops for FAISS embedding normalisation
 tqdm>=4.66.0                    # Progress bars during ingestion
 python-dotenv>=1.0.0            # Optional: load config from .env file
+bcrypt>=4.0.0                   # Password hashing
