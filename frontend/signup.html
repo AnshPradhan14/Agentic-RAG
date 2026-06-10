@@ -9,44 +9,71 @@
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <style>
   body {
-    background-color: #0D0D0F;
-    background-image: radial-gradient(circle at 60% 40%, rgba(99,102,241,0.08) 0%, transparent 55%),
-                      radial-gradient(circle at 20% 80%, rgba(59,130,246,0.06) 0%, transparent 40%),
-                      radial-gradient(#1b1b1d 0.5px, transparent 0.5px);
-    background-size: 100% 100%, 100% 100%, 24px 24px;
+    background-color: #0B0B0E;
+    background-image: radial-gradient(circle at 60% 40%, rgba(99,102,241,0.15) 0%, transparent 60%),
+                      radial-gradient(circle at 20% 80%, rgba(59,130,246,0.1) 0%, transparent 50%),
+                      radial-gradient(#1b1b1d 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 30px 30px;
     font-family: 'Inter', sans-serif;
+    color: #e5e1e4;
   }
   .glass-card {
-    background: rgba(26,26,30,0.88);
-    backdrop-filter: blur(24px);
-    border: 1px solid rgba(66,71,84,0.4);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 40px rgba(99,102,241,0.06);
+    background: rgba(20, 20, 24, 0.7);
+    backdrop-filter: blur(30px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7), 0 0 30px rgba(99,102,241,0.1);
+    transition: transform 0.3s ease;
   }
+  .glass-card:hover { transform: translateY(-2px); }
   .btn-primary {
-    background: linear-gradient(135deg, #3B82F6, #6366f1);
-    transition: all 0.2s ease;
+    background: linear-gradient(135deg, #4f46e5, #3b82f6);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 14px 0 rgba(79, 70, 229, 0.39);
   }
-  .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 8px 25px rgba(59,130,246,0.35); }
-  .btn-primary:active { transform: scale(0.98); }
+  .btn-primary:hover { 
+    opacity: 1; 
+    transform: translateY(-2px); 
+    box-shadow: 0 6px 20px rgba(79, 70, 229, 0.5); 
+  }
+  .btn-primary:active { transform: scale(0.97); }
   .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
   .input-wrap { position: relative; }
   .input-field {
-    width: 100%; padding: 0.875rem 1rem 0.875rem 2.75rem;
-    background: #0e0e10; border: 1px solid rgba(66,71,84,0.4);
-    border-radius: 0.75rem; color: #e5e1e4; font-size: 0.875rem;
-    outline: none; transition: all 0.2s;
+    width: 100%; 
+    padding: 0.875rem 1rem 0.875rem 3rem !important;
+    background: rgba(0, 0, 0, 0.4) !important; 
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 9999px !important; 
+    color: #ffffff !important; 
+    font-size: 0.875rem;
+    outline: none; 
+    transition: all 0.3s ease;
   }
-  .input-field:focus { border-color: rgba(173,198,255,0.5); box-shadow: 0 0 0 3px rgba(173,198,255,0.1); }
-  .input-field.error { border-color: rgba(255,107,107,0.6); box-shadow: 0 0 0 3px rgba(255,107,107,0.1); }
-  .input-field.success { border-color: rgba(16,185,129,0.5); }
-  .input-field::placeholder { color: #5a5e6e; }
+  .input-field:-webkit-autofill,
+  .input-field:-webkit-autofill:hover, 
+  .input-field:-webkit-autofill:focus, 
+  .input-field:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px #1c1c24 inset !important;
+    -webkit-text-fill-color: #ffffff !important;
+    transition: background-color 5000s ease-in-out 0s;
+    border-radius: 9999px !important;
+  }
+  .input-field:focus { 
+    border-color: rgba(99,102,241,0.6) !important; 
+    box-shadow: 0 0 0 4px rgba(99,102,241,0.15) !important; 
+    background: rgba(0,0,0,0.6) !important;
+  }
+  .input-field.error { border-color: rgba(255,107,107,0.6) !important; box-shadow: 0 0 0 3px rgba(255,107,107,0.15) !important; }
+  .input-field.success { border-color: rgba(16,185,129,0.5) !important; }
+  .input-field::placeholder { color: #6b7280 !important; }
   .field-error { font-size: 11px; color: #ff6b6b; margin-top: 4px; padding-left: 4px; min-height: 16px; }
   .alert-box { border-radius: 0.75rem; padding: 0.75rem 1rem; font-size: 0.8rem; display: none; }
-  .alert-error { background: rgba(255,180,171,0.1); border: 1px solid rgba(255,180,171,0.3); color: #ffb4ab; }
+  .alert-error { background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.3); color: #fca5a5; }
   /* Strength bar */
-  .strength-bar-track { height: 3px; background: rgba(66,71,84,0.4); border-radius: 3px; overflow: hidden; margin-top: 8px; }
+  .strength-bar-track { height: 3px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; margin-top: 8px; }
   .strength-bar-fill { height: 100%; border-radius: 3px; transition: width 0.3s, background 0.3s; width: 0; }
-  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  .material-symbols-outlined { transition: color 0.3s ease; font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  .input-wrap:focus-within .material-symbols-outlined { color: #818cf8 !important; }
   @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
   main { animation: fadeIn 0.4s ease; }
 </style>
@@ -79,7 +106,7 @@
       <div class="space-y-1">
         <label class="block text-[11px] font-semibold uppercase tracking-widest px-1" style="color:#8c909f;" for="username">Username</label>
         <div class="input-wrap">
-          <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+          <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
             <span class="material-symbols-outlined text-lg" style="color:#5a5e6e;">person</span>
           </div>
           <input class="input-field" id="username" name="username" placeholder="min. 3 characters" required type="text" autocomplete="username"
@@ -92,12 +119,12 @@
       <div class="space-y-1">
         <label class="block text-[11px] font-semibold uppercase tracking-widest px-1" style="color:#8c909f;" for="password">Password</label>
         <div class="input-wrap">
-          <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+          <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
             <span class="material-symbols-outlined text-lg" style="color:#5a5e6e;">lock</span>
           </div>
           <input class="input-field" id="password" name="password" placeholder="min. 8 characters" required type="password" autocomplete="new-password"
                  oninput="validatePassword(); validateConfirm()"/>
-          <button class="absolute inset-y-0 right-0 pr-3.5 flex items-center" type="button" onclick="togglePass('password', this)">
+          <button class="absolute inset-y-0 right-0 pr-3.5 flex items-center transition-transform hover:scale-110" type="button" onclick="togglePass('password', this)">
             <span class="material-symbols-outlined text-lg" style="color:#5a5e6e;">visibility</span>
           </button>
         </div>
@@ -110,12 +137,12 @@
       <div class="space-y-1">
         <label class="block text-[11px] font-semibold uppercase tracking-widest px-1" style="color:#8c909f;" for="confirm-password">Confirm Password</label>
         <div class="input-wrap">
-          <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+          <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
             <span class="material-symbols-outlined text-lg" style="color:#5a5e6e;">lock</span>
           </div>
           <input class="input-field" id="confirm-password" name="confirm-password" placeholder="Re-enter your password" required type="password" autocomplete="new-password"
                  oninput="validateConfirm()" onblur="validateConfirm()"/>
-          <button class="absolute inset-y-0 right-0 pr-3.5 flex items-center" type="button" onclick="togglePass('confirm-password', this)">
+          <button class="absolute inset-y-0 right-0 pr-3.5 flex items-center transition-transform hover:scale-110" type="button" onclick="togglePass('confirm-password', this)">
             <span class="material-symbols-outlined text-lg" style="color:#5a5e6e;">visibility</span>
           </button>
         </div>
@@ -191,6 +218,7 @@ function validatePassword() {
 
   if (val.length === 0) { setFieldState('password', 'password-err', false, ''); passwordValid = false; return; }
   if (val.length < 8) { setFieldState('password', 'password-err', false, 'Password must be at least 8 characters.'); passwordValid = false; return; }
+  if (strength < 3) { setFieldState('password', 'password-err', false, 'Password is too weak. Add numbers/uppercase/symbols.'); passwordValid = false; return; }
   setFieldState('password', 'password-err', true, '');
   passwordValid = true;
 }
@@ -237,7 +265,7 @@ async function handleSignup(e) {
     const res = await fetch(`${API}/auth/signup`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password, confirm_password }),
+      body: JSON.stringify({ username, password }),
     });
 
     const data = await res.json().catch(() => ({}));
@@ -257,13 +285,8 @@ async function handleSignup(e) {
   }
 }
 
-// Guard: redirect if already logged in
-const existingToken = localStorage.getItem('ask_data_token');
-const existingUser = JSON.parse(localStorage.getItem('ask_data_user') || 'null');
-if (existingToken && existingUser) {
-  if (existingUser.role === 'admin') window.location.href = 'admin_dashboard.html';
-  else window.location.href = 'chat.html';
-}
+// Guard removed to allow account creation at any time
+
 </script>
 </body>
 </html>
