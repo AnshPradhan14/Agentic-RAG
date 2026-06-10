@@ -102,11 +102,11 @@
           <div class="field-label">Generation Model (LLM)</div>
           <div class="info-value" id="llm-model">Loading...</div>
           <div style="margin-top:8px;display:flex;align-items:center;gap:8px;">
-            <span style="font-size:12px;color:#5a5e6e;">Provider: Groq Cloud</span>
+            <span style="font-size:12px;color:#5a5e6e;" id="llm-provider-label">Provider: Loading...</span>
             <span class="info-chip" id="llm-status-chip" style="background:rgba(66,71,84,0.3);color:#8c909f;">Checking...</span>
           </div>
           <div style="margin-top:8px;font-size:12px;color:#5a5e6e;">
-            LLM Temperature: <span style="color:#adc6ff;font-weight:600;" id="llm-temp">0 (Deterministic)</span>
+            LLM Temperature: <span style="color:#adc6ff;font-weight:600;" id="llm-temp">—</span>
           </div>
         </div>
 
@@ -145,17 +145,17 @@
         <div class="card-body" style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
           <div>
             <div class="field-label">Chunk Token Limit</div>
-            <div class="info-value" style="font-size:22px;font-weight:700;color:#adc6ff;">400</div>
+            <div class="info-value" id="chunk-limit" style="font-size:22px;font-weight:700;color:#adc6ff;">—</div>
             <div style="font-size:11px;color:#5a5e6e;margin-top:4px;">tokens per chunk</div>
           </div>
           <div>
             <div class="field-label">Chunk Overlap</div>
-            <div class="info-value" style="font-size:22px;font-weight:700;color:#adc6ff;">100</div>
+            <div class="info-value" id="chunk-overlap" style="font-size:22px;font-weight:700;color:#adc6ff;">—</div>
             <div style="font-size:11px;color:#5a5e6e;margin-top:4px;">token overlap</div>
           </div>
           <div>
             <div class="field-label">Retrieval Top-K</div>
-            <div class="info-value" style="font-size:22px;font-weight:700;color:#d0bcff;">5</div>
+            <div class="info-value" id="retrieval-top-k" style="font-size:22px;font-weight:700;color:#d0bcff;">—</div>
             <div style="font-size:11px;color:#5a5e6e;margin-top:4px;">chunks per search</div>
           </div>
           <div>
@@ -270,11 +270,19 @@ async function loadHealth() {
 
     // LLM status
     const llmChip = document.getElementById('llm-status-chip');
-    if (d.groq_llm_ready) {
+    document.getElementById('llm-provider-label').textContent = `Provider: ${d.llm_provider === 'groq' ? 'Groq Cloud' : (d.llm_provider === 'ollama' ? 'Ollama Local' : d.llm_provider)}`;
+    document.getElementById('llm-temp').textContent = d.llm_temperature === 0 ? '0 (Deterministic)' : d.llm_temperature;
+    
+    if (d.llm_ready) {
       llmChip.textContent = '✅ Connected'; llmChip.className = 'info-chip chip-green';
     } else {
       llmChip.textContent = '❌ Not Ready'; llmChip.className = 'info-chip chip-red';
     }
+
+    // Chunking settings
+    document.getElementById('chunk-limit').textContent = d.chunk_token_limit ?? '—';
+    document.getElementById('chunk-overlap').textContent = d.chunk_overlap ?? '—';
+    document.getElementById('retrieval-top-k').textContent = d.retrieval_top_k ?? '—';
 
     // FAISS
     const faissStatus = document.getElementById('faiss-status');
