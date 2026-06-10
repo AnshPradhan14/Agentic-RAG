@@ -101,6 +101,40 @@ def init_db() -> None:
             );
         """)
 
+        # ── users table (Auth) ────────────────────────────────────────────────
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS users (
+                user_id       INTEGER PRIMARY KEY AUTOINCREMENT,
+                username      TEXT    UNIQUE NOT NULL,
+                password_hash TEXT    NOT NULL,
+                role          TEXT    DEFAULT 'user',
+                created_at    TEXT    DEFAULT (datetime('now'))
+            );
+        """)
+
+        # ── chat_sessions table ───────────────────────────────────────────────
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS chat_sessions (
+                session_id    INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id       INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
+                title         TEXT    NOT NULL,
+                created_at    TEXT    DEFAULT (datetime('now')),
+                updated_at    TEXT    DEFAULT (datetime('now'))
+            );
+        """)
+
+        # ── chat_messages table ───────────────────────────────────────────────
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS chat_messages (
+                message_id     INTEGER PRIMARY KEY AUTOINCREMENT,
+                session_id     INTEGER REFERENCES chat_sessions(session_id) ON DELETE CASCADE,
+                role           TEXT    NOT NULL,  -- 'user' or 'assistant'
+                content        TEXT    NOT NULL,
+                mentioned_docs TEXT,              -- JSON list of mentioned pdf names
+                created_at     TEXT    DEFAULT (datetime('now'))
+            );
+        """)
+
         conn.commit()
 
         # ── Add section column to chunks if not present (idempotent) ──────────
@@ -483,3 +517,101 @@ def save_triples(triples: list[dict]) -> None:
 def get_connection() -> sqlite3.Connection:
     """Public alias for _get_connection — used by triple_lookup tool."""
     return _get_connection()
+
+
+# ── Auth & Chat helpers ───────────────────────────────────────────────────────
+
+def create_user(username: str, password_hash: str, role: str = "user") -> int:
+    conn = _get_connection()
+    try:
+        cur = conn.execute(
+            "INSERT INTO users (username, password_hash, role) VALUES (?, ?, ?)",
+            (username, password_hash, role)
+        )
+        conn.commit()
+        return cur.lastrowid
+    finally:
+        conn.close()
+
+def get_user_by_username(username: str) -> dict[str, Any] | None:
+    conn = _get_connection()
+    try:
+        row = conn.execute("SELECT * FROM users WHERE username = ?", (username,)).fetchone()
+        return dict(row) if row else None
+    finally:
+        conn.close()
+
+def create_chat_session(user_id: int, title: str) -> int:
+    conn = _get_connection()
+    try:
+        cur = conn.execute(
+            "INSERT INTO chat_sessions (user_id, title) VALUES (?, ?)",
+            (user_id, title)
+        )
+        conn.commit()
+        return cur.lastrowid
+    finally:
+        conn.close()
+
+def get_chat_sessions(user_id: int) -> list[dict[str, Any]]:
+    conn = _get_connection()
+    try:
+        rows = conn.execute(
+            "SELECT * FROM chat_sessions WHERE user_id = ? ORDER BY updated_at DESC",
+            (user_id,)
+        ).fetchall()
+        return [dict(row) for row in rows]
+    finally:
+        conn.close()
+
+def get_chat_session(session_id: int) -> dict[str, Any] | None:
+    conn = _get_connection()
+    try:
+        row = conn.execute("SELECT * FROM chat_sessions WHERE session_id = ?", (session_id,)).fetchone()
+        return dict(row) if row else None
+    finally:
+        conn.close()
+
+def delete_chat_session(session_id: int) -> bool:
+    conn = _get_connection()
+    try:
+        cur = conn.execute("DELETE FROM chat_sessions WHERE session_id = ?", (session_id,))
+        conn.commit()
+        return cur.rowcount > 0
+    finally:
+        conn.close()
+
+def add_chat_message(session_id: int, role: str, content: str, mentioned_docs: list[str] = None) -> int:
+    docs_json = json.dumps(mentioned_docs) if mentioned_docs else None
+    conn = _get_connection()
+    try:
+        cur = conn.execute(
+            "INSERT INTO chat_messages (session_id, role, content, mentioned_docs) VALUES (?, ?, ?, ?)",
+            (session_id, role, content, docs_json)
+        )
+        conn.execute("UPDATE chat_sessions SET updated_at = datetime('now') WHERE session_id = ?", (session_id,))
+        conn.commit()
+        return cur.lastrowid
+    finally:
+        conn.close()
+
+def get_chat_messages(session_id: int) -> list[dict[str, Any]]:
+    conn = _get_connection()
+    try:
+        rows = conn.execute(
+            "SELECT * FROM chat_messages WHERE session_id = ? ORDER BY created_at ASC",
+            (session_id,)
+        ).fetchall()
+        
+        result = []
+        for r in rows:
+            msg = dict(r)
+            if msg["mentioned_docs"]:
+                msg["mentioned_docs"] = json.loads(msg["mentioned_docs"])
+            else:
+                msg["mentioned_docs"] = []
+            result.append(msg)
+        return result
+    finally:
+        conn.close()
+
