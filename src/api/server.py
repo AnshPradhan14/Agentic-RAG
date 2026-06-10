@@ -35,7 +35,9 @@ from fastapi import FastAPI, HTTPException, UploadFile, File, Form, BackgroundTa
 from fastapi.concurrency import run_in_threadpool
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, StreamingResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
+import bcrypt
 
 logging.basicConfig(
     level=logging.INFO,
@@ -125,11 +127,26 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# ── Static Files ───────────────────────────────────────────────────────────────
+from src.core.config import RAW_DIR
+RAW_DIR.mkdir(parents=True, exist_ok=True)
+app.mount("/raw", StaticFiles(directory=str(RAW_DIR)), name="raw")
+
 
 # ── Models ─────────────────────────────────────────────────────────────────────
 class AskRequest(BaseModel):
     query: str
     max_iterations: int = 5  # Reduced from 10 to prevent runaway loops and context blowout
+    session_id: Optional[int] = None
+    mentioned_docs: Optional[list[str]] = None
+
+class AuthRequest(BaseModel):
+    username: str
+    password: str
+
+class ChatSessionRequest(BaseModel):
+    user_id: int
+    title: str
 
 
 class AskResponse(BaseModel):
@@ -150,23 +167,95 @@ class IngestResponse(BaseModel):
     chunks_created: int
     message: str
 
+def hash_password(password: str) -> str:
+    salt = bcrypt.gensalt()
+    return bcrypt.hashpw(password.encode('utf-8'), salt).decode('utf-8')
+
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    # Fallback for old sha256 passwords for testing/backward compatibility
+    if not hashed_password.startswith('$2b$'):
+        import hashlib
+        return hashed_password == hashlib.sha256(plain_password.encode()).hexdigest()
+    return bcrypt.checkpw(plain_password.encode('utf-8'), hashed_password.encode('utf-8'))
+
+# ── Auth & Chat Endpoints ──────────────────────────────────────────────────────
+
+@app.post("/auth/signup")
+def signup(req: AuthRequest):
+    from src.core.database import create_user, get_user_by_username
+    import sqlite3
+    
+    if get_user_by_username(req.username):
+        raise HTTPException(status_code=400, detail="Username already exists")
+    
+    try:
+        user_id = create_user(req.username, hash_password(req.password))
+        return {"message": "User created successfully", "user_id": user_id, "username": req.username, "role": "user"}
+    except sqlite3.Error as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/auth/login")
+def login(req: AuthRequest):
+    from src.core.database import get_user_by_username
+    
+    user = get_user_by_username(req.username)
+    if not user or not verify_password(req.password, user["password_hash"]):
+        raise HTTPException(status_code=401, detail="Invalid username or password")
+    
+    return {
+        "message": "Login successful", 
+        "user_id": user["user_id"], 
+        "username": user["username"], 
+        "role": user["role"]
+    }
+
+@app.post("/chats")
+def create_chat(req: ChatSessionRequest):
+    from src.core.database import create_chat_session
+    try:
+        session_id = create_chat_session(req.user_id, req.title)
+        return {"session_id": session_id, "title": req.title}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/chats/user/{user_id}")
+def get_user_chats(user_id: int):
+    from src.core.database import get_chat_sessions
+    return get_chat_sessions(user_id)
+
+@app.get("/chats/{session_id}")
+def get_chat_history(session_id: int):
+    from src.core.database import get_chat_messages
+    return get_chat_messages(session_id)
+
+@app.delete("/chats/{session_id}")
+def delete_chat(session_id: int):
+    from src.core.database import delete_chat_session
+    success = delete_chat_session(session_id)
+    if not success:
+        raise HTTPException(status_code=404, detail="Chat session not found")
+    return {"message": "Chat deleted successfully"}
 
 # ── Endpoints ──────────────────────────────────────────────────────────────────
 
 @app.get("/health")
 def health_check():
-    from src.core.config import LLM_PROVIDER, ACTIVE_MODEL, EMBEDDING_MODEL_NAME
+    from src.core.config import LLM_PROVIDER, ACTIVE_MODEL, EMBEDDING_MODEL_NAME, CHUNK_TOKEN_LIMIT, CHUNK_OVERLAP, RETRIEVAL_TOP_K, LLM_TEMPERATURE
     return {
         "status": "ok",
         "embedding_model_loaded": _state["embedding_model_loaded"],
         "faiss_index_loaded": _state["faiss_index_loaded"],
-        "ollama_ready": _state["llm"] is not None,
+        "llm_ready": _state["llm"] is not None,
         "startup_time_seconds": _state["startup_time"],
         "active_llm": f"{LLM_PROVIDER.upper()}: {ACTIVE_MODEL}",
         "llm_provider": LLM_PROVIDER,
         "active_model": ACTIVE_MODEL,
         "embedding_model": EMBEDDING_MODEL_NAME,
         "query_count": _state["query_count"],
+        "chunk_token_limit": CHUNK_TOKEN_LIMIT,
+        "chunk_overlap": CHUNK_OVERLAP,
+        "retrieval_top_k": RETRIEVAL_TOP_K,
+        "llm_temperature": LLM_TEMPERATURE,
     }
 
 
@@ -398,12 +487,28 @@ def ask(request: AskRequest):
     _state["query_count"] += 1
 
     try:
+        from src.core.database import add_chat_message
+        
+        # Save user message if session exists
+        if request.session_id:
+            add_chat_message(request.session_id, "user", request.query, request.mentioned_docs)
+
+        # Modify query slightly if documents are mentioned
+        query_text = request.query
+        if request.mentioned_docs:
+            docs_context = " ".join(request.mentioned_docs)
+            query_text = f"[Focus on documents: {docs_context}] {query_text}"
+
         answer = run_agent(
-            query=request.query,
+            query=query_text,
             max_iterations=request.max_iterations,
         )
         elapsed = round(time.time() - t0, 2)
         logger.info("Query answered in %.2fs", elapsed)
+
+        # Save assistant message if session exists
+        if request.session_id:
+            add_chat_message(request.session_id, "assistant", answer)
 
         return AskResponse(
             query=request.query,
@@ -448,14 +553,33 @@ def ask_stream(request: AskRequest):
     logger.info("Received streaming query: '%s'", request.query)
     _state["query_count"] += 1
 
+    from src.core.database import add_chat_message
+    
+    # Save user message if session exists
+    if request.session_id:
+        add_chat_message(request.session_id, "user", request.query, request.mentioned_docs)
+
+    # Modify query slightly if documents are mentioned
+    query_text = request.query
+    if request.mentioned_docs:
+        docs_context = " ".join(request.mentioned_docs)
+        query_text = f"[Focus on documents: {docs_context}] {query_text}"
+
     def event_generator():
+        full_answer = ""
         try:
             for token in run_agent_stream(
-                query=request.query,
+                query=query_text,
                 max_iterations=request.max_iterations,
             ):
+                full_answer += token
                 # SSE format: each event is "data: <payload>\n\n"
                 yield f"data: {json.dumps(token)}\n\n"
+            
+            # Save assistant message if session exists
+            if request.session_id:
+                add_chat_message(request.session_id, "assistant", full_answer)
+            
             yield "data: [DONE]\n\n"
         except Exception as exc:
             logger.exception("Streaming agent error: %s", exc)
@@ -529,10 +653,11 @@ def ingest(request: IngestRequest):
 
 # ── Entry point ────────────────────────────────────────────────────────────────
 if __name__ == "__main__":
+    should_reload = "--reload" in sys.argv
     uvicorn.run(
         "src.api.server:app",
         host="0.0.0.0",
         port=8000,
-        reload=False,
+        reload=should_reload,
         log_level="info",
     )
