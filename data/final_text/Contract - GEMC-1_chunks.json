@@ -1,0 +1,233 @@
+[
+  {
+    "chunk_id": "Contract - GEMC-1__section_001",
+    "source_file": "Contract - GEMC-1.pdf",
+    "page_range": [
+      0,
+      0
+    ],
+    "heading_path": "Contract",
+    "heading_path_list": [
+      "Contract"
+    ],
+    "section_level": 1,
+    "section_heading": "Contract",
+    "chunk_index": 0,
+    "content": "<!-- context: Contract -->\n\n# Contract\n- Contract No: GEMC-511687700138456\n- Generated Date: 18-Mar-2025",
+    "content_length": 104,
+    "token_estimate": 27,
+    "has_table": false,
+    "parent_heading": null,
+    "child_headings": [
+      "Organisation Details",
+      "Financial Approval Detail",
+      "Seller Details",
+      "Product Details",
+      "Consignee Detail",
+      "Buyer Details",
+      "Paying Authority Details",
+      "Terms and Conditions"
+    ]
+  },
+  {
+    "chunk_id": "Contract - GEMC-1__section_002",
+    "source_file": "Contract - GEMC-1.pdf",
+    "page_range": [
+      0,
+      0
+    ],
+    "heading_path": "Contract > Organisation Details",
+    "heading_path_list": [
+      "Contract",
+      "Organisation Details"
+    ],
+    "section_level": 2,
+    "section_heading": "Organisation Details",
+    "chunk_index": 1,
+    "content": "<!-- context: Contract > Organisation Details -->\n\n## Organisation Details\n- **Type:** Central Autonomous\n- **Ministry:** PMO\n- **Department:** Department of Atomic Energy\n- **Organisation Name:** Institute for Plasma Research\n- **Office Zone:** West Zone",
+    "content_length": 255,
+    "token_estimate": 46,
+    "has_table": false,
+    "parent_heading": "Contract",
+    "child_headings": []
+  },
+  {
+    "chunk_id": "Contract - GEMC-1__section_003",
+    "source_file": "Contract - GEMC-1.pdf",
+    "page_range": [
+      0,
+      0
+    ],
+    "heading_path": "Contract > Financial Approval Detail",
+    "heading_path_list": [
+      "Contract",
+      "Financial Approval Detail"
+    ],
+    "section_level": 2,
+    "section_heading": "Financial Approval Detail",
+    "chunk_index": 2,
+    "content": "<!-- context: Contract > Financial Approval Detail -->\n\n## Financial Approval Detail\n- **IFD Concurrence:** No\n- **Designation of Administrative Approval:** Head PMMD\n- **Designation of Financial Approval:** Head-Accounts Section",
+    "content_length": 229,
+    "token_estimate": 39,
+    "has_table": false,
+    "parent_heading": "Contract",
+    "child_headings": []
+  },
+  {
+    "chunk_id": "Contract - GEMC-1__section_004",
+    "source_file": "Contract - GEMC-1.pdf",
+    "page_range": [
+      0,
+      0
+    ],
+    "heading_path": "Contract > Seller Details",
+    "heading_path_list": [
+      "Contract",
+      "Seller Details"
+    ],
+    "section_level": 2,
+    "section_heading": "Seller Details",
+    "chunk_index": 3,
+    "content": "<!-- context: Contract > Seller Details -->\n\n## Seller Details\n- **GeM Seller ID:** AC08180000522803\n- **Company Name:** Nirmal Infotech\n- **Contact No.:** 09783304329\n- **Email ID:** shivpujans@gmail.com\n- **Address:** 16/8B/14 A.N. Jha Marg, Corporative Crossing, George Town, George town, George Town, Allahabad, UTTAR PRADESH-211002, -\n- **MSME Registration number:** UDYAM-UP-03-0043910\n- **GSTIN:** 09BNIPS1031D1Z8 (R)\n- **MSE Social Category:** OBC\n- **MSE Gender:** Female\n- **GST/Tax:** GST / Tax invoice to be raised in the name of Buyer\n- **Delivery Instructions:** URGENT 24-25/1340",
+    "content_length": 594,
+    "token_estimate": 189,
+    "has_table": false,
+    "parent_heading": "Contract",
+    "child_headings": []
+  },
+  {
+    "chunk_id": "Contract - GEMC-1__section_005",
+    "source_file": "Contract - GEMC-1.pdf",
+    "page_range": [
+      0,
+      0
+    ],
+    "heading_path": "Contract > Product Details",
+    "heading_path_list": [
+      "Contract",
+      "Product Details"
+    ],
+    "section_level": 2,
+    "section_heading": "Product Details",
+    "chunk_index": 4,
+    "content": "<!-- context: Contract > Product Details -->\n\n## Product Details\n| # | Item Description | Ordered Quantity | Unit | Unit Price (INR) | Tax Bifurcation (INR) | Price (Inclusive of all Duties and Taxes in INR) |\n|---|---|---|---|---|---|---|\n| 1 | Product Name : DELL EMC 1 X Intel DDR5 128 GB Brand : DELL EMC Brand Type : Registered Brand Catalogue Status: OEM verified catalogue Selling As : OEM verified Reseller Category Name & Quadrant : Server (Q2) Model: Dell EMC PowerEdge R760xs HSN Code: HSN not specified by seller | 1 | pieces | 990,390 | NA | 990,390 |\n| Total Order Value (in INR) | 990,390 | | | | | |",
+    "content_length": 615,
+    "token_estimate": 173,
+    "has_table": true,
+    "parent_heading": "Contract",
+    "child_headings": [
+      "Specification"
+    ]
+  },
+  {
+    "chunk_id": "Contract - GEMC-1__section_006",
+    "source_file": "Contract - GEMC-1.pdf",
+    "page_range": [
+      0,
+      0
+    ],
+    "heading_path": "Contract > Product Details > Specification",
+    "heading_path_list": [
+      "Contract",
+      "Product Details",
+      "Specification"
+    ],
+    "section_level": 3,
+    "section_heading": "Specification",
+    "chunk_index": 5,
+    "content": "<!-- context: Contract > Product Details > Specification -->\n\n### Specification\n| Specification | Sub-Spec | Value |\n|---|---|---|\n| Chassis | Form Factor | Rack |\n| Chassis | Size (RU) | 2 |\n| Processor | Processor Architecture | CISC(X86) |\n| Processor | Processor Make | Intel |\n| Processor | Number of Cores per Processor | 24 |\n| Processor | Processor Base Frequency (GHz) | 2 |\n| Processor | Processor Turbo Frequency (GHz) | 3.8 |\n| Processor | Total Cache (L1+L2+L3) (MB) | 45 |\n| Processor | Processor Description/ Number | Intel Xeon Gold 5418Y |\n| Motherboard | Chipset compatible with CPU | Intel C621 |\n| Motherboard | Expansion Slots Gen 3 (PCIe x1) | 0 |\n| Motherboard | Expansion Slots Gen 3 (PCIe x4) | 0 |\n| Motherboard | Expansion Slots Gen 3 (PCIe x8) | 1 |\n| Motherboard | Expansion Slots Gen 3 (PCIe x16) | 1 |\n| Motherboard | Maximum number of Sockets available on Server | 2 |\n| Motherboard | Maximum number of Sockets populated with Processors available on Server | 1 |\n| Co Processor / GPU | Availability of Co Processor /GPU | No |\n| Co Processor / GPU | If Yes, Maximum Number of Slots available for Co- Processor/GPU | 0 |\n| Co Processor / GPU | If Yes, Maximum Number of slots populated with Co processor/GPU | 0 |\n| Co Processor / GPU | If Yes, Co Processor /GPU Description | NA |\n| Memory | Type of RAM | DDR5 |\n| Memory | Total Number of DIMM Slots available | 16 |\n| Memory | populated with DDR SDRAM Number of DIMM Slots | 4 |\n| Memory | populated with DDR | 0 |\n| Memory | DDR SDRAM Size(GB) | 128 |\n| Memory | DDR NVRAM Size (GB) | 0 |\n| Memory | DDR SDRAM upgradable upto using spare DIMM Slots (GB) | 512 |\n| Memory | DDR NVRAM upgradable upto using spare DIMM | 0 |\n| SSD Storage | Type of Interface for SSD Type of SATA SSD | NA |\n| SSD Storage | SATA SSD Hot Swappable | NA |\n| SSD Storage | Endurance for SATA SSD (DWPD - Drive Writes Per Day) (X) | 0 |\n| SSD Storage | Total Number of Slots available for SATA SSD | 0 |\n| SSD Storage | Number of Slot Populated with SATA SSD | 0 |\n| SSD Storage | Capacity offered per SATA SSD (GB) | 0 |\n| SSD Storage | Total Capacity Offered with SATA SSD (GB) | 0 |\n| SSD Storage | Type of SAS SSD | NA |\n| SSD Storage | SAS SSD Hot Swappable Endurance for SAS SSD | No |\n| SSD Storage | Total Number of Slots available for SAS SSD | 0 |\n| SSD Storage | Number of Slots populated with SAS SSD | 0 |\n| SSD Storage | Capacity Offered per SAS SSD (GB) | 0 |\n| SSD Storage | Total Capacity Offered with SAS SSD (GB) | 0 |\n| SSD Storage | Type of NVMe SSD | NA |\n| SSD Storage | NVMe SSD Hot Swappable | No |\n| SSD Storage | Endurance for NVMe SSD (DWPD - Drive Writes Per Day) (X) | 0 |\n| SSD Storage | Total Number of Slots available for NVMe SSD | 0 |\n| SSD Storage | Number of Slots populated with NVMe SSD | 0 |\n| SSD Storage | Capacity Offered per NVMe SSD (GB) | 0 |\n| SSD Storage | Total Capacity Offered with NVMe SSD (GB) | 0 |\n| HDD Storage | Type of Interface for Hard Disk Drive | SAS |\n| HDD Storage | Total number of Slots available for SATA Drive | 0 |\n| HDD Storage | Number of Slots populated with SATA Drive | 0 |\n| HDD Storage | Capacity offered per SATA Drive (GB) | 0 |\n| HDD Storage | Total number of slots available for SAS drive | 8 |\n| HDD Storage | Number of Slots populated with SAS | 4 |\n| HDD Storage | Capacity offered per SAS Drive (GB) | 1200 |\n| HDD Storage | SAS drive Speed (Hot plug or better) (RPM) | 10K |\n| HDD Storage | Total Storage Capacity offered with SAS Drive (GB) | 4800 |\n| HDD Storage | Total number of slots available for NL SAS drive | 0 |\n| HDD Storage | Number of Slots populated with NL SAS Drive | 0 |\n| HDD Storage | Capacity offered per NL SAS Drive | 0 |\n| HDD Storage | NL SAS drive speed (hot plug or better) (RPM) | NA |\n| HDD Storage | Total Storage Capacity offered with NL SAS Drive (GB) | 0 |\n| RAID | RAID level | 1,5,6,1+0,5+0,0 |\n| RAID | No of RAID Controller Ports | 8 |\n| RAID | Speed of RAID Controller Ports (Gbps) | 12 |\n| RAID | RAID Controller Cache (GB) | 8 |\n| Ports & Interfaces | Network Card Supported | 10G |\n| Ports & Interfaces | Number of Networking Interface Cards (LAN) | 2 |\n| Ports & Interfaces | Whether Network Interface Card Embedded | Yes |\n| Ports & Interfaces | Total Number of Ethernet Ports required in Server | 2x1G,4x1G |\n| Ports & Interfaces | Networking Interface Card Features | Asset Feature Tracking,Security Management,Remote Wake |\n| Ports & Interfaces | Server Network Ports should Support SR-IOV Feature | No |\n| Ports & Interfaces | Server network ports should support DPDK and it should deliver zero packet loss as per RFC 2544 and deliver 100% line rate for all the packet sizes over 64 Bytes, Vendor to submit latest DPDK test report for the same | No |\n| Ports & Interfaces | Number of Single port FC HBA card | 0 |\n| Ports & Interfaces | Number of Dual port FC HBA card | 0 |\n| Ports & Interfaces | Number of Quad port FC HBA card | 0 |\n| Ports & Interfaces | FC HBA Speed (Gbps) | NA |\n| Ports & Interfaces | vHBA Card Features Supported | No |\n| Ports & Interfaces | Number of Converged Network Adaptor (CNA) | 0 |\n| Ports & Interfaces | Number of Ports per CNA card | NA |\n| Ports & Interfaces | CNA Port Speed (Gbps) | 0 |\n| Ports & Interfaces | Length of LC-LC Cable per SFP+ Port (meter) | 0 |\n| Ports & Interfaces | Length of LC-LC Cable per HBA Port (meter) | 0 |\n| Ports & Interfaces | Length of LC-LC Cable per CNA Port (meter) | 0 |\n| Ports & Interfaces | Length of Twinax Breakout Cables per Port (meter) | 0 |\n| Ports & Interfaces | Video Controller (support VGA or above resolution) | Yes |\n| Ports & Interfaces | Keyboard Port | No |\n| Ports & Interfaces | Mouse Port | No |\n| Ports & Interfaces | DVD ROM (Internal/Exrternal) | No |\n| Ports & Interfaces | USB Ports (version 2point0/3point0) | 3 |\n| Ports & Interfaces | Total number of Spare Bays Available for Future Upgradation (Internal) | 0 |\n| Ports & Interfaces | Total number of Spare Bays Available for Future Upgradation (Hot Plugable) | 2 |\n| Certifications | Certifications/Compliance (OS) | Windows,Red Hat Linux,Suse Linux,Ubuntu |\n| Certifications | Certification/Compliance (Virtualization/Cloud Platform) | VM ware,HyperV |\n| Features | Management Features-1 | Remoter power On/ Shutdown of server,,Remote Management of Server over LAN & WAN with SSL encryption through gigabit management port,,Should have virtual Media support with all required licenses.,Remote KVM,Server Health Logging,Out of Band Management |\n| Features | Management Features-2 | Management of multiple Servers from single console with single source of truth for multiple sites.,Automated infrastructure management for patch upgrades, version upgrades ,etc.,Simplified management with analytics driven actionable intelligence.,System tagging giving admin flexibility to provide metadata tags to each System to enable users to filter and sort systems based on user-assigned attributes,Hardware Profile based deployment to multiple Servers simultaneously,Policy template for deployment of single policy to multiple Servers simultaneously,Platfrom inventory and helath status,Server utilization statistics collection (including firmware updates and diagnostic tools),Should provide an alert in case the system is not part of OEM hardware complatibilty test,Solution should be open and programmable providing Rest API, SDK for programming lanugaes like Python , power shell scripts etc.,Should have customizable dashboard to show overall faults/health/inventory for all managed infrastructure the solution should provide option to create unique dashboards for individual users.the user should be flexibility to select name for dshasboards and widgets (viz. health, utilization etc),Self service portal deployment for automated provisioning,Real-time out-of-band hardware performance monitoring & alerting |\n| Features | Security Features-1 | Secure Boot(Firmware and Bios Level Security),Provision to lock the system on breach,Hardware root of trust/Dual Root of Trust,Server should provide policy based security,Server should provide server intrusion detection,,\"Malicious Code Free design\" (to be certified by OEM) |\n| Features | Security Features-2 | Provision for Cryptographic firmware updates,Capability to stop execution of Application/Hyperviser/ Operating System on predefined security breach,Secure /Automatic BIOS recovery,Network Card secure firmware boot,In case of any security breach system should provide the lock down feature |\n| Features | Server scalability to be achived within the box & without adding nodes | Yes |\n| Features | support for high availability clustering and virtualization | Yes |\n| Generic | Redundant Power Supply | Yes |\n| Generic | Hot Swappable (Redundant Power Supply) | Yes |\n| Generic | Power Supply Efficiency | Platinum |\n| Generic | Redundant Fan | Yes |\n| Generic | Hot Swappable (Redundant Fan) | Yes |\n| Generic | Server Main Supply | 230 +/- 10%Vac |\n| Benchmark | SPEC int_rate_base 2017 for the product (must be available on SPEC dot ORG before evaluation) | 407 |\n| Benchmark | SPEC fp_rate_2017 for the product (must be available on SPEC dot ORG before evaluation) | 521 |\n| Benchmark | SPEC int_speed_base 2017 for the product (must be available on SPEC dot ORG before evaluation) | 14.1 |\n| Benchmark | SPEC fp_speed_2017 for the product (must be available on SPEC dot ORG before evaluation) | 245 |\n| Miscellaneous | Maximum power consumption of the system (Watts) | 800 |\n| Miscellaneous | BIS Registration under CRS of MeitY | Yes |\n| Miscellaneous | BIS Registration Number Under CRS of MeitY and its validity | R-61000388 |\n| Miscellaneous | Other Certifications Available | UL |\n| Miscellaneous | RoHS Compliance | Yes |\n| Miscellaneous | Availability of the type test report from Central Government / NABL / ILAC acredited laboratory covering verification of all features & functional parameters & environmental tests sequence | No |\n| Miscellaneous | a) Dry heat:test - for 16 hrs at 45 deg C as per IS: 9000/pt-3/sec-5/1977 b) Cold test - for 4 hrs at 0 deg C as per IS: 9000/pt- 2/sec-4/1977 c) Damp Heat Cyclic Test - for 2 cycles of 24 hrs at 40 deg C & 95% RH as per IS: 9000/pt-5/sec-1/1981 | NA |\n| Miscellaneous | The server has been checked for all the parameters before conditioning, After completion of the environmental tests sequence, with a recovery period of 1 to 2 hrs, the server found to be functional | NA |\n| Miscellaneous | Test Report Number & | NA |\n| Miscellaneous | Name & Address of Lab | NA |\n| Scope of Supply | Installation and Commissioning shall be included in the scope of supply | Yes |\n| Warranty | On Site OEM Warranty (Year) | 5 |",
+    "content_length": 10674,
+    "token_estimate": 2615,
+    "has_table": true,
+    "parent_heading": "Product Details",
+    "child_headings": []
+  },
+  {
+    "chunk_id": "Contract - GEMC-1__section_007",
+    "source_file": "Contract - GEMC-1.pdf",
+    "page_range": [
+      0,
+      0
+    ],
+    "heading_path": "Contract > Consignee Detail",
+    "heading_path_list": [
+      "Contract",
+      "Consignee Detail"
+    ],
+    "section_level": 2,
+    "section_heading": "Consignee Detail",
+    "chunk_index": 6,
+    "content": "<!-- context: Contract > Consignee Detail -->\n\n## Consignee Detail\n| S.No | Consignee | Item | Lot No. | Quantity | Delivery Start After | Delivery To Be Completed By |\n|---|---|---|---|---|---|---|\n| 1 | Designation : stores1 Email ID : buyer17.ipr.gj@gembuyer.in Contact : 079-23962000-2262 GSTIN : 24AAAAI0348C2ZC Address : BHAT, NEAR INDIRA BRIDGE, GANDHINAGAR, | DELL EMC 1 X Intel DDR5 128 GB | - | 1 | 18-Mar-2025 | 02-May-2025 |",
+    "content_length": 436,
+    "token_estimate": 147,
+    "has_table": true,
+    "parent_heading": "Contract",
+    "child_headings": []
+  },
+  {
+    "chunk_id": "Contract - GEMC-1__section_008",
+    "source_file": "Contract - GEMC-1.pdf",
+    "page_range": [
+      0,
+      0
+    ],
+    "heading_path": "Contract > Buyer Details",
+    "heading_path_list": [
+      "Contract",
+      "Buyer Details"
+    ],
+    "section_level": 2,
+    "section_heading": "Buyer Details",
+    "chunk_index": 7,
+    "content": "<!-- context: Contract > Buyer Details -->\n\n## Buyer Details\n- **Designation:** Gautambhai Suthar\n- **Contact No.:** 079-23962028-\n- **Email ID:** buyer5.ipr.gj@gembuyer.in\n- **GSTIN:** 24AAAAI0348C2ZC\n- **Address:** BHAT, NEAR INDIRA BRIDGE, GANDHINAGAR, GANDHINAGAR, GUJARAT-382428, India",
+    "content_length": 290,
+    "token_estimate": 100,
+    "has_table": false,
+    "parent_heading": "Contract",
+    "child_headings": []
+  },
+  {
+    "chunk_id": "Contract - GEMC-1__section_009",
+    "source_file": "Contract - GEMC-1.pdf",
+    "page_range": [
+      0,
+      0
+    ],
+    "heading_path": "Contract > Paying Authority Details",
+    "heading_path_list": [
+      "Contract",
+      "Paying Authority Details"
+    ],
+    "section_level": 2,
+    "section_heading": "Paying Authority Details",
+    "chunk_index": 8,
+    "content": "<!-- context: Contract > Paying Authority Details -->\n\n## Paying Authority Details\n- **Role:** PAO\n- **Payment Mode:** Offline\n- **Designation:** Accounts Officer - I\n- **Email ID:** pao1.ipr.gadj@gembuyer.in\n- **GSTIN:** N\n- **Address:** BHAT, NEAR INDIRA BRIDGE, GANDHINAGAR, GANDHINAGAR, GUJARAT-382428, India",
+    "content_length": 312,
+    "token_estimate": 93,
+    "has_table": false,
+    "parent_heading": "Contract",
+    "child_headings": []
+  },
+  {
+    "chunk_id": "Contract - GEMC-1__section_010",
+    "source_file": "Contract - GEMC-1.pdf",
+    "page_range": [
+      0,
+      0
+    ],
+    "heading_path": "Contract > Terms and Conditions",
+    "heading_path_list": [
+      "Contract",
+      "Terms and Conditions"
+    ],
+    "section_level": 2,
+    "section_heading": "Terms and Conditions",
+    "chunk_index": 9,
+    "content": "<!-- context: Contract > Terms and Conditions -->\n\n## Terms and Conditions\n'''\n\n1. General Terms and Conditions-\n2. 1.1 This contract is governed by the General Terms and Conditions, conditions stipulated to this Product/Service as provided in the Marketplace.\n3. 1.2 This Contract between the Seller and the Buyer, is for the supply of the Goods and/ or Services, detailed in the schedule above, in accordance with the General Terms and Conditions (GTC) unless otherwise superseded by Goods / Services specific Special Terms and Conditions (STC) and/ or BID/Reverse Auction Additional Terms and Conditions (ATC), as applicable\n4. 1.3 All GeM Sellers / Service Providers are mandated to ensure compliance with all the applicable laws / acts / rules including but not limited to all Labour Laws such as The Minimum Wages Act, 1948, The Payment of Wages Act, 1936, The Payment of Bonus Act, 1965, The Equal Remuneration Act, 1976, The Payment of Gratuity Act, 1972 etc. Any non-compliance will be treated as breach of contract and Buyer may take suitable actions as per GeM Contract.\n\n: /\n\nNote: This is system generated file. No signature is required. Print out of this document is not valid for payment/ transaction purpose.",
+    "content_length": 1224,
+    "token_estimate": 269,
+    "has_table": false,
+    "parent_heading": "Contract",
+    "child_headings": []
+  }
+]

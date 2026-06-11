@@ -193,7 +193,12 @@
 const API = 'http://localhost:8000';
 let documents = [];
 let chatHistory = [];
-let currentSessionId = sessionStorage.getItem('current_session_id') || 'session-' + Date.now();
+let currentSessionId = sessionStorage.getItem('current_session_id') || null;
+if (currentSessionId && currentSessionId !== 'null' && !isNaN(currentSessionId)) {
+  currentSessionId = parseInt(currentSessionId);
+} else {
+  currentSessionId = null;
+}
 let currentMentions = [];
 let isSending = false;
 
@@ -209,15 +214,16 @@ window.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('user-avatar').textContent = username.charAt(0);
   document.getElementById('user-role-display').textContent = role === 'admin' ? 'Administrator' : 'Standard Access';
 
-  sessionStorage.setItem('current_session_id', currentSessionId);
-  // Restore current history from storage if it exists
-  const stored = localStorage.getItem('chat_history_' + currentSessionId);
-  if (stored) chatHistory = JSON.parse(stored);
+  if (currentSessionId) sessionStorage.setItem('current_session_id', currentSessionId);
 
   await loadDocuments();
   await loadModelInfo();
-  renderHistory();
-  renderMessages();
+  await renderHistory();
+  if (currentSessionId) {
+    await loadSession(currentSessionId);
+  } else {
+    renderMessages();
+  }
 });
 
 async function loadDocuments() {
@@ -236,7 +242,7 @@ async function loadModelInfo() {
     if (res.ok) {
       const data = await res.json();
       document.getElementById('model-name').textContent = data.active_llm || 'Groq LLM';
-      document.getElementById('model-dot').style.background = data.ollama_ready ? '#10B981' : '#EF4444';
+      document.getElementById('model-dot').style.background = data.llm_ready ? '#10B981' : '#EF4444';
     }
   } catch {}
 }
@@ -331,8 +337,8 @@ document.addEventListener('click', e => {
 
 // ── Chat ────────────────────────────────────────────────────────────────────
 function newChat() {
-  currentSessionId = 'session-' + Date.now();
-  sessionStorage.setItem('current_session_id', currentSessionId);
+  currentSessionId = null;
+  sessionStorage.removeItem('current_session_id');
   chatHistory = [];
   renderHistory();
   renderMessages();
@@ -340,44 +346,62 @@ function newChat() {
   renderMentions();
 }
 
-function loadSession(id) {
-  const sessions = JSON.parse(localStorage.getItem('ask_data_sessions') || '[]');
-  const session = sessions.find(s => s.id === id);
-  if (!session) return;
-
+async function loadSession(id) {
   currentSessionId = id;
   sessionStorage.setItem('current_session_id', id);
-  const stored = localStorage.getItem('chat_history_' + id);
-  chatHistory = stored ? JSON.parse(stored) : [];
+  
+  try {
+    const res = await fetch(`${API}/chats/${id}`);
+    if (res.ok) {
+      const messages = await res.json();
+      chatHistory = messages.map(m => ({
+        role: m.role,
+        content: m.content,
+        mentions: m.mentioned_docs || [],
+        time: m.created_at
+      }));
+    } else {
+      chatHistory = [];
+    }
+  } catch {
+    chatHistory = [];
+  }
   
   renderHistory();
   renderMessages();
 }
 
-function renderHistory() {
+async function renderHistory() {
   const list = document.getElementById('history-list');
-  const sessions = JSON.parse(localStorage.getItem('ask_data_sessions') || '[]');
-  if (!sessions.length) { list.innerHTML = '<div style="font-size:12px;color:#5a5e6e;padding:4px 4px 8px;">No previous chats</div>'; return; }
-  
-  list.innerHTML = sessions.slice(-12).reverse().map(s => `
-    <div class="history-item ${s.id === currentSessionId ? 'active' : ''}" style="display:flex; justify-content:space-between; align-items:center;">
-      <div onclick="loadSession('${s.id}')" style="flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; display:flex; align-items:center; gap:8px;" title="${s.title}">
-        <span class="material-symbols-outlined" style="font-size:15px;flex-shrink:0;">chat_bubble</span>
-        <span>${s.title}</span>
-      </div>
-      <span class="material-symbols-outlined chat-delete-btn" onclick="deleteSession('${s.id}', event)" title="Delete Chat">delete</span>
-    </div>
-  `).join('');
+  const userId = sessionStorage.getItem('ask_data_user_id');
+  if (!userId) return;
+
+  try {
+    const res = await fetch(`${API}/chats/user/${userId}`);
+    if (res.ok) {
+      const sessions = await res.json();
+      if (!sessions.length) { list.innerHTML = '<div style="font-size:12px;color:#5a5e6e;padding:4px 4px 8px;">No previous chats</div>'; return; }
+      
+      list.innerHTML = sessions.slice(0, 12).map(s => `
+        <div class="history-item ${s.session_id === currentSessionId ? 'active' : ''}" style="display:flex; justify-content:space-between; align-items:center;">
+          <div onclick="loadSession(${s.session_id})" style="flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; display:flex; align-items:center; gap:8px;" title="${escapeHtml(s.title)}">
+            <span class="material-symbols-outlined" style="font-size:15px;flex-shrink:0;">chat_bubble</span>
+            <span>${escapeHtml(s.title)}</span>
+          </div>
+          <span class="material-symbols-outlined chat-delete-btn" onclick="deleteSession(${s.session_id}, event)" title="Delete Chat">delete</span>
+        </div>
+      `).join('');
+    }
+  } catch {}
 }
 
-function deleteSession(id, event) {
+async function deleteSession(id, event) {
   event.stopPropagation();
   if (!confirm("Are you sure you want to delete this chat?")) return;
   
-  let sessions = JSON.parse(localStorage.getItem('ask_data_sessions') || '[]');
-  sessions = sessions.filter(s => s.id !== id);
-  localStorage.setItem('ask_data_sessions', JSON.stringify(sessions));
-  localStorage.removeItem('chat_history_' + id);
+  try {
+    await fetch(`${API}/chats/${id}`, { method: 'DELETE' });
+  } catch {}
   
   if (currentSessionId === id) {
     newChat();
@@ -448,15 +472,22 @@ async function sendMessage() {
   const userMsg = { role: 'user', content: query, mentions: [...currentMentions], time: now };
   chatHistory.push(userMsg);
 
-  // Save/Update session metadata
-  const sessions = JSON.parse(localStorage.getItem('ask_data_sessions') || '[]');
-  let sessIdx = sessions.findIndex(s => s.id === currentSessionId);
-  if (sessIdx === -1) {
-    sessions.push({ id: currentSessionId, title: query.slice(0, 40), ts: Date.now() });
-  } else {
-    sessions[sessIdx].ts = Date.now(); // update time to float to top
+  // Save/Update session metadata via API
+  if (!currentSessionId) {
+    const userId = sessionStorage.getItem('ask_data_user_id');
+    try {
+      const chatRes = await fetch(`${API}/chats`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user_id: parseInt(userId), title: query.slice(0, 40) })
+      });
+      if (chatRes.ok) {
+        const chatData = await chatRes.json();
+        currentSessionId = chatData.session_id;
+        sessionStorage.setItem('current_session_id', currentSessionId);
+      }
+    } catch {}
   }
-  localStorage.setItem('ask_data_sessions', JSON.stringify(sessions.slice(-50)));
   renderHistory();
 
   renderMessages();
@@ -520,10 +551,14 @@ async function sendMessage() {
   container.scrollTop = container.scrollHeight;
 
   try {
+    const reqBody = { query: fullQuery };
+    if (currentSessionId) reqBody.session_id = currentSessionId;
+    if (currentMentions.length) reqBody.mentioned_docs = currentMentions;
+
     const res = await fetch(`${API}/ask_stream`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ query: fullQuery, max_iterations: 5 })
+      body: JSON.stringify(reqBody)
     });
 
     if (!res.ok) {
@@ -587,8 +622,6 @@ async function sendMessage() {
     setTimeout(() => { if (thinkEl) thinkEl.style.display = 'none'; }, 800);
   }
 
-  // Save history to localStorage
-  localStorage.setItem('chat_history_' + currentSessionId, JSON.stringify(chatHistory));
   isSending = false;
   document.getElementById('send-btn').disabled = false;
 }

@@ -14,8 +14,16 @@ from __future__ import annotations
 import logging
 
 from docling.document_converter import DocumentConverter
+from functools import lru_cache
 
 logger = logging.getLogger(__name__)
+
+@lru_cache(maxsize=1)
+def get_document_converter() -> DocumentConverter:
+    """Return a globally cached DocumentConverter instance to prevent reloading models per PDF."""
+    logger.info("[pdf_parser] Initialising DocumentConverter (first run only)...")
+    return DocumentConverter()
+
 
 
 def parse_pdf_to_markdown(pdf_path: str) -> str:
@@ -47,7 +55,7 @@ def parse_pdf_to_markdown(pdf_path: str) -> str:
     logger.info(f"[pdf_parser] Starting Docling conversion: {pdf_path}")
 
     try:
-        converter = DocumentConverter()
+        converter = get_document_converter()
         # raises_on_error=False means Docling keeps going on page-level failures
         # and surfaces them in result.errors rather than raising immediately.
         result = converter.convert(pdf_path, raises_on_error=False)

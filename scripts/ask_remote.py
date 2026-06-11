@@ -25,9 +25,9 @@ def check_server() -> bool:
         return False
 
 
-def ask(query: str, max_iterations: int = 10) -> dict:
+def ask(query: str) -> dict:
     """Send a query to the server and return the response dict."""
-    payload = json.dumps({"query": query, "max_iterations": max_iterations}).encode()
+    payload = json.dumps({"query": query}).encode()
     req = urllib.request.Request(
         f"{SERVER_URL}/ask",
         data=payload,

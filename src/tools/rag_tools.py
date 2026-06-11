@@ -308,17 +308,18 @@ def list_documents() -> list[dict]:
 # ─────────────────────────────────────────────────────────────────────────────
 
 @tool
-def get_document_chunks(doc_id: int, max_chunks: int = 6) -> list[dict]:
+def get_document_chunks(doc_id: int = None, doc_name: str = None, max_chunks: int = 6) -> list[dict]:
     """Retrieve the first N chunk IDs and their snippets for a specific document.
 
-    Use this tool when you want to summarise a SPECIFIC document identified by
-    its doc_id (obtained from list_documents).  It returns real chunk_ids that
-    you can then pass to chunk_read to get the full text.
+    Use this tool when you want to summarise or read a SPECIFIC document.
+    You must provide EITHER the integer doc_id OR the exact document name (e.g. 'Contract - GEMC-1.pdf').
+    It returns real chunk_ids that you can then pass to chunk_read to get the full text.
 
     DO NOT guess chunk_ids.  Always use this tool to discover them.
 
     Args:
-        doc_id     : The integer doc_id from list_documents.
+        doc_id     : The integer doc_id.
+        doc_name   : The exact filename of the document.
         max_chunks : How many chunks to return (default 6, max 10).
 
     Returns:
@@ -326,7 +327,20 @@ def get_document_chunks(doc_id: int, max_chunks: int = 6) -> list[dict]:
             chunk_id (str) : Real chunk identifier safe to pass to chunk_read.
             snippet  (str) : First 300 characters of the chunk for preview.
     """
-    logger.info("get_document_chunks called: doc_id=%d, max_chunks=%d", doc_id, max_chunks)
+    logger.info("get_document_chunks called: doc_id=%s, doc_name=%s, max_chunks=%d", doc_id, doc_name, max_chunks)
+    
+    if doc_id is None and doc_name is None:
+        return [{"error": "Must provide either doc_id or doc_name"}]
+        
+    if doc_id is None:
+        docs = fetch_all_documents()
+        for d in docs:
+            if d["source"] == doc_name:
+                doc_id = d["doc_id"]
+                break
+        if doc_id is None:
+            return [{"error": f"Document '{doc_name}' not found."}]
+
     max_chunks = min(max_chunks, 10)  # cap to protect token budget
     chunks = fetch_chunks_by_doc(doc_id)
     result = [

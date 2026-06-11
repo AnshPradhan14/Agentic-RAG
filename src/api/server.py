@@ -136,7 +136,6 @@ app.mount("/raw", StaticFiles(directory=str(RAW_DIR)), name="raw")
 # ── Models ─────────────────────────────────────────────────────────────────────
 class AskRequest(BaseModel):
     query: str
-    max_iterations: int = 5  # Reduced from 10 to prevent runaway loops and context blowout
     session_id: Optional[int] = None
     mentioned_docs: Optional[list[str]] = None
 
@@ -501,7 +500,6 @@ def ask(request: AskRequest):
 
         answer = run_agent(
             query=query_text,
-            max_iterations=request.max_iterations,
         )
         elapsed = round(time.time() - t0, 2)
         logger.info("Query answered in %.2fs", elapsed)
@@ -570,7 +568,6 @@ def ask_stream(request: AskRequest):
         try:
             for token in run_agent_stream(
                 query=query_text,
-                max_iterations=request.max_iterations,
             ):
                 full_answer += token
                 # SSE format: each event is "data: <payload>\n\n"
