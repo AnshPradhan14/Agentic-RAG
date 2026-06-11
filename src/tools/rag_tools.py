@@ -278,29 +278,7 @@ def semantic_search(query: str, top_k: int = RETRIEVAL_TOP_K) -> list[dict]:
     return reranked
 
 
-# ─────────────────────────────────────────────────────────────────────────────
-# Tool 3 — List Documents
-# ─────────────────────────────────────────────────────────────────────────────
 
-@tool
-def list_documents() -> list[dict]:
-    """List all documents that have been ingested into the RAG system.
-
-    Use this tool FIRST when the user asks to summarise, compare, or work across
-    multiple documents.  It returns the doc_id and filename of every PDF in the
-    database, so you know how many documents exist and what each one is called.
-
-    Returns:
-        List of dicts, each with:
-            doc_id      (int) : Unique document identifier.
-            source      (str) : Original PDF filename.
-            date_issued (str) : Date the document was issued (may be None).
-            doc_type    (str) : Document type label (may be None).
-    """
-    logger.info("list_documents called")
-    docs = fetch_all_documents()
-    logger.info("list_documents returned %d documents", len(docs))
-    return docs
 
 
 # ─────────────────────────────────────────────────────────────────────────────

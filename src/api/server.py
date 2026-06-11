@@ -564,18 +564,24 @@ def ask_stream(request: AskRequest):
         query_text = f"[Focus on documents: {docs_context}] {query_text}"
 
     def event_generator():
-        full_answer = ""
+        final_answer = ""
         try:
             for token in run_agent_stream(
                 query=query_text,
             ):
-                full_answer += token
+                if isinstance(token, dict):
+                    t = token.get("type")
+                    if t == "answer":
+                        final_answer += token.get("content", "")
+                    elif t == "convert_to_answer":
+                        final_answer = token.get("content", "")
+                
                 # SSE format: each event is "data: <payload>\n\n"
                 yield f"data: {json.dumps(token)}\n\n"
             
             # Save assistant message if session exists
-            if request.session_id:
-                add_chat_message(request.session_id, "assistant", full_answer)
+            if request.session_id and final_answer:
+                add_chat_message(request.session_id, "assistant", final_answer)
             
             yield "data: [DONE]\n\n"
         except Exception as exc:

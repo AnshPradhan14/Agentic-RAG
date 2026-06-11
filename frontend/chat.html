@@ -52,20 +52,119 @@
   .avatar.ai { background: linear-gradient(135deg,#3B82F6,#6366f1); color: white; }
   .avatar.user { background: #1E3A5F; border: 1px solid rgba(59,130,246,0.3); color: #adc6ff; }
 
-  /* Thinking block */
-  .thinking-block { max-width: 72%; margin-bottom: 12px; margin-left: 42px; }
-  .thinking-header { display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 8px 12px; background: rgba(173,198,255,0.05); border: 1px solid rgba(173,198,255,0.1); border-radius: 10px 10px 0 0; font-size: 12px; color: #adc6ff; }
-  .thinking-body { padding: 10px 12px; background: rgba(14,14,16,0.6); border: 1px solid rgba(173,198,255,0.1); border-top: none; border-radius: 0 0 10px 10px; font-size: 12px; color: #8c909f; }
-  .thinking-step { display: flex; align-items: center; gap: 8px; padding: 5px 0; border-bottom: 1px solid rgba(66,71,84,0.2); }
-  .thinking-step:last-child { border-bottom: none; }
-  .step-icon { font-size: 14px; }
-  .step-status { margin-left: auto; font-size: 11px; }
-  .step-done { color: #10B981; }
-  .step-running { color: #adc6ff; }
+  /* Thinking/Reasoning block — DeepSeek-style */
+  .thinking-block {
+    max-width: 78%;
+    margin-bottom: 14px;
+    margin-left: 42px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(99, 179, 237, 0.18);
+    background: rgba(10, 10, 14, 0.7);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+  }
+  .thinking-header {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    cursor: pointer;
+    padding: 10px 14px;
+    background: rgba(99, 179, 237, 0.07);
+    font-size: 12.5px;
+    color: #90cdf4;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    user-select: none;
+    border-bottom: 1px solid rgba(99,179,237,0.1);
+    transition: background 0.2s;
+  }
+  .thinking-header:hover { background: rgba(99,179,237,0.12); }
+  .thinking-header .th-toggle {
+    margin-left: auto;
+    font-size: 16px;
+    color: #63b3ed;
+    transition: transform 0.25s ease;
+  }
+  .thinking-header .th-toggle.open { transform: rotate(180deg); }
+  .thinking-body {
+    padding: 12px 14px;
+    max-height: 280px;
+    overflow-y: auto;
+    font-size: 12.5px;
+    font-family: 'Inter', monospace;
+    color: #a0aec0;
+    line-height: 1.65;
+    transition: max-height 0.35s ease, opacity 0.25s ease;
+    scroll-behavior: smooth;
+  }
+  .thinking-body::-webkit-scrollbar { width: 3px; }
+  .thinking-body::-webkit-scrollbar-thumb { background: rgba(99,179,237,0.25); border-radius: 3px; }
+  .thinking-body.hidden { max-height: 0; padding: 0 14px; overflow: hidden; opacity: 0; }
+  .reasoning-text { white-space: pre-wrap; display: block; animation: fadeIn 0.15s ease; }
+  .reasoning-text-block { white-space: pre-wrap; margin-bottom: 10px; display: block; animation: fadeIn 0.15s ease; }
+  .tool-result-block {
+    background: rgba(255,255,255,0.03);
+    padding: 8px 12px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    border-left: 3px solid #63b3ed;
+    font-size: 12px;
+    animation: fadeIn 0.15s ease;
+  }
+  .reasoning-cursor {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #63b3ed;
+    margin-left: 6px;
+    vertical-align: middle;
+    animation: blink 0.8s step-end infinite;
+  }
+  /* Activity stream rows */
+  .activity-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 13px;
+    color: #a0aec0;
+    animation: slideIn 0.2s ease;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .activity-row:last-child { border-bottom: none; }
+  .activity-icon {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: rgba(99,179,237,0.12);
+    border: 1px solid rgba(99,179,237,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 11px;
+  }
+  .activity-icon.spin { animation: spin 1s linear infinite; }
+  .activity-icon.done { background: rgba(72,187,120,0.1); border-color: rgba(72,187,120,0.25); }
+  .activity-label { flex: 1; color: #cbd5e0; }
+  .activity-label.active { color: #90cdf4; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .thinking-done-header {
+    background: rgba(72,187,120,0.07) !important;
+    border-color: rgba(72,187,120,0.15) !important;
+    color: #68d391 !important;
+  }
+  .thinking-done-header .pulse-dot { display: none; }
+  @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0;} }
+  @keyframes slideIn { from { opacity:0; transform: translateY(-4px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
 
   /* Pulse animation */
   @keyframes pulse { 0%,100% { opacity:0.4; } 50% { opacity:1; } }
-  .pulse-dot { width: 8px; height: 8px; border-radius: 50%; background: #3B82F6; animation: pulse 1.4s infinite; }
+  .pulse-dot { width: 8px; height: 8px; border-radius: 50%; background: #63b3ed; animation: pulse 1.2s infinite; flex-shrink: 0; }
 
   /* Mention dropdown */
   #mention-dropdown { position: absolute; bottom: 100%; left: 0; background: #1b1b1d; border: 1px solid rgba(66,71,84,0.4); border-radius: 10px; padding: 6px; min-width: 200px; max-height: 200px; overflow-y: auto; display: none; z-index: 50; box-shadow: 0 -10px 30px rgba(0,0,0,0.4); }
@@ -498,42 +597,53 @@ async function sendMessage() {
     fullQuery = `[Context: focus on documents: ${currentMentions.join(', ')}] ${query}`;
   }
 
-  // Show thinking block
+  // Show thinking block — clean activity stream
   const container = document.getElementById('messages');
   const thinkingId = 'thinking-' + Date.now();
   container.insertAdjacentHTML('beforeend', `
     <div id="${thinkingId}" class="thinking-block">
-      <div class="thinking-header" onclick="this.nextElementSibling.classList.toggle('hidden')">
+      <div id="${thinkingId}-header" class="thinking-header" onclick="_toggleThinking('${thinkingId}')">
         <div class="pulse-dot"></div>
-        <span style="font-weight:600;">Agent Reasoning</span>
-        <span class="material-symbols-outlined" style="margin-left:auto;font-size:14px;">expand_more</span>
+        <span>Agent is working...</span>
+        <span id="${thinkingId}-steps" style="margin-left:8px;font-size:11px;color:#718096;"></span>
+        <span class="material-symbols-outlined th-toggle open" id="${thinkingId}-toggle" style="font-size:16px;">expand_more</span>
       </div>
-      <div class="thinking-body">
-        <div class="thinking-step"><span class="step-icon">🔍</span><span>Relevance Check</span><span class="step-running step-status">⟳ Running...</span></div>
-        <div class="thinking-step"><span class="step-icon">📖</span><span>Fact Retrieval</span><span class="step-running step-status">⟳ Pending</span></div>
-        <div class="thinking-step"><span class="step-icon">🧠</span><span>Expert Synthesis</span><span class="step-running step-status">⟳ Pending</span></div>
-      </div>
+      <div id="${thinkingId}-body" class="thinking-body"></div>
     </div>
   `);
   container.scrollTop = container.scrollHeight;
 
-  // Update thinking steps with delay
-  setTimeout(() => {
-    const t = document.getElementById(thinkingId);
-    if (t) {
-      const steps = t.querySelectorAll('.step-status');
-      if (steps[0]) { steps[0].textContent = '✅ Done'; steps[0].className = 'step-done step-status'; }
-      if (steps[1]) { steps[1].textContent = '⟳ Running...'; steps[1].className = 'step-running step-status'; }
+  // Helpers
+  let _activityStepCount = 0;
+  function _addActivityRow(message, isActive = true) {
+    const body = document.getElementById(thinkingId + '-body');
+    if (!body) return;
+    // Mark previous row as done
+    const prevActive = body.querySelector('.activity-icon.spin');
+    if (prevActive) {
+      prevActive.classList.remove('spin');
+      prevActive.classList.add('done');
+      prevActive.textContent = '✓';
+      const prevLabel = prevActive.nextElementSibling;
+      if (prevLabel) prevLabel.classList.remove('active');
     }
-  }, 1200);
-  setTimeout(() => {
-    const t = document.getElementById(thinkingId);
-    if (t) {
-      const steps = t.querySelectorAll('.step-status');
-      if (steps[1]) { steps[1].textContent = '✅ Done'; steps[1].className = 'step-done step-status'; }
-      if (steps[2]) { steps[2].textContent = '⟳ Finalizing...'; steps[2].className = 'step-running step-status'; }
-    }
-  }, 2500);
+    const rowId = thinkingId + '-row-' + (++_activityStepCount);
+    body.insertAdjacentHTML('beforeend', `
+      <div class="activity-row" id="${rowId}">
+        <div class="activity-icon${isActive ? ' spin' : ' done'}">${isActive ? '◌' : '✓'}</div>
+        <div class="activity-label${isActive ? ' active' : ''}">${escapeHtml(message)}</div>
+      </div>
+    `);
+    body.scrollTop = body.scrollHeight;
+  }
+
+  window._toggleThinking = function(id) {
+    const body = document.getElementById(id + '-body');
+    const toggle = document.getElementById(id + '-toggle');
+    if (!body) return;
+    body.classList.toggle('hidden');
+    toggle.classList.toggle('open');
+  };
 
   const t0 = Date.now();
 
@@ -551,7 +661,7 @@ async function sendMessage() {
   container.scrollTop = container.scrollHeight;
 
   try {
-    const reqBody = { query: fullQuery };
+    const reqBody = { query: query };
     if (currentSessionId) reqBody.session_id = currentSessionId;
     if (currentMentions.length) reqBody.mentioned_docs = currentMentions;
 
@@ -594,10 +704,88 @@ async function sendMessage() {
               if (bubble) bubble.innerHTML += `<br>❌ ${escapeHtml(parsed.error)}`;
               break;
             }
-            const token = typeof parsed === 'string' ? parsed : '';
-            fullAnswer += token;
-            if (bubble) {
-              bubble.innerHTML = typeof marked !== 'undefined' ? marked.parse(fullAnswer) : escapeHtml(fullAnswer);
+
+            if (typeof parsed === 'string') {
+              fullAnswer += parsed;
+              if (bubble) bubble.innerHTML = typeof marked !== 'undefined' ? marked.parse(fullAnswer) : escapeHtml(fullAnswer);
+
+            } else if (parsed && typeof parsed === 'object') {
+
+              if (parsed.type === 'status') {
+                _addActivityRow(parsed.message, true);
+
+              } else if (parsed.type === 'reasoning') {
+                const body = document.getElementById(thinkingId + '-body');
+                if (body) {
+                   const prevActive = body.querySelector('.activity-icon.spin');
+                   if (prevActive) {
+                       prevActive.classList.remove('spin');
+                       prevActive.classList.add('done');
+                       prevActive.textContent = '✓';
+                       const prevLabel = prevActive.nextElementSibling;
+                       if (prevLabel) prevLabel.classList.remove('active');
+                   }
+
+                   let textBlock = body.querySelector('.reasoning-text-block:last-child');
+                   if (!textBlock) {
+                       textBlock = document.createElement('div');
+                       textBlock.className = 'reasoning-text-block';
+                       body.appendChild(textBlock);
+                   }
+                   textBlock.textContent += parsed.content;
+                   body.scrollTop = body.scrollHeight;
+                }
+
+              } else if (parsed.type === 'tool_result') {
+                 const body = document.getElementById(thinkingId + '-body');
+                 if (body) {
+                    const prevActive = body.querySelector('.activity-icon.spin');
+                    if (prevActive) {
+                        prevActive.classList.remove('spin');
+                        prevActive.classList.add('done');
+                        prevActive.textContent = '✓';
+                        const prevLabel = prevActive.nextElementSibling;
+                        if (prevLabel) prevLabel.classList.remove('active');
+                    }
+                    const div = document.createElement('div');
+                    div.className = 'tool-result-block';
+                    
+                    const toolName = parsed.tool_name || parsed.tool || 'tool';
+                    const summary = parsed.result || '';
+                    let argsStr = '';
+                    if (parsed.args) {
+                       try { argsStr = JSON.stringify(parsed.args); } catch(e){}
+                    }
+                    
+                    div.innerHTML = `<strong style="color:#90cdf4;">🛠 ${escapeHtml(toolName)}</strong><br>
+                                     <span style="color:#a0aec0;font-size:11px;">Args: ${escapeHtml(argsStr)}</span><br>
+                                     <span style="color:#e2e8f0;margin-top:4px;display:inline-block;">Result: ${escapeHtml(summary)}</span>`;
+                    body.appendChild(div);
+                    
+                    const spacer = document.createElement('div');
+                    spacer.className = 'reasoning-spacer';
+                    spacer.style.height = '1px';
+                    body.appendChild(spacer);
+                    body.scrollTop = body.scrollHeight;
+                 }
+
+              } else if (parsed.type === 'answer') {
+                fullAnswer += parsed.content;
+                if (bubble) bubble.innerHTML = typeof marked !== 'undefined' ? marked.parse(fullAnswer) : escapeHtml(fullAnswer);
+
+              } else if (parsed.type === 'convert_to_answer') {
+                // The reasoning phase generated the final answer—move it to bubble
+                const lastAnswer = parsed.content || '';
+                if (lastAnswer) {
+                  fullAnswer = lastAnswer;
+                } else {
+                  // pull the text we stored in the last reasoning chunk
+                  fullAnswer = fullAnswer || '';
+                }
+                if (fullAnswer && bubble) {
+                  bubble.innerHTML = typeof marked !== 'undefined' ? marked.parse(fullAnswer) : escapeHtml(fullAnswer);
+                }
+              }
             }
             container.scrollTop = container.scrollHeight;
           } catch { }
@@ -615,11 +803,32 @@ async function sendMessage() {
     chatHistory.push({ role: 'assistant', content: '❌ Cannot reach the backend.' });
   }
 
-  // Finalize thinking block
+  // Finalize thinking block — mark last step done and collapse with success style
   const thinkEl = document.getElementById(thinkingId);
   if (thinkEl) {
-    thinkEl.querySelectorAll('.step-status').forEach(s => { s.textContent = '✅ Done'; s.className = 'step-done step-status'; });
-    setTimeout(() => { if (thinkEl) thinkEl.style.display = 'none'; }, 800);
+    // Mark last spinning icon as done
+    const lastSpin = thinkEl.querySelector('.activity-icon.spin');
+    if (lastSpin) {
+      lastSpin.classList.remove('spin');
+      lastSpin.classList.add('done');
+      lastSpin.textContent = '✓';
+      const label = lastSpin.nextElementSibling;
+      if (label) label.classList.remove('active');
+    }
+    const header = document.getElementById(thinkingId + '-header');
+    if (header) {
+      header.classList.add('thinking-done-header');
+      const elapsed = ((Date.now() - t0)/1000).toFixed(1);
+      header.innerHTML = `
+        <span class="material-symbols-outlined" style="font-size:15px;color:#68d391;">check_circle</span>
+        <span style="color:#68d391;">Done</span>
+        <span style="margin-left:8px;font-size:11px;color:#4a7c59;">${elapsed}s</span>
+        <span class="material-symbols-outlined th-toggle" style="margin-left:auto;font-size:16px;color:#68d391;cursor:pointer;" onclick="_toggleThinking('${thinkingId}')">expand_more</span>
+      `;
+    }
+    // Auto-collapse body
+    const body = document.getElementById(thinkingId + '-body');
+    if (body) setTimeout(() => body.classList.add('hidden'), 600);
   }
 
   isSending = false;

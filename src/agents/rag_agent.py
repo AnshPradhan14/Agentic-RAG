@@ -27,7 +27,6 @@ from src.tools.rag_tools import (
     chunk_read,
     get_document_chunks,
     keyword_search,
-    list_documents,
     reset_c_read,
     semantic_search,
     triple_lookup,
@@ -57,6 +56,7 @@ Your goal is to answer questions accurately using ONLY retrieved document eviden
 * Use semantic search for concepts, obligations, requirements, summaries, and relationships.
 * Read full chunks only when snippets are incomplete or additional context is required.
 * Prefer parallel searches when multiple independent facts are needed.
+* ONLY use `get_document_chunks` if a specific document name is given in the query context (e.g., "[Focus on documents: Contract.pdf]"). Never use it for general questions.
 
 ### Reasoning Rules
 
@@ -78,19 +78,12 @@ Your goal is to answer questions accurately using ONLY retrieved document eviden
 * Stop searching as soon as sufficient evidence is gathered.
 * Do not retrieve redundant information.
 * Do not read chunks unnecessarily.
-* IF a specific document name is provided in the prompt context (e.g., "[Context: focus on documents: ...]"), use `get_document_chunks` with the `doc_name` parameter to retrieve its chunks directly.
 
 ### Output Format
 
-Reasoning:
-Brief explanation of how the answer was derived.
-
-Sources:
-List of supporting chunk IDs.
-
-Final Answer:
-Clear, concise, evidence-based answer.
-
+Write ONLY the final answer directly. Do NOT include any preamble, labels, section headers,
+reasoning trace, source lists, or tags like "Reasoning:", "Sources:", "Final Answer:", etc.
+Begin your response immediately with the answer content.
 """
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -111,7 +104,6 @@ def _has_chunk_errors(messages: list[dict]) -> bool:
 # ─────────────────────────────────────────────────────────────────────────────
 
 _TOOL_MAP: dict[str, Any] = {
-    "list_documents":      list_documents,
     "get_document_chunks": get_document_chunks,
     "keyword_search":      keyword_search,
     "semantic_search":     semantic_search,
@@ -119,12 +111,13 @@ _TOOL_MAP: dict[str, Any] = {
     "triple_lookup":       triple_lookup,
 }
 
+# Full tool list — used only when a specific document is mentioned in the query
 OLLAMA_TOOLS = [
     {
         "type": "function",
         "function": {
             "name": "get_document_chunks",
-            "description": "Retrieve the first N chunk IDs and their snippets for a specific document.",
+            "description": "Retrieve the first N chunk IDs and their snippets for a specific named document. ONLY use this if a specific document is explicitly mentioned in the query context.",
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -196,6 +189,33 @@ OLLAMA_TOOLS = [
         }
     }
 ]
+
+# Reduced tool list — used for general queries (no specific document mentioned)
+OLLAMA_TOOLS_NO_DOC = [t for t in OLLAMA_TOOLS if t["function"]["name"] != "get_document_chunks"]
+
+
+# ── Friendly label helper ────────────────────────────────────────────────────────────────────────
+
+def _friendly_tool_label(tool_name: str, tool_args: dict) -> str:
+    """Map a raw tool call into a short user-facing status message."""
+    if tool_name == "semantic_search":
+        q = tool_args.get("query", "")
+        return f'Searching knowledge base for "{q[:60]}"'
+    if tool_name == "keyword_search":
+        kws = ", ".join(str(k) for k in tool_args.get("keywords", [])[:3])
+        return f'Scanning for exact terms: {kws}'
+    if tool_name == "chunk_read":
+        ids = tool_args.get("chunk_ids", [])
+        count = len(ids)
+        return f'Reading {count} document section{"s" if count != 1 else ""}'
+    if tool_name == "get_document_chunks":
+        doc = tool_args.get("doc_name") or f'document {tool_args.get("doc_id", "")}'
+        return f'Locating sections in "{doc}"'
+    if tool_name == "triple_lookup":
+        entity = tool_args.get("entity", "")
+        attr   = tool_args.get("attribute", "")
+        return f'Looking up "{attr}" for {entity}'
+    return f'Running {tool_name}'
 
 # ─────────────────────────────────────────────────────────────────────────────
 # LLM Factory
@@ -540,14 +560,24 @@ def run_agent_stream(
 
     logger.info("=== Streaming agent loop started: query='%s' ===", query)
 
+    # ── Decide which tool set to expose based on whether a document was mentioned ──
+    doc_mentioned = "[Focus on documents:" in query or "[Context: focus on documents:" in query
+    active_tools = OLLAMA_TOOLS if doc_mentioned else OLLAMA_TOOLS_NO_DOC
+    logger.info("[Stream] doc_mentioned=%s — using %d tools.", doc_mentioned, len(active_tools))
+
+    yield {"type": "status", "message": "Understanding query"}
+
     # ── Phase 1: Tool-calling loop ──────────
     for iteration in range(max_iterations):
         logger.debug("Stream iteration %d/%d", iteration + 1, max_iterations)
 
+        if iteration == 0:
+            yield {"type": "status", "message": "Planning approach"}
+
         reply_msg = None
-        for chunk_type, data in _unified_chat_stream_tools(messages, tools=OLLAMA_TOOLS):
+        for chunk_type, data in _unified_chat_stream_tools(messages, tools=active_tools):
             if chunk_type == "content":
-                yield data
+                yield {"type": "reasoning", "content": data}
             elif chunk_type == "done":
                 reply_msg = data
 
@@ -555,7 +585,10 @@ def run_agent_stream(
 
         # If no tool calls, the LLM has produced its final answer
         if not reply_msg.get("tool_calls"):
-            logger.info("Streaming agent: final answer received (len=%d).", len(reply_msg.get("content", "")))
+            content = reply_msg.get("content", "")
+            logger.info("Streaming agent: final answer received (len=%d).", len(content))
+            yield {"type": "status", "message": "Generating answer"}
+            yield {"type": "convert_to_answer", "content": content}
             return
 
         # ── Execute tool calls ────────────────────────────────────────────────
@@ -564,14 +597,28 @@ def run_agent_stream(
             tool_args = tool_call["function"]["arguments"]
             logger.info("[Stream] Tool call: %s | args=%s", tool_name, tool_args)
 
+            friendly = _friendly_tool_label(tool_name, tool_args)
+            yield {"type": "status", "message": friendly}
+
             if tool_name in _TOOL_MAP:
                 try:
                     tool_result = _TOOL_MAP[tool_name].invoke(tool_args)
                     tool_result_str = str(tool_result)
+                    
+                    if isinstance(tool_result, list):
+                        snippet = f"Returned {len(tool_result)} items. " + tool_result_str[:250].replace('\n', ' ')
+                    else:
+                        snippet = tool_result_str[:250].replace('\n', ' ')
+                    if len(tool_result_str) > 250:
+                        snippet += "..."
+                        
+                    yield {"type": "tool_result", "tool_name": tool_name, "args": tool_args, "result": snippet}
+
                     if len(tool_result_str) > 8000:
                         tool_result_str = tool_result_str[:8000] + "\n... [TRUNCATED] ..."
                 except Exception as exc:
                     tool_result_str = f"Tool '{tool_name}' raised an error: {exc}"
+                    yield {"type": "tool_result", "tool_name": tool_name, "args": tool_args, "result": f"Error: {exc}"}
             else:
                 tool_result_str = f"Unknown tool: {tool_name!r}"
 
@@ -581,6 +628,8 @@ def run_agent_stream(
                 "name": tool_name,
                 "tool_call_id": tool_call.get("id", f"call_{tool_name}")
             })
+
+        yield {"type": "status", "message": "Processing results"}
 
     # ── Phase 2: Max iterations reached — force wrap-up with streaming ─────────
     logger.warning("[Stream] max_iterations=%d reached. Requesting streamed wrap-up.", max_iterations)
@@ -607,5 +656,5 @@ def run_agent_stream(
     # Final wrap-up — this one we DO want to stream fresh
     for token_text in _unified_chat_stream(messages=messages):
         if token_text:
-            yield token_text
+            yield {"type": "answer", "content": token_text}
 
