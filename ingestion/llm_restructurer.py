@@ -133,11 +133,109 @@ def restructure_markdown(
     if boilerplate_part:
         result = result.strip() + "\n\n" + boilerplate_part
 
+    # Phase 14 Fix: Deterministically fix orphaned financial values from GeM tables
+    result = _fix_financial_orphans(result)
+
     logger.info(
         f"[llm_restructurer] Restructure complete{label} — "
         f"{_count_tokens(result)} output tokens."
     )
     return result
+
+def _fix_financial_orphans(text: str) -> str:
+    """
+    Finds headings for financial fields that have empty bodies, and searches
+    for orphaned numeric values later in the document to attach to them.
+
+    GeM contracts have a complex merged-cell pricing table that Docling
+    consistently fails to parse. The monetary values (Total Value without
+    Addons, Total Addon Value, Total Value Including Addons, Total Contract
+    Value) end up as bare number lines scattered in the raw text.
+
+    Assignment order matches the order values appear in a GeM contract:
+      1. Total Value without Addons(INR)
+      2. Total Addon Value(INR)
+      3. Total Value Including Addons(INR)
+      4. Amount of Contract            <- section wrapper, mirrors value from #3
+      5. Total Contract Value Including All Duties and Taxes(INR)
+    """
+    import re
+    lines = text.split("\n")
+
+    # Collect standalone numeric lines (e.g. "233640", "0", "1,23,456")
+    numeric_line_pattern = re.compile(r'^\s*(\d[\d,\.]*)\s*$')
+    orphan_indices = [i for i, line in enumerate(lines) if numeric_line_pattern.match(line)]
+
+    if not orphan_indices:
+        return text
+
+    # Value fields that each consume one orphan number, in document order
+    value_fields = [
+        "Total Value without Addons(INR)",
+        "Total Addon Value(INR)",
+        "Total Value Including Addons(INR)",
+        "Total Contract Value Including All Duties and Taxes(INR)",
+    ]
+    # Wrapper headings that mirror another field's value (no orphan consumed)
+    wrapper_mirrors = {
+        "Amount of Contract": "Total Value Including Addons(INR)",
+    }
+
+    # Build heading -> line-index map
+    heading_pat = re.compile(r'^##\s+(.+?)\s*$')
+    heading_line_map: dict = {}
+    for i, line in enumerate(lines):
+        m = heading_pat.match(line)
+        if m:
+            heading_line_map[m.group(1)] = i
+
+    assigned_values: dict = {}  # field label -> resolved value string
+
+    def _has_value(idx: int) -> str | None:
+        """Return the existing value string if heading already has a body, else None."""
+        for j in range(idx + 1, len(lines)):
+            stripped = lines[j].strip()
+            if stripped:
+                return None if stripped.startswith("#") else stripped
+        return None
+
+    # ── Pass 1: assign orphan numbers to value fields in order ───────────────
+    orphan_queue = list(orphan_indices)
+    for field in value_fields:
+        idx = heading_line_map.get(field)
+        if idx is None:
+            continue
+        existing = _has_value(idx)
+        if existing:
+            # Already has a value — record it for mirror fields
+            assigned_values[field] = existing
+            continue
+        if not orphan_queue:
+            break
+        orphan_idx = orphan_queue.pop(0)
+        val = lines[orphan_idx].strip()
+        lines[orphan_idx] = ""  # remove orphan from its original location
+        insert_at = idx + 1
+        lines.insert(insert_at, f"**{field}:** {val}")
+        assigned_values[field] = val
+        # Shift all tracked indices that come after the insertion point
+        orphan_queue = [x + 1 if x > idx else x for x in orphan_queue]
+        heading_line_map = {k: (v + 1 if v > idx else v) for k, v in heading_line_map.items()}
+
+    # ── Pass 2: fill wrapper/mirror headings ─────────────────────────────────
+    for wrapper, parent_field in wrapper_mirrors.items():
+        parent_val = assigned_values.get(parent_field)
+        if parent_val is None:
+            continue
+        idx = heading_line_map.get(wrapper)
+        if idx is None:
+            continue
+        if _has_value(idx) is None:  # empty heading
+            lines.insert(idx + 1, f"**{wrapper}:** {parent_val}")
+
+    return "\n".join(lines).replace("\n\n\n", "\n\n").strip()
+
+
 
 
 # ── Batch orchestration ───────────────────────────────────────────────────────

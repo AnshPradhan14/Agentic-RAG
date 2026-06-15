@@ -148,6 +148,9 @@
     font-size: 11px;
   }
   .activity-icon.spin { animation: spin 1s linear infinite; }
+  
+  .source-btn { background: rgba(99,179,237,0.1); border: 1px solid rgba(99,179,237,0.3); color: #90cdf4; padding: 4px 8px; border-radius: 4px; cursor: pointer; transition: all 0.2s; font-size: 11px; white-space: nowrap; max-width: 250px; overflow: hidden; text-overflow: ellipsis; }
+  .source-btn:hover { background: rgba(99,179,237,0.2); }
   .activity-icon.done { background: rgba(72,187,120,0.1); border-color: rgba(72,187,120,0.25); }
   .activity-label { flex: 1; color: #cbd5e0; }
   .activity-label.active { color: #90cdf4; }
@@ -247,6 +250,17 @@
   </div>
 </div>
 
+<!-- Chunk Modal -->
+<div id="chunk-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); backdrop-filter:blur(4px); z-index:200; align-items:center; justify-content:center;">
+  <div style="background:#1b1b1d; border:1px solid rgba(66,71,84,0.4); border-radius:16px; width:90%; max-width:700px; max-height:85vh; display:flex; flex-direction:column; box-shadow:0 20px 40px rgba(0,0,0,0.4);">
+    <div style="padding:16px 20px; border-bottom:1px solid rgba(66,71,84,0.2); display:flex; justify-content:space-between; align-items:center;">
+      <h2 id="chunk-modal-title" style="font-size:14px; font-weight:600; color:#90cdf4; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">Source Chunk</h2>
+      <span class="material-symbols-outlined" style="cursor:pointer; color:#8c909f; transition:color 0.2s; flex-shrink:0;" onclick="document.getElementById('chunk-modal').style.display='none'" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#8c909f'">close</span>
+    </div>
+    <div id="chunk-modal-body" style="padding:20px; overflow-y:auto; flex:1; font-size:13px; line-height:1.6; color:#e2e8f0; font-family:'Inter',sans-serif;"></div>
+  </div>
+</div>
+
 <!-- ── MAIN ── -->
 <div style="flex:1;display:flex;flex-direction:column;overflow:hidden;" id="chat-wrapper">
 
@@ -341,7 +355,7 @@ async function loadModelInfo() {
     if (res.ok) {
       const data = await res.json();
       document.getElementById('model-name').textContent = data.active_llm || 'Groq LLM';
-      document.getElementById('model-dot').style.background = data.llm_ready ? '#10B981' : '#EF4444';
+      document.getElementById('model-dot').style.background = (data.llm_status === 'ready') ? '#10B981' : '#EF4444';
     }
   } catch {}
 }
@@ -349,6 +363,28 @@ async function loadModelInfo() {
 function toggleDocModal() {
   const modal = document.getElementById('doc-modal');
   modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
+}
+
+async function viewChunk(chunkId) {
+  const modal = document.getElementById('chunk-modal');
+  const body = document.getElementById('chunk-modal-body');
+  const title = document.getElementById('chunk-modal-title');
+  
+  title.textContent = chunkId;
+  body.innerHTML = '<div style="text-align:center; padding:20px;"><span class="pulse-dot" style="display:inline-block;"></span> Loading content...</div>';
+  modal.style.display = 'flex';
+  
+  try {
+    const res = await fetch(`${API}/chunks/${encodeURIComponent(chunkId)}`);
+    if (res.ok) {
+      const data = await res.json();
+      body.innerHTML = typeof marked !== 'undefined' ? marked.parse(data.markdown_text) : escapeHtml(data.markdown_text);
+    } else {
+      body.innerHTML = `<div style="color:#ef4444; padding:20px;">Failed to load chunk: ${res.statusText}</div>`;
+    }
+  } catch (err) {
+    body.innerHTML = `<div style="color:#ef4444; padding:20px;">Error loading chunk: ${err.message}</div>`;
+  }
 }
 
 function renderDocList() {
@@ -457,6 +493,7 @@ async function loadSession(id) {
         role: m.role,
         content: m.content,
         mentions: m.mentioned_docs || [],
+        sources: m.sources || [],
         time: m.created_at
       }));
     } else {
@@ -546,10 +583,21 @@ function renderMessage(msg) {
   } else {
     const rendered = typeof marked !== 'undefined' ? marked.parse(msg.content) : escapeHtml(msg.content);
     const timeHtml = msg.elapsed ? `<span>⏱ ${msg.elapsed}s</span>` : '';
+    
+    let sourcesHtml = '';
+    if (msg.sources && msg.sources.length > 0) {
+        sourcesHtml = '<div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 12px;">';
+        sourcesHtml += '<strong style="color: #90cdf4;">Sources:</strong><div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:4px;">';
+        for (const s of msg.sources) {
+           sourcesHtml += `<button class="source-btn" onclick="viewChunk('${s}')">${escapeHtml(s)}</button>`;
+        }
+        sourcesHtml += '</div></div>';
+    }
+    
     return `<div class="msg-row">
       <div class="avatar ai">AI</div>
       <div style="max-width: 85%;">
-        <div class="msg-bubble ai">${rendered}</div>
+        <div class="msg-bubble ai">${rendered}${sourcesHtml}</div>
         <div class="msg-meta">${timeHtml}</div>
       </div>
     </div>`;
@@ -772,6 +820,23 @@ async function sendMessage() {
               } else if (parsed.type === 'answer') {
                 fullAnswer += parsed.content;
                 if (bubble) bubble.innerHTML = typeof marked !== 'undefined' ? marked.parse(fullAnswer) : escapeHtml(fullAnswer);
+
+              } else if (parsed.type === 'sources') {
+                const sources = parsed.content || [];
+                if (sources.length > 0) {
+                  let sourcesHtml = '<div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 12px;">';
+                  sourcesHtml += '<strong style="color: #90cdf4;">Sources:</strong><div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:4px;">';
+                  for (const s of sources) {
+                     sourcesHtml += `<button class="source-btn" onclick="viewChunk('${s}')">${escapeHtml(s)}</button>`;
+                  }
+                  sourcesHtml += '</div></div>';
+                  
+                  // Render answer then append sources
+                  if (bubble) {
+                     const ansHtml = typeof marked !== 'undefined' ? marked.parse(fullAnswer) : escapeHtml(fullAnswer);
+                     bubble.innerHTML = ansHtml + sourcesHtml;
+                  }
+                }
 
               } else if (parsed.type === 'convert_to_answer') {
                 // The reasoning phase generated the final answer—move it to bubble

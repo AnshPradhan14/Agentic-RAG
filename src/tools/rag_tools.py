@@ -25,7 +25,8 @@ import logging
 from functools import lru_cache
 from pathlib import Path
 
-import faiss
+from qdrant_client import QdrantClient
+from qdrant_client.http import models
 import nltk
 import numpy as np
 from langchain_core.tools import tool
@@ -33,9 +34,9 @@ import requests
 
 from src.core.config import (
     EMBEDDING_MODEL_NAME,
-    FAISS_INDEX_PATH,
     RETRIEVAL_TOP_K,
-    SENTENCES_MAP_PATH,
+    QDRANT_URL,
+    QDRANT_COLLECTION,
 )
 from src.core.database import (
     fetch_all_chunks,
@@ -130,15 +131,16 @@ def _get_embedding_model() -> OllamaEmbedder:
 
 
 @lru_cache(maxsize=1)
-def _get_faiss_index() -> faiss.IndexFlatIP:
-    """Load and cache the FAISS index from disk."""
-    if not FAISS_INDEX_PATH.exists():
-        raise FileNotFoundError(
-            f"FAISS index not found at {FAISS_INDEX_PATH}. "
-            "Run 'python layer1_indexer.py --rebuild-all' first."
-        )
-    logger.info("Loading FAISS index from %s", FAISS_INDEX_PATH)
-    return faiss.read_index(str(FAISS_INDEX_PATH))
+def _get_qdrant_client() -> QdrantClient:
+    """Load and cache the Qdrant client."""
+    logger.info("Setting up Qdrant client at %s", QDRANT_URL)
+    is_local = not QDRANT_URL.startswith("http")
+    
+    if is_local:
+        Path(QDRANT_URL).mkdir(parents=True, exist_ok=True)
+        return QdrantClient(path=QDRANT_URL)
+    else:
+        return QdrantClient(url=QDRANT_URL)
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -208,17 +210,15 @@ def keyword_search(keywords: list[str], top_k: int = RETRIEVAL_TOP_K) -> list[di
 # ─────────────────────────────────────────────────────────────────────────────
 
 @tool
-def semantic_search(query: str, top_k: int = RETRIEVAL_TOP_K) -> list[dict]:
+def semantic_search(query: str, top_k: int = RETRIEVAL_TOP_K, mentioned_docs: list[str] = None) -> list[dict]:
     """Use this tool for conceptual or meaning-based matching, or when the exact wording in the documents is unknown. It finds passages that are semantically related to your query.
 
-    FIX 1B — Query vector is L2-normalised before FAISS search.
-    Score = dot product of unit vectors = cosine similarity (NOT 1 - L2 distance).
-    Aggregates sentence-level scores to chunk-level, returning top chunks.
     Returns top-k chunk IDs and snippets of the most relevant sentences within those chunks.
 
     Args:
         query  : Natural language search query.
         top_k  : Number of chunks to return (default 5).
+        mentioned_docs: Optional list of document names to filter the search to.
 
     Returns:
         List of dicts, each with:
@@ -226,41 +226,51 @@ def semantic_search(query: str, top_k: int = RETRIEVAL_TOP_K) -> list[dict]:
             score    (float) : Cosine similarity score (0–1).
             snippet  (str)   : The best-matching sentence from that chunk.
     """
-    logger.info("semantic_search called: query='%s', top_k=%d", query, top_k)
+    logger.info("semantic_search called: query='%s', top_k=%d, docs=%s", query, top_k, mentioned_docs)
 
     model  = _get_embedding_model()
-    index  = _get_faiss_index()
+    client = _get_qdrant_client()
 
-    # FIX 1B — Encode and normalise the query vector
     q_emb: np.ndarray = model.encode([query], convert_to_numpy=True).astype(np.float32)
-    q_emb = q_emb.reshape(1, -1)
-    faiss.normalize_L2(q_emb)   # MUST normalise query; cosine = dot product on unit vecs
+    query_vector = q_emb[0].tolist()
+    
+    query_filter = None
+    if mentioned_docs:
+        # Match any of the mentioned docs
+        query_filter = models.Filter(
+            must=[
+                models.FieldCondition(
+                    key="doc_name",
+                    match=models.MatchAny(any=mentioned_docs)
+                )
+            ]
+        )
 
     # Search for top_k*2 sentences so we can aggregate to top_k unique chunks
-    D, I = index.search(q_emb, top_k * 2)
+    search_result = client.search(
+        collection_name=QDRANT_COLLECTION,
+        query_vector=query_vector,
+        limit=top_k * 2,
+        query_filter=query_filter,
+        with_payload=True
+    )
 
     # Aggregate sentence-level scores to chunk-level (keep highest score per chunk)
     chunk_scores: dict[str, tuple[float, str]] = {}  # chunk_id → (best_score, snippet)
 
-    for sent_faiss_row, cosine_score in zip(I[0], D[0]):
-        if sent_faiss_row < 0:
-            continue  # FAISS returns -1 for empty slots
-
-        try:
-            parent_chunk_id = get_parent_chunk_id(int(sent_faiss_row))
-            snippet_text    = get_sentence_text(int(sent_faiss_row))
-        except KeyError:
-            logger.debug("FAISS row %d has no DB mapping — skipping.", sent_faiss_row)
+    for hit in search_result:
+        chunk_id = hit.payload.get("chunk_id")
+        snippet_text = hit.payload.get("sentence_text", "")
+        score = hit.score
+        
+        if not chunk_id:
             continue
 
-        # FIX 1B: score = cosine similarity directly (NOT 1 - distance)
-        score = float(cosine_score)
-
         if (
-            parent_chunk_id not in chunk_scores
-            or score > chunk_scores[parent_chunk_id][0]
+            chunk_id not in chunk_scores
+            or score > chunk_scores[chunk_id][0]
         ):
-            chunk_scores[parent_chunk_id] = (score, snippet_text)
+            chunk_scores[chunk_id] = (score, snippet_text)
 
     # Sort by score descending, limit to top_k
     sorted_chunks = sorted(
@@ -305,8 +315,6 @@ def get_document_chunks(doc_id: int = None, doc_name: str = None, max_chunks: in
             chunk_id (str) : Real chunk identifier safe to pass to chunk_read.
             snippet  (str) : First 300 characters of the chunk for preview.
     """
-    logger.info("get_document_chunks called: doc_id=%s, doc_name=%s, max_chunks=%d", doc_id, doc_name, max_chunks)
-    
     if doc_id is None and doc_name is None:
         return [{"error": "Must provide either doc_id or doc_name"}]
         
@@ -317,10 +325,16 @@ def get_document_chunks(doc_id: int = None, doc_name: str = None, max_chunks: in
                 doc_id = d["doc_id"]
                 break
         if doc_id is None:
-            return [{"error": f"Document '{doc_name}' not found."}]
+            return [{"error": f"Document '{doc_name}' not found in database."}]
+
+    logger.info("get_document_chunks called: doc_id=%s, doc_name=%s, max_chunks=%d", doc_id, doc_name, max_chunks)
 
     max_chunks = min(max_chunks, 10)  # cap to protect token budget
     chunks = fetch_chunks_by_doc(doc_id)
+    
+    if not chunks:
+        return [{"error": f"Document '{doc_name or doc_id}' exists (doc_id={doc_id}) but has 0 chunks. The document may need to be re-ingested through the current pipeline."}]
+        
     result = [
         {
             "chunk_id": c["chunk_id"],

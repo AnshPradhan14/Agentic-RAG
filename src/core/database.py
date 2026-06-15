@@ -144,6 +144,20 @@ def init_db() -> None:
             logger.info("Added 'section' column to chunks table.")
         except Exception:  # Column already exists — safe to ignore
             pass
+            
+        try:
+            conn.execute("ALTER TABLE sentences ADD COLUMN qdrant_id TEXT;")
+            conn.commit()
+            logger.info("Added 'qdrant_id' column to sentences table.")
+        except Exception:  
+            pass
+            
+        try:
+            conn.execute("ALTER TABLE chat_messages ADD COLUMN sources TEXT;")
+            conn.commit()
+            logger.info("Added 'sources' column to chat_messages table.")
+        except Exception:  
+            pass
 
         logger.info("Database schema ready (documents / chunks / sentences / entity_triples).")
     except sqlite3.Error as exc:
@@ -349,13 +363,14 @@ def fetch_chunk_by_id(chunk_id: str) -> dict[str, Any]:
 
 # ── Sentence helpers ──────────────────────────────────────────────────────────
 
-def insert_sentence(chunk_id: str, sentence_text: str, faiss_index: int) -> int:
+def insert_sentence(chunk_id: str, sentence_text: str, faiss_index: int = None, qdrant_id: str = None) -> int:
     """Insert one sentence row and return its sentence_id.
 
     Args:
         chunk_id      : Parent chunk identifier.
         sentence_text : Raw sentence string.
-        faiss_index   : 0-based row in the FAISS index corresponding to this sentence.
+        faiss_index   : 0-based row in the FAISS index (deprecated).
+        qdrant_id     : UUID string in Qdrant.
 
     Returns:
         sentence_id (int): Auto-incremented primary key.
@@ -363,8 +378,8 @@ def insert_sentence(chunk_id: str, sentence_text: str, faiss_index: int) -> int:
     conn = _get_connection()
     try:
         cur = conn.execute(
-            "INSERT INTO sentences (chunk_id, sentence_text, faiss_index) VALUES (?, ?, ?)",
-            (chunk_id, sentence_text, faiss_index),
+            "INSERT INTO sentences (chunk_id, sentence_text, faiss_index, qdrant_id) VALUES (?, ?, ?, ?)",
+            (chunk_id, sentence_text, faiss_index, qdrant_id),
         )
         conn.commit()
         return cur.lastrowid  # type: ignore[return-value]
@@ -581,13 +596,14 @@ def delete_chat_session(session_id: int) -> bool:
     finally:
         conn.close()
 
-def add_chat_message(session_id: int, role: str, content: str, mentioned_docs: list[str] = None) -> int:
+def add_chat_message(session_id: int, role: str, content: str, mentioned_docs: list[str] = None, sources: list[str] = None) -> int:
     docs_json = json.dumps(mentioned_docs) if mentioned_docs else None
+    sources_json = json.dumps(sources) if sources else None
     conn = _get_connection()
     try:
         cur = conn.execute(
-            "INSERT INTO chat_messages (session_id, role, content, mentioned_docs) VALUES (?, ?, ?, ?)",
-            (session_id, role, content, docs_json)
+            "INSERT INTO chat_messages (session_id, role, content, mentioned_docs, sources) VALUES (?, ?, ?, ?, ?)",
+            (session_id, role, content, docs_json, sources_json)
         )
         conn.execute("UPDATE chat_sessions SET updated_at = datetime('now') WHERE session_id = ?", (session_id,))
         conn.commit()
@@ -610,6 +626,11 @@ def get_chat_messages(session_id: int) -> list[dict[str, Any]]:
                 msg["mentioned_docs"] = json.loads(msg["mentioned_docs"])
             else:
                 msg["mentioned_docs"] = []
+                
+            if "sources" in msg and msg["sources"]:
+                msg["sources"] = json.loads(msg["sources"])
+            else:
+                msg["sources"] = []
             result.append(msg)
         return result
     finally:

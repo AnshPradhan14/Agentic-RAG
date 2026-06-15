@@ -1,0 +1,306 @@
+{
+  "title": "Contract No: GEMC-511687748916939",
+  "total_sections": 23,
+  "sections": [
+    {
+      "id": "section_001",
+      "heading": "Contract No: GEMC-511687748916939",
+      "level": 1,
+      "heading_path": "Contract No: GEMC-511687748916939",
+      "parent_id": null,
+      "children": [
+        "section_002",
+        "section_003",
+        "section_004",
+        "section_005",
+        "section_006",
+        "section_007",
+        "section_008",
+        "section_009",
+        "section_010",
+        "section_011",
+        "section_012",
+        "section_013",
+        "section_014",
+        "section_015",
+        "section_016",
+        "section_017",
+        "section_018",
+        "section_019",
+        "section_020",
+        "section_021",
+        "section_022",
+        "section_023"
+      ],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_002",
+      "heading": "Organisation Details",
+      "level": 2,
+      "heading_path": "Contract No: GEMC-511687748916939 > Organisation Details",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_003",
+      "heading": "Financial Approval Detail",
+      "level": 2,
+      "heading_path": "Contract No: GEMC-511687748916939 > Financial Approval Detail",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_004",
+      "heading": "Consignee Details",
+      "level": 2,
+      "heading_path": "Contract No: GEMC-511687748916939 > Consignee Details",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_005",
+      "heading": "Service Provider Details",
+      "level": 2,
+      "heading_path": "Contract No: GEMC-511687748916939 > Service Provider Details",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_006",
+      "heading": "Service Details",
+      "level": 2,
+      "heading_path": "Contract No: GEMC-511687748916939 > Service Details",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_007",
+      "heading": "Buyer Details",
+      "level": 2,
+      "heading_path": "Contract No: GEMC-511687748916939 > Buyer Details",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_008",
+      "heading": "Paying Authority Details",
+      "level": 2,
+      "heading_path": "Contract No: GEMC-511687748916939 > Paying Authority Details",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_009",
+      "heading": "Total Value without Addons(INR)",
+      "level": 2,
+      "heading_path": "Contract No: GEMC-511687748916939 > Total Value without Addons(INR)",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_010",
+      "heading": "Total Addon Value(INR)",
+      "level": 2,
+      "heading_path": "Contract No: GEMC-511687748916939 > Total Addon Value(INR)",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_011",
+      "heading": "Total Value Including Addons(INR)",
+      "level": 2,
+      "heading_path": "Contract No: GEMC-511687748916939 > Total Value Including Addons(INR)",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_012",
+      "heading": "Amount of Contract",
+      "level": 2,
+      "heading_path": "Contract No: GEMC-511687748916939 > Amount of Contract",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_013",
+      "heading": "Total Contract Value Including All Duties and Taxes(INR)",
+      "level": 2,
+      "heading_path": "Contract No: GEMC-511687748916939 > Total Contract Value Including All Duties and Taxes(INR)",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_014",
+      "heading": "SLA Details",
+      "level": 2,
+      "heading_path": "Contract No: GEMC-511687748916939 > SLA Details",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_015",
+      "heading": "PREAMBLE:",
+      "level": 2,
+      "heading_path": "Contract No: GEMC-511687748916939 > PREAMBLE:",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_016",
+      "heading": "Service Formula:",
+      "level": 2,
+      "heading_path": "Contract No: GEMC-511687748916939 > Service Formula:",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_017",
+      "heading": "Techno-Commercial Clarification",
+      "level": 2,
+      "heading_path": "Contract No: GEMC-511687748916939 > Techno-Commercial Clarification",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_018",
+      "heading": "Additional Required Data/Document(s) : Buyer",
+      "level": 2,
+      "heading_path": "Contract No: GEMC-511687748916939 > Additional Required Data/Document(s) : Buyer",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_019",
+      "heading": "Additional Data/Document(s) : Seller",
+      "level": 2,
+      "heading_path": "Contract No: GEMC-511687748916939 > Additional Data/Document(s) : Seller",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_020",
+      "heading": "ePBG Detail",
+      "level": 2,
+      "heading_path": "Contract No: GEMC-511687748916939 > ePBG Detail",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_021",
+      "heading": "Terms and Conditions",
+      "level": 2,
+      "heading_path": "Contract No: GEMC-511687748916939 > Terms and Conditions",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_022",
+      "heading": "Eligibility Criteria:",
+      "level": 2,
+      "heading_path": "Contract No: GEMC-511687748916939 > Eligibility Criteria:",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_023",
+      "heading": "Note:",
+      "level": 2,
+      "heading_path": "Contract No: GEMC-511687748916939 > Note:",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    }
+  ],
+  "source_file": "Final Contract-1.pdf"
+}

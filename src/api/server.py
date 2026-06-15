@@ -51,7 +51,7 @@ logger = logging.getLogger(__name__)
 _state: dict = {
     "llm": None,
     "embedding_model_loaded": False,
-    "faiss_index_loaded": False,
+    "qdrant_ready": False,
     "startup_time": None,
     "query_count": 0,
 }
@@ -63,12 +63,61 @@ async def lifespan(app: FastAPI):
     t0 = time.time()
     logger.info("=== A-RAG Server Starting Up ===")
 
+    from src.core.config import LLM_PROVIDER
+    
+    # --- Auto-start Ollama if needed ---
+    if LLM_PROVIDER.lower() == "ollama":
+        import urllib.request
+        import urllib.error
+        import subprocess
+        
+        logger.info("⏳ Checking if Ollama is running...")
+        ollama_ready = False
+        try:
+            urllib.request.urlopen("http://localhost:11434/api/tags", timeout=2)
+            ollama_ready = True
+            logger.info("✅ Ollama is already running.")
+        except (urllib.error.URLError, ConnectionError):
+            logger.warning("⚠️ Ollama is not running. Attempting to start it in the background...")
+            
+            # Start Ollama process silently
+            # On Windows, 'ollama serve' or 'ollama app' could be used. We'll try 'ollama serve'
+            try:
+                # Use creationflags=subprocess.CREATE_NO_WINDOW to hide the console on Windows
+                creationflags = 0
+                if sys.platform == "win32":
+                    creationflags = subprocess.CREATE_NO_WINDOW
+                    
+                subprocess.Popen(
+                    ["ollama", "serve"], 
+                    stdout=subprocess.DEVNULL, 
+                    stderr=subprocess.DEVNULL,
+                    creationflags=creationflags
+                )
+                
+                # Wait for it to wake up
+                for i in range(10):
+                    import asyncio
+                    await asyncio.sleep(2)
+                    try:
+                        urllib.request.urlopen("http://localhost:11434/api/tags", timeout=2)
+                        ollama_ready = True
+                        logger.info(f"✅ Ollama successfully started after {i*2} seconds.")
+                        break
+                    except (urllib.error.URLError, ConnectionError):
+                        pass
+                        
+                if not ollama_ready:
+                    logger.error("❌ Failed to verify Ollama started. It may take longer, or the command failed.")
+            except Exception as e:
+                logger.error(f"❌ Failed to start Ollama process automatically: {e}")
+
     from src.core.database import init_db
     init_db()
     logger.info("✅ Database schema ready.")
 
     logger.info("⏳ Loading embedding model into RAM ...")
-    from src.tools.rag_tools import _get_embedding_model, _get_faiss_index
+    from src.tools.rag_tools import _get_embedding_model, _get_qdrant_client
     try:
         _get_embedding_model()
         _state["embedding_model_loaded"] = True
@@ -87,17 +136,29 @@ async def lifespan(app: FastAPI):
         except Exception as exc2:
             logger.error("⚠️ Embedding model retry also failed: %s", exc2)
 
+    logger.info("⏳ Pre-warming Docling DocumentConverter (loads layout/table ML models)...")
     try:
-        _get_faiss_index()
-        _state["faiss_index_loaded"] = True
-        logger.info("✅ FAISS index loaded.")
-    except FileNotFoundError:
-        logger.warning("⚠️  FAISS index not found. Ingest a PDF first.")
+        from ingestion.pdf_parser import get_document_converter
+        await run_in_threadpool(get_document_converter)
+        logger.info("✅ Docling DocumentConverter ready.")
+    except Exception as exc:
+        logger.warning("⚠️  Docling pre-warm failed (will load on first upload): %s", exc)
 
     try:
-        # LLM client is built per-request via _unified_chat now.
-        _state["llm"] = "ready"
-        logger.info("✅ LLM ready (unified chat).")
+        client = _get_qdrant_client()
+        client.get_collections()
+        _state["qdrant_ready"] = True
+        logger.info("✅ Qdrant connection verified.")
+    except Exception as exc:
+        logger.warning("⚠️  Qdrant connection failed: %s", exc)
+
+    try:
+        if LLM_PROVIDER.lower() == "ollama" and not ollama_ready:
+            _state["llm"] = "error"
+            logger.error("⚠️ LLM not fully ready because Ollama failed to respond.")
+        else:
+            _state["llm"] = "ready"
+            logger.info("✅ LLM ready (unified chat).")
     except Exception as exc:
         logger.error("⚠️ Failed to setup LLM state: %s", exc)
         _state["llm"] = None
@@ -239,13 +300,14 @@ def delete_chat(session_id: int):
 
 @app.get("/health")
 def health_check():
+    """Returns the operational status of the server and models."""
     from src.core.config import LLM_PROVIDER, ACTIVE_MODEL, EMBEDDING_MODEL_NAME, CHUNK_TOKEN_LIMIT, CHUNK_OVERLAP, RETRIEVAL_TOP_K, LLM_TEMPERATURE
     return {
-        "status": "ok",
+        "status": "online",
+        "llm_status": _state["llm"],
         "embedding_model_loaded": _state["embedding_model_loaded"],
-        "faiss_index_loaded": _state["faiss_index_loaded"],
-        "llm_ready": _state["llm"] is not None,
-        "startup_time_seconds": _state["startup_time"],
+        "qdrant_ready": _state["qdrant_ready"],
+        "uptime_seconds": round(time.time() - _state.get("startup_time", time.time()), 2) if _state.get("startup_time") else 0,
         "active_llm": f"{LLM_PROVIDER.upper()}: {ACTIVE_MODEL}",
         "llm_provider": LLM_PROVIDER,
         "active_model": ACTIVE_MODEL,
@@ -275,7 +337,7 @@ def get_stats():
         "llm_provider": LLM_PROVIDER,
         "active_model": ACTIVE_MODEL,
         "embedding_model": EMBEDDING_MODEL_NAME,
-        "faiss_index_loaded": _state["faiss_index_loaded"],
+        "qdrant_ready": _state.get("qdrant_ready", False),
         "embedding_model_loaded": _state["embedding_model_loaded"],
     }
 
@@ -307,13 +369,21 @@ def list_documents():
     return result
 
 
+@app.get("/chunks/{chunk_id}")
+def get_chunk(chunk_id: str):
+    from src.core.database import fetch_chunk_by_id
+    chunk = fetch_chunk_by_id(chunk_id)
+    if not chunk:
+        raise HTTPException(status_code=404, detail="Chunk not found")
+    return {"chunk_id": chunk_id, "markdown_text": chunk["markdown_text"]}
+
+
 @app.delete("/documents/{doc_id}")
 def delete_document(doc_id: int, background_tasks: BackgroundTasks):
     """
-    Delete a document and all its associated artifacts (DB rows, physical files, and FAISS vectors).
+    Delete a document and all its associated artifacts (DB rows, physical files, and Qdrant vectors).
     """
     from src.core.config import DB_PATH, RAW_DIR, PARSED_DIR
-    from src.tools.rag_tools import _get_faiss_index
     import sqlite3
 
     conn = sqlite3.connect(str(DB_PATH), check_same_thread=False)
@@ -374,19 +444,14 @@ def delete_document(doc_id: int, background_tasks: BackgroundTasks):
         except Exception as exc:
             logger.warning("Could not delete file %s: %s", p, exc)
 
-    # ── 4. Schedule FAISS rebuild in background ───────────────────────────────
-    _get_faiss_index.cache_clear()
-    from ingestion.store import rebuild_faiss_index
+    # ── 4. Delete vectors from Qdrant ───────────────────────────────
+    from ingestion.store import delete_document_vectors
     
-    def _background_rebuild():
-        try:
-            remaining = rebuild_faiss_index()
-            logger.info("FAISS index rebuilt in background with %d remaining vector(s).", remaining)
-            _state["faiss_index_loaded"] = remaining > 0
-        except Exception as exc:
-            logger.error("FAISS background rebuild failed after deletion of doc_id=%d: %s", doc_id, exc)
-            
-    background_tasks.add_task(_background_rebuild)
+    try:
+        delete_document_vectors(doc_id)
+        logger.info("Vectors deleted for doc_id=%d.", doc_id)
+    except Exception as exc:
+        logger.error("Failed to delete vectors from Qdrant for doc_id=%d: %s", doc_id, exc)
 
     return {
         "message": f"Document '{source_filename}' deleted successfully",
@@ -440,10 +505,7 @@ async def upload_pdf(file: UploadFile = File(...), is_gemc: Optional[bool] = For
         if summary.get("errors") and not summary.get("total_chunks"):
             raise HTTPException(status_code=500, detail=f"Ingestion failed: {summary['errors']}")
 
-        # Clear FAISS index cache in the server so next query loads updated index
-        from src.tools.rag_tools import _get_faiss_index
-        _get_faiss_index.cache_clear()
-        _state["faiss_index_loaded"] = True
+        _state["qdrant_ready"] = True
 
         conn = get_connection()
         try:
@@ -540,10 +602,10 @@ def ask_stream(request: AskRequest):
             status_code=503,
             detail="Embedding model not loaded. Check server logs for the root cause (e.g. HuggingFace connectivity or missing model files)."
         )
-    if not _state["faiss_index_loaded"]:
+    if not _state.get("qdrant_ready", False):
         raise HTTPException(
             status_code=400,
-            detail="No FAISS index found. Ingest at least one PDF first via POST /upload"
+            detail="Qdrant connection not established. Ingest at least one PDF first via POST /upload"
         )
 
     from src.agents.rag_agent import run_agent_stream
@@ -565,6 +627,7 @@ def ask_stream(request: AskRequest):
 
     def event_generator():
         final_answer = ""
+        sources = []
         try:
             for token in run_agent_stream(
                 query=query_text,
@@ -575,13 +638,15 @@ def ask_stream(request: AskRequest):
                         final_answer += token.get("content", "")
                     elif t == "convert_to_answer":
                         final_answer = token.get("content", "")
+                    elif t == "sources":
+                        sources = token.get("content", [])
                 
                 # SSE format: each event is "data: <payload>\n\n"
                 yield f"data: {json.dumps(token)}\n\n"
             
             # Save assistant message if session exists
             if request.session_id and final_answer:
-                add_chat_message(request.session_id, "assistant", final_answer)
+                add_chat_message(request.session_id, "assistant", final_answer, sources=sources)
             
             yield "data: [DONE]\n\n"
         except Exception as exc:
@@ -631,10 +696,7 @@ def ingest(request: IngestRequest):
         if summary.get("errors") and not summary.get("total_chunks"):
             raise HTTPException(status_code=500, detail=f"Ingestion failed: {summary['errors']}")
 
-        # Clear FAISS index cache in the server so next query loads updated index
-        from src.tools.rag_tools import _get_faiss_index
-        _get_faiss_index.cache_clear()
-        _state["faiss_index_loaded"] = True
+        _state["qdrant_ready"] = True
 
         conn = get_connection()
         try:

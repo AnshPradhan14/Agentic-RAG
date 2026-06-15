@@ -22,40 +22,29 @@ import logging
 from pathlib import Path
 from typing import Any
 
-import faiss
 import numpy as np
+import uuid
+from qdrant_client.http import models
 
-from src.core.config import FAISS_INDEX_PATH, INDEX_DIR, FINAL_TEXT_DIR, PARSED_DIR
+from src.core.config import INDEX_DIR, FINAL_TEXT_DIR, PARSED_DIR, QDRANT_COLLECTION
 from src.core.database import (
     insert_chunk,
     insert_document,
     insert_sentence,
 )
-from src.tools.rag_tools import _get_embedding_model
+from src.tools.rag_tools import _get_embedding_model, _get_qdrant_client
 
 logger = logging.getLogger(__name__)
 
-
-# ── FAISS helpers ─────────────────────────────────────────────────────────────
-
-def _init_faiss_index(dim: int) -> faiss.IndexFlatIP:
-    """Load the existing FAISS index from disk, or create a fresh one."""
-    INDEX_DIR.mkdir(parents=True, exist_ok=True)
-    if FAISS_INDEX_PATH.exists():
-        logger.info(f"[store] Loading existing FAISS index from {FAISS_INDEX_PATH}")
-        return faiss.read_index(str(FAISS_INDEX_PATH))
-    logger.info(f"[store] Creating new FAISS IndexFlatIP (dim={dim})")
-    return faiss.IndexFlatIP(dim)
-
-
-def _write_faiss_index(index: faiss.IndexFlatIP) -> None:
-    """Persist FAISS index to disk. Raises RuntimeError on failure."""
-    try:
-        faiss.write_index(index, str(FAISS_INDEX_PATH))
-        logger.info(f"[store] FAISS index saved to {FAISS_INDEX_PATH} (total={index.ntotal} vectors).")
-    except Exception as exc:
-        logger.error(f"[store] FAILED to write FAISS index to {FAISS_INDEX_PATH}: {exc}")
-        raise RuntimeError(f"FAISS write failed: {exc}") from exc
+def _ensure_qdrant_collection(client, dim: int) -> None:
+    """Ensure the Qdrant collection exists with the correct vector size."""
+    collections = client.get_collections().collections
+    if not any(c.name == QDRANT_COLLECTION for c in collections):
+        logger.info(f"[store] Creating new Qdrant collection '{QDRANT_COLLECTION}' (dim={dim})")
+        client.create_collection(
+            collection_name=QDRANT_COLLECTION,
+            vectors_config=models.VectorParams(size=dim, distance=models.Distance.COSINE),
+        )
 
 
 # ── Failed chunk persistence ──────────────────────────────────────────────────
@@ -161,31 +150,38 @@ def store_chunks(
     model = _get_embedding_model()
     embeddings: np.ndarray = model.encode(texts, convert_to_numpy=True).astype(np.float32)
 
-    # ── Step 4: Normalise for cosine similarity + update FAISS ───────────────
-    faiss.normalize_L2(embeddings)
-
+    # ── Step 4: Qdrant setup ───────────────
     dim = embeddings.shape[1]
-    index = _init_faiss_index(dim)
-    start_faiss_row = index.ntotal      # record offset before we add
+    client = _get_qdrant_client()
+    _ensure_qdrant_collection(client, dim)
 
-    index.add(embeddings)
-    logger.info(
-        f"[store] Added {len(embeddings)} vector(s) to FAISS index "
-        f"(total now={index.ntotal})."
-    )
-    _write_faiss_index(index)           # raises RuntimeError on failure
-
-    # ── Step 5: Persist each chunk in SQLite — per-chunk error isolation ──────
+    # ── Step 5: Persist each chunk in SQLite and Qdrant ──────
     failed_chunks: list[dict[str, Any]] = []
 
+    qdrant_points = []
+    
     for i, chunk in enumerate(valid_chunks):
-        faiss_row = start_faiss_row + i
+        qdrant_id = uuid.uuid4().hex
         chunk_id  = str(chunk.get("chunk_id", f"{pdf_stem}_{i}"))
         content   = chunk.get("content", "")
+        vector    = embeddings[i].tolist()
 
         # Metadata blob = everything except "content" (Phase 13 spec)
         meta: dict[str, Any] = {k: v for k, v in chunk.items() if k != "content"}
         meta_json = json.dumps(meta, ensure_ascii=False)
+        
+        qdrant_points.append(
+            models.PointStruct(
+                id=qdrant_id,
+                vector=vector,
+                payload={
+                    "chunk_id": chunk_id,
+                    "doc_id": doc_id,
+                    "doc_name": f"{pdf_stem}.pdf",
+                    "sentence_text": content,
+                }
+            )
+        )
 
         try:
             insert_chunk(
@@ -199,19 +195,28 @@ def store_chunks(
             insert_sentence(
                 chunk_id=chunk_id,
                 sentence_text=content,
-                faiss_index=faiss_row,
+                faiss_index=None,
+                qdrant_id=qdrant_id,
             )
-            logger.debug(f"[store] Upserted chunk_id={chunk_id} (faiss_row={faiss_row}).")
+            logger.debug(f"[store] Upserted chunk_id={chunk_id} to DB.")
 
         except Exception as exc:
-            # Phase 14: "Vector store upsert failure → log error, save to failed_chunks.json"
             logger.error(
-                f"[store] Upsert FAILED for chunk_id={chunk_id} (faiss_row={faiss_row}): "
+                f"[store] DB Insert FAILED for chunk_id={chunk_id}: "
                 f"{type(exc).__name__}: {exc}"
             )
-            # Tag the chunk with failure metadata for operator retry
-            failed_entry = {**chunk, "_failed_reason": str(exc), "_faiss_row": faiss_row}
+            failed_entry = {**chunk, "_failed_reason": str(exc)}
             failed_chunks.append(failed_entry)
+
+    # Upsert to Qdrant
+    if qdrant_points:
+        client.upsert(
+            collection_name=QDRANT_COLLECTION,
+            points=qdrant_points
+        )
+        logger.info(f"[store] Upserted {len(qdrant_points)} vectors to Qdrant.")
+
+
 
     # ── Step 6: Persist chunks JSON to disk ───────────────────────────────────
     chunks_file = out_path / f"{pdf_stem}_chunks.json"
@@ -229,75 +234,29 @@ def store_chunks(
     )
 
 
-# ── FAISS Rebuild ─────────────────────────────────────────────────────────────
+# ── Qdrant Deletion ───────────────────────────────────────────────────────────
 
-def rebuild_faiss_index() -> int:
+def delete_document_vectors(doc_id: int) -> None:
     """
-    Rebuild the FAISS index from ALL remaining sentences in the DB.
-
-    Called after a document deletion to remove stale vectors (FAISS IndexFlatIP
-    does not support in-place removal, so we must rebuild from scratch).
-
-    Returns:
-        int: Number of vectors in the rebuilt index (0 if DB is empty).
+    Delete all vectors associated with a specific document from Qdrant.
+    This is an instant operation that doesn't require rebuilding the index.
     """
-    import sqlite3
-    from src.core.config import DB_PATH
-    from src.tools.rag_tools import _get_embedding_model, _get_faiss_index
-
-    logger.info("[store:rebuild] Rebuilding FAISS index from remaining DB sentences...")
-
-    conn = sqlite3.connect(str(DB_PATH), check_same_thread=False)
-    conn.row_factory = sqlite3.Row
+    client = _get_qdrant_client()
     try:
-        rows = conn.execute(
-            "SELECT sentence_id, chunk_id, sentence_text FROM sentences ORDER BY sentence_id"
-        ).fetchall()
-    finally:
-        conn.close()
-
-    if not rows:
-        logger.info("[store:rebuild] No sentences remain. Clearing FAISS index file.")
-        if FAISS_INDEX_PATH.exists():
-            FAISS_INDEX_PATH.unlink()
-        _get_faiss_index.cache_clear()
-        return 0
-
-    # Encode all remaining sentences
-    model = _get_embedding_model()
-    texts = [r["sentence_text"] for r in rows]
-    embeddings = model.encode(texts, convert_to_numpy=True).astype(np.float32)
-    faiss.normalize_L2(embeddings)
-
-    # Build fresh index
-    dim = embeddings.shape[1]
-    new_index = faiss.IndexFlatIP(dim)
-    new_index.add(embeddings)
-
-    # Update faiss_index values in DB to match new positions
-    conn = sqlite3.connect(str(DB_PATH), check_same_thread=False)
-    try:
-        for new_idx, row in enumerate(rows):
-            conn.execute(
-                "UPDATE sentences SET faiss_index=? WHERE sentence_id=?",
-                (new_idx, row["sentence_id"])
+        client.delete(
+            collection_name=QDRANT_COLLECTION,
+            points_selector=models.FilterSelector(
+                filter=models.Filter(
+                    must=[
+                        models.FieldCondition(
+                            key="doc_id",
+                            match=models.MatchValue(value=doc_id)
+                        )
+                    ]
+                )
             )
-        conn.commit()
-        logger.info("[store:rebuild] Updated faiss_index for %d sentences.", len(rows))
+        )
+        logger.info(f"[store:delete] Deleted vectors for doc_id={doc_id} from Qdrant.")
     except Exception as exc:
-        conn.rollback()
-        logger.error("[store:rebuild] Failed to update faiss_index in DB: %s", exc)
+        logger.error(f"[store:delete] Failed to delete vectors for doc_id={doc_id}: {exc}")
         raise
-    finally:
-        conn.close()
-
-    # Persist the new index
-    faiss.write_index(new_index, str(FAISS_INDEX_PATH))
-    logger.info(
-        "[store:rebuild] FAISS index rebuilt → %s (%d vectors).",
-        FAISS_INDEX_PATH, new_index.ntotal
-    )
-
-    # Clear the lru_cache so the next query loads the fresh index
-    _get_faiss_index.cache_clear()
-    return new_index.ntotal

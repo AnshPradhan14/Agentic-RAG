@@ -13,16 +13,27 @@ from __future__ import annotations
 
 import logging
 
-from docling.document_converter import DocumentConverter
+from docling.document_converter import DocumentConverter, PdfFormatOption
+from docling.datamodel.base_models import InputFormat
+from docling.datamodel.pipeline_options import PipelineOptions, EasyOcrOptions
 from functools import lru_cache
 
 logger = logging.getLogger(__name__)
 
 @lru_cache(maxsize=1)
 def get_document_converter() -> DocumentConverter:
-    """Return a globally cached DocumentConverter instance to prevent reloading models per PDF."""
-    logger.info("[pdf_parser] Initialising DocumentConverter (first run only)...")
-    return DocumentConverter()
+    """Return a globally cached DocumentConverter instance with OCR enabled to prevent reloading models per PDF."""
+    logger.info("[pdf_parser] Initialising DocumentConverter with EasyOCR (first run only)...")
+    
+    pipeline_options = PipelineOptions()
+    pipeline_options.do_ocr = True
+    pipeline_options.ocr_options = EasyOcrOptions()
+    
+    return DocumentConverter(
+        format_options={
+            InputFormat.PDF: PdfFormatOption(pipeline_options=pipeline_options)
+        }
+    )
 
 
 

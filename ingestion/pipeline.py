@@ -231,36 +231,52 @@ def run_ingestion(pdf_path: str, output_dir: str) -> dict[str, Any]:
 
     # ─────────────────────────────────────────────────────────────────────────
     # STEP 2 — Parse full PDF → raw markdown (Docling)
-    # Critical: without raw text nothing else can run.
+    # Skipped for large PDFs (>50 pages): those documents will be split into
+    # 25-page batches in Step 4 and each batch is re-parsed individually in
+    # Step 5. Parsing the full PDF here first would cause Docling to load all
+    # pages into memory at once → std::bad_alloc on image-heavy PDFs.
     # ─────────────────────────────────────────────────────────────────────────
-    with _StepContext("parse_pdf", pdf_name, summary, critical=True):
-        raw_markdown = parse_pdf_to_markdown(str(pdf_path_obj))
+    _large_pdf = total_pages > 50
+    if not _large_pdf:
+        with _StepContext("parse_pdf", pdf_name, summary, critical=True):
+            raw_markdown = parse_pdf_to_markdown(str(pdf_path_obj))
+            logger.info(
+                f"[pipeline:parse_pdf] Raw markdown extracted: "
+                f"{len(raw_markdown):,} chars."
+            )
+    else:
         logger.info(
-            f"[pipeline:parse_pdf] Raw markdown extracted: "
-            f"{len(raw_markdown):,} chars."
+            f"[pipeline:parse_pdf] SKIPPED for large PDF ({total_pages} pages). "
+            "Will parse per-batch in Step 5 to avoid OOM."
         )
 
     # ─────────────────────────────────────────────────────────────────────────
     # STEP 3 — Filter Hindi / Devanagari
     # Recoverable: if filter blows up we continue with raw markdown.
+    # Skipped for large PDFs — filtering is applied per-batch in Step 5.
     # ─────────────────────────────────────────────────────────────────────────
-    with _StepContext("filter_hindi", pdf_name, summary, critical=False):
-        filtered_markdown = filter_hindi(raw_markdown)
-        removed = _count_hindi_paragraphs(raw_markdown, filtered_markdown)
-        summary["hindi_paragraphs_removed"] = removed
-        logger.info(
-            f"[pipeline:filter_hindi] Removed ~{removed} Hindi paragraph(s). "
-            f"Filtered markdown: {len(filtered_markdown):,} chars."
-        )
-        if not filtered_markdown.strip():
-            logger.warning(
-                f"[pipeline:filter_hindi] All content was filtered for "
-                f"'{pdf_name}'. Falling back to raw markdown."
+    if not _large_pdf:
+        with _StepContext("filter_hindi", pdf_name, summary, critical=False):
+            filtered_markdown = filter_hindi(raw_markdown)
+            removed = _count_hindi_paragraphs(raw_markdown, filtered_markdown)
+            summary["hindi_paragraphs_removed"] = removed
+            logger.info(
+                f"[pipeline:filter_hindi] Removed ~{removed} Hindi paragraph(s). "
+                f"Filtered markdown: {len(filtered_markdown):,} chars."
             )
-            filtered_markdown = raw_markdown
+            if not filtered_markdown.strip():
+                logger.warning(
+                    f"[pipeline:filter_hindi] All content was filtered for "
+                    f"'{pdf_name}'. Falling back to raw markdown."
+                )
+                filtered_markdown = raw_markdown
 
-    if not filtered_markdown:
-        filtered_markdown = raw_markdown  # guard if step was suppressed
+        if not filtered_markdown:
+            filtered_markdown = raw_markdown  # guard if step was suppressed
+    else:
+        logger.info(
+            f"[pipeline:filter_hindi] SKIPPED for large PDF — will filter per-batch."
+        )
 
     # ─────────────────────────────────────────────────────────────────────────
     # STEP 4 — Split into 25-page batches (if > 50 pages)
@@ -277,16 +293,22 @@ def run_ingestion(pdf_path: str, output_dir: str) -> dict[str, Any]:
         # ─────────────────────────────────────────────────────────────────────
         # STEP 5 — Parse each batch PDF → markdown
         # Individual batch failures are recoverable; we skip the failed batch.
+        # For small PDFs (single batch), reuse filtered_markdown from Step 2/3.
+        # For large PDFs, parse each 25-page batch here — this avoids loading
+        # the entire PDF into Docling memory at once.
         # ─────────────────────────────────────────────────────────────────────
         if len(batch_pdf_paths) == 1 and batch_pdf_paths[0] == str(pdf_path_obj):
-            # Single-batch: reuse already-filtered markdown, skip re-parse
+            # Small PDF (<=50 pages): reuse already-filtered markdown, skip re-parse
             batch_markdowns = [filtered_markdown]
         else:
+            # Large PDF: parse each 25-page batch individually
+            _total_hindi_removed = 0
             for i, batch_path in enumerate(batch_pdf_paths, start=1):
                 batch_label = f"{pdf_name} — batch {i}/{len(batch_pdf_paths)}"
                 with _StepContext("parse_batch", batch_label, summary, critical=False):
                     batch_raw = parse_pdf_to_markdown(batch_path)
                     batch_filtered = filter_hindi(batch_raw)
+                    _total_hindi_removed += _count_hindi_paragraphs(batch_raw, batch_filtered)
                     if not batch_filtered.strip():
                         logger.warning(
                             f"[pipeline:parse_batch] Batch {i} is empty after "
@@ -294,6 +316,7 @@ def run_ingestion(pdf_path: str, output_dir: str) -> dict[str, Any]:
                         )
                     else:
                         batch_markdowns.append(batch_filtered)
+            summary["hindi_paragraphs_removed"] = _total_hindi_removed
 
         if not batch_markdowns:
             msg = f"All batches for '{pdf_name}' were empty after filtering."
@@ -373,6 +396,10 @@ def run_ingestion(pdf_path: str, output_dir: str) -> dict[str, Any]:
     metadata_path  = FINAL_TEXT_DIR / f"{pdf_stem}_metadata.json"
     structured_path = FINAL_TEXT_DIR / f"{pdf_stem}_structured.md"
     chunks_path    = FINAL_TEXT_DIR / f"{pdf_stem}_chunks.json"
+
+    # For large PDFs, Step 2 was skipped — reconstruct raw_markdown from batches
+    if _large_pdf and not raw_markdown and batch_markdowns:
+        raw_markdown = "\n\n".join(batch_markdowns)
 
     with _StepContext("save_raw_md", pdf_name, summary, critical=False):
         _save_text(raw_markdown, raw_path)

@@ -1,0 +1,151 @@
+{
+  "title": "Contract",
+  "total_sections": 11,
+  "sections": [
+    {
+      "id": "section_001",
+      "heading": "Contract",
+      "level": 1,
+      "heading_path": "Contract",
+      "parent_id": null,
+      "children": [
+        "section_002",
+        "section_003",
+        "section_004",
+        "section_005",
+        "section_006",
+        "section_007",
+        "section_008",
+        "section_009",
+        "section_010"
+      ],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_002",
+      "heading": "Organisation Details",
+      "level": 2,
+      "heading_path": "Contract > Organisation Details",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_003",
+      "heading": "Financial Approval Detail",
+      "level": 2,
+      "heading_path": "Contract > Financial Approval Detail",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_004",
+      "heading": "Seller Details",
+      "level": 2,
+      "heading_path": "Contract > Seller Details",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_005",
+      "heading": "Product Details",
+      "level": 2,
+      "heading_path": "Contract > Product Details",
+      "parent_id": "section_001",
+      "children": [
+        "section_011"
+      ],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_006",
+      "heading": "Consignee Detail",
+      "level": 2,
+      "heading_path": "Contract > Consignee Detail",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_007",
+      "heading": "Buyer Details",
+      "level": 2,
+      "heading_path": "Contract > Buyer Details",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_008",
+      "heading": "Paying Authority Details",
+      "level": 2,
+      "heading_path": "Contract > Paying Authority Details",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_009",
+      "heading": "ePBG Detail",
+      "level": 2,
+      "heading_path": "Contract > ePBG Detail",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_010",
+      "heading": "Terms and Conditions",
+      "level": 2,
+      "heading_path": "Contract > Terms and Conditions",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_011",
+      "heading": "Product Specification for GODREJ LOCKING SOLUTIONS & SYSTEMS Access Controlled Handle Door Lock Fingerprint + RFID card + Pin based Access Control",
+      "level": 3,
+      "heading_path": "Contract > Product Details > Product Specification for GODREJ LOCKING SOLUTIONS & SYSTEMS Access Controlled Handle Door Lock Fingerprint + RFID card + Pin based Access Control",
+      "parent_id": "section_005",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    }
+  ],
+  "source_file": "Contract - GEMC-9.pdf"
+}

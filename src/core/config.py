@@ -18,10 +18,10 @@ RAW_PARSED_DIR: Path   = BASE_DIR / "data" / "raw_parsed"
 FINAL_TEXT_DIR: Path   = BASE_DIR / "data" / "final_text"
 DB_PATH: Path          = BASE_DIR / "data" / "rag.db"
 
-# ── FAISS Index ───────────────────────────────────────────────────────────────
+# ── Index & Vector DB ────────────────────────────────────────────────────────
 INDEX_DIR: Path          = BASE_DIR / "index"
-FAISS_INDEX_PATH: Path   = INDEX_DIR / "sentences.index"
-SENTENCES_MAP_PATH: Path = INDEX_DIR / "sentences_map.json"
+QDRANT_URL: str          = os.environ.get("QDRANT_URL", "qdrant_storage").strip()
+QDRANT_COLLECTION: str   = os.environ.get("QDRANT_COLLECTION", "rag_sentences").strip()
 
 # ── Embedding Model ───────────────────────────────────────────────────────────
 EMBEDDING_MODEL_NAME: str = "qwen3-embedding:0.6b"

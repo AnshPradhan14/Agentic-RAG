@@ -1,5 +1,6 @@
 # ── PDF Parsing ──────────────────────────────────────────────────────────────
 docling>=2.5.0                  # Offline PDF → Markdown + JSON (MIT license)
+easyocr>=1.7.0                  # OCR engine for Docling to parse scanned PDFs
 
 # ── NLP & Tokenization ───────────────────────────────────────────────────────
 nltk>=3.8.1                     # sent_tokenize for Fix 2 & Fix 3
@@ -14,7 +15,8 @@ pypdf>=4.1.0                    # PDF splitting for batch processing
 # (Embeddings are now handled via Ollama API using Qwen3-Embedding-0.6B)
 
 # ── Vector Search ────────────────────────────────────────────────────────────
-faiss-cpu>=1.8.0                # IndexFlatIP + normalize_L2 (Fix 1) — CPU only
+qdrant-client>=1.9.0            # Qdrant vector database client
+faiss-cpu>=1.8.0                # Deprecated: Kept for backward compatibility during migration
 
 # ── Orchestration & Agent ────────────────────────────────────────────────────
 langchain>=0.3.0                # Core: @tool, AgentExecutor, message history

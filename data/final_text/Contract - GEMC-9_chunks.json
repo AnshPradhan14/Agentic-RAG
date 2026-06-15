@@ -1,0 +1,234 @@
+[
+  {
+    "chunk_id": "Contract - GEMC-9__section_001",
+    "source_file": "Contract - GEMC-9.pdf",
+    "page_range": [
+      0,
+      0
+    ],
+    "heading_path": "Contract",
+    "heading_path_list": [
+      "Contract"
+    ],
+    "section_level": 1,
+    "section_heading": "Contract",
+    "chunk_index": 0,
+    "content": "<!-- context: Contract -->\n\n# Contract\n\n## ePBG Detail\n- **ePBG Detail:** NA",
+    "content_length": 76,
+    "token_estimate": 17,
+    "has_table": false,
+    "parent_heading": null,
+    "child_headings": [
+      "Organisation Details",
+      "Financial Approval Detail",
+      "Seller Details",
+      "Product Details",
+      "Consignee Detail",
+      "Buyer Details",
+      "Paying Authority Details",
+      "ePBG Detail",
+      "Terms and Conditions"
+    ]
+  },
+  {
+    "chunk_id": "Contract - GEMC-9__section_002",
+    "source_file": "Contract - GEMC-9.pdf",
+    "page_range": [
+      0,
+      0
+    ],
+    "heading_path": "Contract > Organisation Details",
+    "heading_path_list": [
+      "Contract",
+      "Organisation Details"
+    ],
+    "section_level": 2,
+    "section_heading": "Organisation Details",
+    "chunk_index": 1,
+    "content": "<!-- context: Contract > Organisation Details -->\n\n## Organisation Details\n- **Type:** Central Autonomous\n- **Ministry:** PMO\n- **Department:** Department of Atomic Energy\n- **Organisation Name:** Institute for Plasma Research\n- **Office Zone:** West Zone",
+    "content_length": 255,
+    "token_estimate": 46,
+    "has_table": false,
+    "parent_heading": "Contract",
+    "child_headings": []
+  },
+  {
+    "chunk_id": "Contract - GEMC-9__section_003",
+    "source_file": "Contract - GEMC-9.pdf",
+    "page_range": [
+      0,
+      0
+    ],
+    "heading_path": "Contract > Financial Approval Detail",
+    "heading_path_list": [
+      "Contract",
+      "Financial Approval Detail"
+    ],
+    "section_level": 2,
+    "section_heading": "Financial Approval Detail",
+    "chunk_index": 2,
+    "content": "<!-- context: Contract > Financial Approval Detail -->\n\n## Financial Approval Detail\n- **IFD Concurrence:** No\n- **Designation of Administrative Approval:** Head PMMD\n- **Designation of Financial Approval:** Head Account Section",
+    "content_length": 228,
+    "token_estimate": 37,
+    "has_table": false,
+    "parent_heading": "Contract",
+    "child_headings": []
+  },
+  {
+    "chunk_id": "Contract - GEMC-9__section_004",
+    "source_file": "Contract - GEMC-9.pdf",
+    "page_range": [
+      0,
+      0
+    ],
+    "heading_path": "Contract > Seller Details",
+    "heading_path_list": [
+      "Contract",
+      "Seller Details"
+    ],
+    "section_level": 2,
+    "section_heading": "Seller Details",
+    "chunk_index": 3,
+    "content": "<!-- context: Contract > Seller Details -->\n\n## Seller Details\n- **GeM Seller ID:** EEEB190000714246\n- **Company Name:** SRILAYA TECHIES\n- **Contact No.:** 09944555573\n- **Email ID:** SRILAYA.TECHIES@GMAIL.COM\n- **Address:** OLD NO 23,NEW NO 45,,FIRST FLOOR,GCM TOWER,KRISHNARAYAR TANK STREET,MADURAI SOUTH, Madurai, TAMIL NADU-625001, -\n- **MSME Registration number:** UDYAM-TN-12-0012334\n- **GSTIN:** 33ATRPP4054H1ZF (R)\n- **MSE Social Category:** General\n- **MSE Gender:** Male\n- * GST/TAX GST / Tax invoice to be raised in the name of - Buyer\n- **Delivery Instructions:** URGENT 25-26/137",
+    "content_length": 592,
+    "token_estimate": 197,
+    "has_table": false,
+    "parent_heading": "Contract",
+    "child_headings": []
+  },
+  {
+    "chunk_id": "Contract - GEMC-9__section_005",
+    "source_file": "Contract - GEMC-9.pdf",
+    "page_range": [
+      0,
+      0
+    ],
+    "heading_path": "Contract > Product Details",
+    "heading_path_list": [
+      "Contract",
+      "Product Details"
+    ],
+    "section_level": 2,
+    "section_heading": "Product Details",
+    "chunk_index": 4,
+    "content": "<!-- context: Contract > Product Details -->\n\n## Product Details\n| S.No | Item Description | Ordered Quantity | Unit | Unit Price (INR) | Tax Bifurcation (INR) | Price (Inclusive of all Duties and Taxes in INR) |\n|---|---|---|---|---|---|---|\n| 1 | Product Name : GODREJ LOCKING SOLUTIONS & SYSTEMS Access Controlled Handle Door Lock Fingerprint + RFID card + Pin based Access Control Brand : GODREJ LOCKING SOLUTIONS & SYSTEMS Brand Type : Registered Brand Catalogue Status: OEM verified catalogueSelling As : OEM verified Reseller Category Name & Quadrant : Access Controlled Handle Door Lock (Q3) Model: GODREJ ADVANTIS REVOLUTION - 4967 HSN Code: 83014090 | 1 | pieces | 35,000 | NA | 35,000 |\n| **Total Order Value (in INR)** | 35,000 | | | | | |",
+    "content_length": 751,
+    "token_estimate": 208,
+    "has_table": true,
+    "parent_heading": "Contract",
+    "child_headings": [
+      "Product Specification for GODREJ LOCKING SOLUTIONS & SYSTEMS Access Controlled Handle Door Lock Fingerprint + RFID card + Pin based Access Control"
+    ]
+  },
+  {
+    "chunk_id": "Contract - GEMC-9__section_006",
+    "source_file": "Contract - GEMC-9.pdf",
+    "page_range": [
+      0,
+      0
+    ],
+    "heading_path": "Contract > Consignee Detail",
+    "heading_path_list": [
+      "Contract",
+      "Consignee Detail"
+    ],
+    "section_level": 2,
+    "section_heading": "Consignee Detail",
+    "chunk_index": 5,
+    "content": "<!-- context: Contract > Consignee Detail -->\n\n## Consignee Detail\n| S.No | Consignee | Item | Lot No. | Quantity | Delivery Start After | Delivery To Be Completed By |\n|---|---|---|---|---|---|---|\n| 1 | Designation : stores1Email ID : buyer17.ipr.gj@gembuyer.inContact : 079-23962000-2262 | GODREJ LOCKING SOLUTIONS & SYSTEMS Access Controlled Handle Door Lock | - | 1 | 30-May-2025 | 14-Jun-2025 |",
+    "content_length": 400,
+    "token_estimate": 117,
+    "has_table": true,
+    "parent_heading": "Contract",
+    "child_headings": []
+  },
+  {
+    "chunk_id": "Contract - GEMC-9__section_007",
+    "source_file": "Contract - GEMC-9.pdf",
+    "page_range": [
+      0,
+      0
+    ],
+    "heading_path": "Contract > Buyer Details",
+    "heading_path_list": [
+      "Contract",
+      "Buyer Details"
+    ],
+    "section_level": 2,
+    "section_heading": "Buyer Details",
+    "chunk_index": 6,
+    "content": "<!-- context: Contract > Buyer Details -->\n\n## Buyer Details\n- **Designation:** Gautambhai Suthar\n- **Contact No.:** 079-23962028-\n- **Email ID:** buyer5.ipr.gj@gembuyer.in\n- **GSTIN:** 24AAAAI0348C2ZC\n- **Address:** BHAT, NEAR INDIRA BRIDGE, GANDHINAGAR, GANDHINAGAR, GUJARAT-382428, India",
+    "content_length": 290,
+    "token_estimate": 100,
+    "has_table": false,
+    "parent_heading": "Contract",
+    "child_headings": []
+  },
+  {
+    "chunk_id": "Contract - GEMC-9__section_008",
+    "source_file": "Contract - GEMC-9.pdf",
+    "page_range": [
+      0,
+      0
+    ],
+    "heading_path": "Contract > Paying Authority Details",
+    "heading_path_list": [
+      "Contract",
+      "Paying Authority Details"
+    ],
+    "section_level": 2,
+    "section_heading": "Paying Authority Details",
+    "chunk_index": 7,
+    "content": "<!-- context: Contract > Paying Authority Details -->\n\n## Paying Authority Details\n- **Role:** PAO\n- **Payment Mode:** Offline\n- **Designation:** Accounts Officer - I\n- **Email ID:** pao1.ipr.gadj@gembuyer.in\n- **GSTIN:** N\n- **Address:** BHAT, NEAR INDIRA BRIDGE, GANDHINAGAR, GANDHINAGAR, GUJARAT-382428, India",
+    "content_length": 312,
+    "token_estimate": 93,
+    "has_table": false,
+    "parent_heading": "Contract",
+    "child_headings": []
+  },
+  {
+    "chunk_id": "Contract - GEMC-9__section_010",
+    "source_file": "Contract - GEMC-9.pdf",
+    "page_range": [
+      0,
+      0
+    ],
+    "heading_path": "Contract > Terms and Conditions",
+    "heading_path_list": [
+      "Contract",
+      "Terms and Conditions"
+    ],
+    "section_level": 2,
+    "section_heading": "Terms and Conditions",
+    "chunk_index": 8,
+    "content": "<!-- context: Contract > Terms and Conditions -->\n\n## Terms and Conditions\n\n1. General Terms and Conditions-\n2. 1.1 This contract is governed by the General Terms and Conditions, conditions stipulated to this Product/Service as provided in the Marketplace.\n3. 1.2 This Contract between the Seller and the Buyer, is for the supply of the Goods and/ or Services, detailed in the schedule above, in accordance with the General Terms and Conditions (GTC) unless otherwise superseded by Goods / Services specific Special Terms and Conditions (STC) and/ or BID/Reverse Auction Additional Terms and Conditions (ATC), as applicable\n4. 1.3 All GeM Sellers / Service Providers are mandated to ensure compliance with all the applicable laws / acts / rules including but not limited to all Labour Laws such as The Minimum Wages Act, 1948, The Payment of Wages Act, 1936, The Payment of Bonus Act, 1965, The Equal Remuneration Act, 1976, The Payment of Gratuity Act, 1972 etc. Any non-compliance will be treated as breach of contract and Buyer may take suitable actions as per GeM Contract.\n\n: /\n\nNote: This is system generated file. No signature is required. Print out of this document is not valid for payment/ transaction purpose.",
+    "content_length": 1220,
+    "token_estimate": 267,
+    "has_table": false,
+    "parent_heading": "Contract",
+    "child_headings": []
+  },
+  {
+    "chunk_id": "Contract - GEMC-9__section_011",
+    "source_file": "Contract - GEMC-9.pdf",
+    "page_range": [
+      0,
+      0
+    ],
+    "heading_path": "Contract > Product Details > Product Specification for GODREJ LOCKING SOLUTIONS & SYSTEMS Access Controlled Handle Door Lock Fingerprint + RFID card + Pin based Access Control",
+    "heading_path_list": [
+      "Contract",
+      "Product Details",
+      "Product Specification for GODREJ LOCKING SOLUTIONS & SYSTEMS Access Controlled Handle Door Lock Fingerprint + RFID card + Pin based Access Control"
+    ],
+    "section_level": 3,
+    "section_heading": "Product Specification for GODREJ LOCKING SOLUTIONS & SYSTEMS Access Controlled Handle Door Lock Fingerprint + RFID card + Pin based Access Control",
+    "chunk_index": 9,
+    "content": "<!-- context: Contract > Product Details > Product Specification for GODREJ LOCKING SOLUTIONS & SYSTEMS Access Controlled Handle Door Lock Fingerprint + RFID card + Pin based Access Control -->\n\n### Product Specification for GODREJ LOCKING SOLUTIONS & SYSTEMS Access Controlled Handle Door Lock Fingerprint + RFID card + Pin based Access Control\n| Specification | Sub-Spec | Value |\n|---|---|---|\n| GENERIC | Usage / Application for Door security locking with authorised in out control | Yes |\n| | Should be Ideal for Wooden door - Glass door - Metal door - Steel door | Yes |\n| | Door Handle should be Backset adjustable single latch design/Reversible type | Yes |\n| | Lock type | Multipoint Locking system |\n| | Access Control Hardware Architecture (Device with) | In built Controller |\n| | Access control software Architecture | Stand Alone |\n| | Types of Access Control Credentials / Device | Fingerprint + RFID card + Pin based Access Control |\n| | Finger Sensor Design | Passive capacitance and active capacitance |\n| | RFID sensing Design | Electromagnetic sensor |\n| | Type of RFID card supported | Mifare |\n| | Screen type | Touch |\n| | Optical/RFID sensing area | 1 inch X 1 inch |\n| | Optical sensor Resolution±1% | 500 DPI |\n| | Fingerprint Identification time | <1 second |\n| | Fingerprint gathering time | <2 second |\n| | Fingerprint templates remain intact after power failure | Yes |\n| | Authentication speed (FAR - False acceptance rate) | 0.1% |\n| | Authentication speed (FRR - False rejection rate) | 0.0001% |\n| | Total Rotational angle | 360 degree |\n| | Automatic Template Distribution of Biometric Templates on Assigned Devices to User | Yes |\n| | Operating temperature | 0 degree centigrade to 45 degree centigrade |\n| | Operating Environment | Humidity RH 48 %to 80% |\n| | Fingerprint memory/storage capacity | Support upto 99 fingerprint |\n| | Number of digits for input password/pin code | Capable of 12 digit input pin code |\n| | Facility of RFID card registration | Upto 100 RFID cards |\n| | Auto locking Facility | Yes |\n| | Remote facility | Yes - can be operated within defined distances |\n| | Provision of Super administrator and administrator - who can enroll and delete | Yes |\n| | Provision of flexible user pin | Yes |\n| | Working power/Power input | 4 x 1.5V AAA alkaline cell |\n| | Dynamic state power consumed | 200 milliAmpère |\n| | Static state power consumed | 8 microAmpère |\n| | Dead bolt error alarm | Yes |\n| | Fire sensor | Yes |\n| | Alarm provision - when door is not closed properly | Yes |\n| | Tamper detection (Security alarm - when the invalid operation is made frequently by other than user) | Yes |\n| | Low Battery warning | voltage <4.8 volt |\n| | Customized Report Generation Facility | No |\n| | Back up unlock mechanism | Yes |\n| | Installation and Commissioning is included in the scope of supply | Yes |\n| | Body material | ABS plastic (Acrylonitrile Butadiene Styrene) |\n| MATERIAL | Thickness of body material | 2mm |\n| | Suitable for Door thickness | 60 millimeter |\n| | Front panel material | Zinc alloy |\n| DIMENSION | Back set length/Case size | 57 mm/76mm |\n| FINISH | Finish type | Matt finish |\n| FINISH | Front panel colors | Black |\n| WARRANTY | Warranty | 1 |\n| WARRANTY | Warranty in years for Battery life | 1 |\n| CERTIFICATION | BIS registration under CRS of Meity | No |\n| CERTIFICATION | RoHS compliance certification | No |\n| CERTIFICATION | Type Test Certificate Covering (TCC) all parameters and environmental tests from STQC certified lab | No |\n| CERTIFICATION | Test reports to be furnished to buyer on demand, if claimed to be available | No |",
+    "content_length": 3627,
+    "token_estimate": 851,
+    "has_table": true,
+    "parent_heading": "Product Details",
+    "child_headings": []
+  }
+]

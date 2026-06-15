@@ -78,6 +78,7 @@ Your goal is to answer questions accurately using ONLY retrieved document eviden
 * Stop searching as soon as sufficient evidence is gathered.
 * Do not retrieve redundant information.
 * Do not read chunks unnecessarily.
+* CRITICAL: If all of your recent searches are returning 0 results, STOP searching immediately and write your final answer using whatever evidence you have. Do not attempt more than 3 consecutive empty searches.
 
 ### Output Format
 
@@ -457,6 +458,11 @@ def run_agent(
 
     logger.info("=== Agent loop started: query='%s' ===", query)
 
+    consecutive_empty = 0
+    MAX_CONSECUTIVE_EMPTY = 3
+    retrieved_chunk_ids = set()
+    SUFFICIENT_CHUNKS = 5
+
     for iteration in range(max_iterations):
         logger.debug("Iteration %d/%d — invoking LLM ...", iteration + 1, max_iterations)
 
@@ -481,12 +487,25 @@ def run_agent(
                     tool_result = _TOOL_MAP[tool_name].invoke(tool_args)
                     tool_result_str = str(tool_result)
 
+                    # Update trackers
+                    if isinstance(tool_result, list) and len(tool_result) == 0:
+                        consecutive_empty += 1
+                    elif "No structured match found" in tool_result_str:
+                        consecutive_empty += 1
+                    else:
+                        consecutive_empty = 0
+                        if isinstance(tool_result, list):
+                            for item in tool_result:
+                                if isinstance(item, dict) and "chunk_id" in item:
+                                    retrieved_chunk_ids.add(item["chunk_id"])
+
                     # Increased truncation limit to allow for more context in multi-hop reasoning
                     if len(tool_result_str) > 8000:
                         tool_result_str = tool_result_str[:8000] + "\n... [CONTENT TRUNCATED TO SAVE TOKENS. NOT ALL DATA SHOWN.] ..."
                 except Exception as exc:  # noqa: BLE001
                     tool_result_str = f"Tool '{tool_name}' raised an error: {exc}"
                     logger.error("Tool '%s' error: %s", tool_name, exc)
+                    consecutive_empty += 1
             else:
                 tool_result_str = f"Unknown tool: {tool_name!r}"
                 logger.warning("Unknown tool requested by LLM: %s", tool_name)
@@ -500,6 +519,14 @@ def run_agent(
                 }
             )
             logger.debug("Tool '%s' result appended to messages.", tool_name)
+
+        if consecutive_empty >= MAX_CONSECUTIVE_EMPTY:
+            logger.warning("Agent hit %d consecutive empty results. Bailing out early.", consecutive_empty)
+            break
+            
+        if len(retrieved_chunk_ids) >= SUFFICIENT_CHUNKS:
+            logger.info("Agent has retrieved %d chunks (>=%d limit). Wrapping up.", len(retrieved_chunk_ids), SUFFICIENT_CHUNKS)
+            break
 
     logger.warning("max_iterations=%d reached without final answer. Requesting wrap-up.", max_iterations)
 
@@ -525,8 +552,7 @@ def run_agent(
     })
 
     wrap_up = _unified_chat(
-        messages=messages,
-        stream=False
+        messages=messages
     )
     return wrap_up.get("content", "")
 
@@ -567,6 +593,11 @@ def run_agent_stream(
 
     yield {"type": "status", "message": "Understanding query"}
 
+    consecutive_empty = 0
+    MAX_CONSECUTIVE_EMPTY = 3
+    retrieved_chunk_ids = set()
+    SUFFICIENT_CHUNKS = 5
+
     # ── Phase 1: Tool-calling loop ──────────
     for iteration in range(max_iterations):
         logger.debug("Stream iteration %d/%d", iteration + 1, max_iterations)
@@ -589,6 +620,9 @@ def run_agent_stream(
             logger.info("Streaming agent: final answer received (len=%d).", len(content))
             yield {"type": "status", "message": "Generating answer"}
             yield {"type": "convert_to_answer", "content": content}
+            
+            from src.tools.rag_tools import C_read
+            yield {"type": "sources", "content": list(C_read)}
             return
 
         # ── Execute tool calls ────────────────────────────────────────────────
@@ -605,6 +639,17 @@ def run_agent_stream(
                     tool_result = _TOOL_MAP[tool_name].invoke(tool_args)
                     tool_result_str = str(tool_result)
                     
+                    if isinstance(tool_result, list) and len(tool_result) == 0:
+                        consecutive_empty += 1
+                    elif "No structured match found" in tool_result_str:
+                        consecutive_empty += 1
+                    else:
+                        consecutive_empty = 0
+                        if isinstance(tool_result, list):
+                            for item in tool_result:
+                                if isinstance(item, dict) and "chunk_id" in item:
+                                    retrieved_chunk_ids.add(item["chunk_id"])
+
                     if isinstance(tool_result, list):
                         snippet = f"Returned {len(tool_result)} items. " + tool_result_str[:250].replace('\n', ' ')
                     else:
@@ -619,6 +664,7 @@ def run_agent_stream(
                 except Exception as exc:
                     tool_result_str = f"Tool '{tool_name}' raised an error: {exc}"
                     yield {"type": "tool_result", "tool_name": tool_name, "args": tool_args, "result": f"Error: {exc}"}
+                    consecutive_empty += 1
             else:
                 tool_result_str = f"Unknown tool: {tool_name!r}"
 
@@ -630,6 +676,14 @@ def run_agent_stream(
             })
 
         yield {"type": "status", "message": "Processing results"}
+
+        if consecutive_empty >= MAX_CONSECUTIVE_EMPTY:
+            logger.warning("[Stream] Agent hit %d consecutive empty results. Bailing out early.", consecutive_empty)
+            break
+            
+        if len(retrieved_chunk_ids) >= SUFFICIENT_CHUNKS:
+            logger.info("[Stream] Agent has retrieved %d chunks (>=%d limit). Wrapping up.", len(retrieved_chunk_ids), SUFFICIENT_CHUNKS)
+            break
 
     # ── Phase 2: Max iterations reached — force wrap-up with streaming ─────────
     logger.warning("[Stream] max_iterations=%d reached. Requesting streamed wrap-up.", max_iterations)
@@ -657,4 +711,7 @@ def run_agent_stream(
     for token_text in _unified_chat_stream(messages=messages):
         if token_text:
             yield {"type": "answer", "content": token_text}
+            
+    from src.tools.rag_tools import C_read
+    yield {"type": "sources", "content": list(C_read)}
 
