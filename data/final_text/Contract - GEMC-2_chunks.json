@@ -1,0 +1,260 @@
+[
+  {
+    "chunk_id": "Contract - GEMC-2__section_001",
+    "source_file": "Contract - GEMC-2.pdf",
+    "page_range": [
+      0,
+      0
+    ],
+    "heading_path": "Contract",
+    "heading_path_list": [
+      "Contract"
+    ],
+    "section_level": 1,
+    "section_heading": "Contract",
+    "chunk_index": 0,
+    "content": "<!-- context: Contract -->\n\n# Contract\n- **Contract No:** GEMC-511687718838398\n- **Generated Date:** 13-Mar-2025\n\n## Terms and Conditions",
+    "content_length": 137,
+    "token_estimate": 34,
+    "has_table": false,
+    "parent_heading": null,
+    "child_headings": [
+      "Organisation Details",
+      "Financial Approval Detail",
+      "Buyer Details",
+      "Paying Authority Details",
+      "Seller Details",
+      "Product Details",
+      "Consignee Detail",
+      "Terms and Conditions"
+    ]
+  },
+  {
+    "chunk_id": "Contract - GEMC-2__section_002",
+    "source_file": "Contract - GEMC-2.pdf",
+    "page_range": [
+      0,
+      0
+    ],
+    "heading_path": "Contract > Organisation Details",
+    "heading_path_list": [
+      "Contract",
+      "Organisation Details"
+    ],
+    "section_level": 2,
+    "section_heading": "Organisation Details",
+    "chunk_index": 1,
+    "content": "<!-- context: Contract > Organisation Details -->\n\n## Organisation Details\n- **Type:** Central Autonomous\n- **Ministry:** PMO\n- **Department:** Department of Atomic Energy\n- **Organisation Name:** Institute for Plasma Research\n- **Office Zone:** West Zone",
+    "content_length": 255,
+    "token_estimate": 46,
+    "has_table": false,
+    "parent_heading": "Contract",
+    "child_headings": []
+  },
+  {
+    "chunk_id": "Contract - GEMC-2__section_003",
+    "source_file": "Contract - GEMC-2.pdf",
+    "page_range": [
+      0,
+      0
+    ],
+    "heading_path": "Contract > Financial Approval Detail",
+    "heading_path_list": [
+      "Contract",
+      "Financial Approval Detail"
+    ],
+    "section_level": 2,
+    "section_heading": "Financial Approval Detail",
+    "chunk_index": 2,
+    "content": "<!-- context: Contract > Financial Approval Detail -->\n\n## Financial Approval Detail\n- **IFD Concurrence:** No\n- **Designation of Administrative Approval:** Head PMMD\n- **Designation of Financial Approval:** Head-Accounts Section",
+    "content_length": 229,
+    "token_estimate": 39,
+    "has_table": false,
+    "parent_heading": "Contract",
+    "child_headings": []
+  },
+  {
+    "chunk_id": "Contract - GEMC-2__section_004",
+    "source_file": "Contract - GEMC-2.pdf",
+    "page_range": [
+      0,
+      0
+    ],
+    "heading_path": "Contract > Buyer Details",
+    "heading_path_list": [
+      "Contract",
+      "Buyer Details"
+    ],
+    "section_level": 2,
+    "section_heading": "Buyer Details",
+    "chunk_index": 3,
+    "content": "<!-- context: Contract > Buyer Details -->\n\n## Buyer Details\n- **Designation:** Gautambhai Suthar\n- **Contact No.:** 079-23962028-\n- **Email ID:** buyer5.ipr.gj@gembuyer.in\n- **GSTIN:** 24AAAAI0348C2ZC\n- **Address:** BHAT, NEAR INDIRA BRIDGE, GANDHINAGAR, GANDHINAGAR, GUJARAT-382428, India",
+    "content_length": 290,
+    "token_estimate": 100,
+    "has_table": false,
+    "parent_heading": "Contract",
+    "child_headings": []
+  },
+  {
+    "chunk_id": "Contract - GEMC-2__section_005",
+    "source_file": "Contract - GEMC-2.pdf",
+    "page_range": [
+      0,
+      0
+    ],
+    "heading_path": "Contract > Paying Authority Details",
+    "heading_path_list": [
+      "Contract",
+      "Paying Authority Details"
+    ],
+    "section_level": 2,
+    "section_heading": "Paying Authority Details",
+    "chunk_index": 4,
+    "content": "<!-- context: Contract > Paying Authority Details -->\n\n## Paying Authority Details\n- **Role:** PAO\n- **Payment Mode:** Offline\n- **Designation:** Accounts Officer - I\n- **Email ID:** pao1.ipr.gadj@gembuyer.in\n- **GSTIN:** N\n- **Address:** BHAT, NEAR INDIRA BRIDGE, GANDHINAGAR, GANDHINAGAR, GUJARAT-382428, India",
+    "content_length": 312,
+    "token_estimate": 93,
+    "has_table": false,
+    "parent_heading": "Contract",
+    "child_headings": []
+  },
+  {
+    "chunk_id": "Contract - GEMC-2__section_006",
+    "source_file": "Contract - GEMC-2.pdf",
+    "page_range": [
+      0,
+      0
+    ],
+    "heading_path": "Contract > Seller Details",
+    "heading_path_list": [
+      "Contract",
+      "Seller Details"
+    ],
+    "section_level": 2,
+    "section_heading": "Seller Details",
+    "chunk_index": 5,
+    "content": "<!-- context: Contract > Seller Details -->\n\n## Seller Details\n- **GeM Seller ID:** GE2O240012621373\n- **Company Name:** ACHIEVERS SPECTRUM PRIVATE LIMITED\n- **Contact No.:** 09818592257\n- **Email ID:** SALES@ACHIEVERSSPECTRUM.COM\n- **Address:** FIRST, FLOOR, KH.NO.298/35,,GHITORNI NEAR BALMIKI MANDIR,GHITORNI NEAR BALMIKI MANDIR,South West Delhi, South West delhi, DELHI-110045, -\n- **MSME Registration number:** UDYAM-DL-08-0088839\n- **GSTIN:** 07AAUCA3254F1ZK (R)\n- **MSE Social Category:** General\n- **MSE Gender:** Female\n* GST/TAX GST / Tax invoice to be raised in the name of - Buyer\n- **Delivery Instructions:** URGENT 24-25/1341",
+    "content_length": 639,
+    "token_estimate": 208,
+    "has_table": false,
+    "parent_heading": "Contract",
+    "child_headings": []
+  },
+  {
+    "chunk_id": "Contract - GEMC-2__section_007",
+    "source_file": "Contract - GEMC-2.pdf",
+    "page_range": [
+      0,
+      0
+    ],
+    "heading_path": "Contract > Product Details",
+    "heading_path_list": [
+      "Contract",
+      "Product Details"
+    ],
+    "section_level": 2,
+    "section_heading": "Product Details",
+    "chunk_index": 6,
+    "content": "<!-- context: Contract > Product Details -->\n\n## Product Details\n| # | Item Description | Ordered Quantity | Unit | Unit Price (INR) | Tax Bifurcation (INR) | Price (Inclusive of all Duties and Taxes in INR) |\n|---|---|---|---|---|---|---|\n| 1 | Product Name : hp 1024 GB Storage Laptop - Notebook Brand : hp Brand Type : Registered Brand Catalogue Status: OEM verified catalogueSelling As : OEM verified Reseller Category Name & Quadrant : High End Laptop - Notebook (Q2)Model: HP 240 G10 i7 1355U Win11h 1611 14\"HSN Code: HSN not specified by seller | 4 | pieces | 67,992 | NA | 271,968 |\n| **Total Order Value (in INR)** | 271,968 | | | | | |",
+    "content_length": 645,
+    "token_estimate": 191,
+    "has_table": true,
+    "parent_heading": "Contract",
+    "child_headings": []
+  },
+  {
+    "chunk_id": "Contract - GEMC-2__section_008",
+    "source_file": "Contract - GEMC-2.pdf",
+    "page_range": [
+      0,
+      0
+    ],
+    "heading_path": "Contract > Consignee Detail",
+    "heading_path_list": [
+      "Contract",
+      "Consignee Detail"
+    ],
+    "section_level": 2,
+    "section_heading": "Consignee Detail",
+    "chunk_index": 7,
+    "content": "<!-- context: Contract > Consignee Detail -->\n\n## Consignee Detail\n| S.No | Consignee | Item | Lot No. | Quantity | Delivery Start After | Delivery To Be Completed By |\n|---|---|---|---|---|---|---|\n| 1 | Designation : stores1 Email ID : buyer17.ipr.gj@gembuyer.in Contact : 079-23962000-2262 GSTIN : 24AAAAI0348C2ZC Address : BHAT, NEAR INDIRA BRIDGE, GANDHINAGAR, | hp 1024 GB Storage Laptop - Notebook | - | 4 | 13-Mar-2025 | 28-Mar-2025 |\n\n| Specification | Sub-Spec | Value |\n|---|---|---|\n| Construction | Description of Stores | Laptop with on site 1 year OEM warranty, BIOS Password, 1- inbuilt RJ45 Gigabit Ethernet Port (1-RJ 45 adapter in case not inbuilt), minimum 2 number of USB Type A 3.0 Ports (1- Type C to Type A compatible adapter in case only 1 USB Type A 3.0 port is provided, minimum 1 Type C USB 3.0 Port, 1- HDMI Port, Wi-Fi 5 (802.11ac) or higher, Bluetooth 5.0 or higher, DC Adapter Jack, Built-in Stereo Speakers with high definition audio support, built-in microphone, Keyboard with touchpad, Minimum Li-ion battery Capacity -36 Watt Hour with minimum 8 hour battery backup and integrated webcam |\n| Construction | Chassis Material | ABS Plastic |\n| Processor | Base Processor Number | For Higher Processor |\n| Processor | Base Processor Number Supplied | For Higher Processor |\n| Processor | Higher Processor Number | Intel Core i7-1355U |\n| Processor | Chipset | Compatible Chipset as per Processor Make |\n| Motherboard | Security | Discrete TPM 2.0 |\n| Operating System | Operating System (Factory Pre-Loaded) | Window 11 Home |\n| Operating System | Recovery Image Media | On Line/Cloud |\n| Operating System | Agreed to provide OEM Website URL Link for product verification to the buyer at the time of bidding or on demand | Yes, agreed |\n| Memory | Type of RAM | DDR4 |\n| Memory | RAM Size (GB) | 16 |\n| Memory | Total Numbers of DIMM Slots Available | 2 |\n| Memory | Number of DIMM Slots Populated | 1 |\n| Memory | RAM Expandability up to | 32 |\n| Display | Display Size (in cm) - Diagonal | 35.56 to 38.07 (14 In to 14.99 In) |\n| Display | Display Technology | LED |\n| Display | Minimum Display Resolution (Pixels) | FHD- 1920x1080 |\n| Display | Minimum Resolution of Webcam | HD-720p |\n| Storage | Type of Storage Drive | NVMe - SSD |\n| Storage | Capacity of Storage Drive (in GB) | 1024 |\n| DIMENSION | Weight (in gram) | 1300 to 1599 |\n| ENVIRONMENTAL | Minimum Operating Temperature (in degree Celsius) | 0 |\n| ENVIRONMENTAL | Maximum Operating Temperature (in degree Celsius) | 35 |\n| ENVIRONMENTAL | Operating Humidity (in Percentage) | 10 to 90 |\n| | BIS CRS Compliance | Yes, as per IS 13252 (Part 1) |\n| | ROHS Compliance | Yes |\n| | Certification for Environmental Management System with manufacturer | Yes. As per IS/ISO:14001 |\n| | Compliance of Information Security, Cybersecurity and Privacy Protection-Information | Yes. Complies as per IS/ISO/IEC 27001 |\n\n| Certification | Security Management Systems Requirements | |\n|---|---|---|\n| | EPR Registration in respect of the manufacturer as per E waste rules as amended up to date | Yes |\n| | Agreed to Provide a copy of EPR Registration Certificate to Buyer on Demand | Yes |\n| BIS license of the product: 61001830 | | |\n| ePBG Detail | | |\n| NA | | |",
+    "content_length": 3249,
+    "token_estimate": 873,
+    "has_table": true,
+    "parent_heading": "Contract",
+    "child_headings": []
+  },
+  {
+    "chunk_id": "Contract - GEMC-2__section_010",
+    "source_file": "Contract - GEMC-2.pdf",
+    "page_range": [
+      0,
+      0
+    ],
+    "heading_path": "Contract > Terms and Conditions > 1. Special terms and conditions- Version:3 effective from 31-01-2025",
+    "heading_path_list": [
+      "Contract",
+      "Terms and Conditions",
+      "1. Special terms and conditions- Version:3 effective from 31-01-2025"
+    ],
+    "section_level": 3,
+    "section_heading": "1. Special terms and conditions- Version:3 effective from 31-01-2025",
+    "chunk_index": 8,
+    "content": "<!-- context: Contract > Terms and Conditions > 1. Special terms and conditions- Version:3 effective from 31-01-2025 -->\n\n### 1. Special terms and conditions- Version:3 effective from 31-01-2025",
+    "content_length": 194,
+    "token_estimate": 21,
+    "has_table": false,
+    "parent_heading": "Terms and Conditions",
+    "child_headings": [
+      "1.1 For Buyers",
+      "For Sellers"
+    ]
+  },
+  {
+    "chunk_id": "Contract - GEMC-2__section_011",
+    "source_file": "Contract - GEMC-2.pdf",
+    "page_range": [
+      0,
+      0
+    ],
+    "heading_path": "Contract > Terms and Conditions > 1. Special terms and conditions- Version:3 effective from 31-01-2025 > 1.1 For Buyers",
+    "heading_path_list": [
+      "Contract",
+      "Terms and Conditions",
+      "1. Special terms and conditions- Version:3 effective from 31-01-2025",
+      "1.1 For Buyers"
+    ],
+    "section_level": 4,
+    "section_heading": "1.1 For Buyers",
+    "chunk_index": 9,
+    "content": "<!-- context: Contract > Terms and Conditions > 1. Special terms and conditions- Version:3 effective from 31-01-2025 > 1.1 For Buyers -->\n\n#### 1.1 For Buyers\n- **Product Verification:** A unique device serial number shall be provided by the seller at the time of supply, which is mentioned on the product. The buyer/consignee shall be able to verify the complete product details, including configuration, through the OEM website. The buyer/consignee should be able to perform these verifications without needing to create an account on the OEM website.\n- **Operating System:** 1. There is no requirement that the OEM of the Laptop - Notebook should be a device partner of Microsoft and holding a Microsoft Authorization Form (MAF) from the software provider. 2. Microsoft OS may be sourced directly from Microsoft by OEMs holding device partner status, and those not holding device partner status may source from authorized distributors, i.e., Ingram/Reddington and their authorized channel partners. 3. Buyers may ensure that MAF shall not be made a mandatory requirement in bids. 4. If supplies are made as per brands of OEMs who are global device partners, then the serial number of the machine supplied can be used to check the details of the product from the website of the OEM. 5. In the case of local device partners of Microsoft, OS details such as the digital key number should be produced with supplies, and the buyer may verify them from Microsoft. 6. In case of other OEMs who are sourcing from authorized distributors of Microsoft, Reddington, or Ingram, a copy of the invoice which contains the relevant serial number of Windows OS shall be submitted with supplies, and the buyer/consignee can verify the same from the OS server website or by telephone, or both. 7. In respect of verification of OS, the consignee shall take necessary steps at the time of acceptance. For device partner machines, buyers can check the Laptop OEM website to verify the OS by entering the PC's serial number and part code number. For entities that are not device partners and source OS from distributors' networks, they may verify the serial number through the Microsoft website or by telephone, or both. 8. In case the product offered is with a DOS or Linux operating system, such verification of OS shall not be applicable. 9. Buyer shall request for Windows Hardware Compatibility Certificate for window operating system to ensure the supply hardware is\n- **Storage Retention:** Buyer may add their requirement of retention of securely store all Hard Disk Drives (HDDs) or Solid-State Drives (SSDs) used in the Laptop- Notebook under ATC clause.\n- **Requirement of OEM logo:** Buyers are advised to note that incorporating a condition stipulating an OEM logo on the motherboard is restrictive and may not be incorporated into the bids.\n- **Processors:** Intel and AMD Processors are added as per Model Technical Specification of Laptop - Notebook issued by Ministry of Electronics and Information Technology (MeitY-IPHW Division) W-43/4/2020 dated 19 Aug 2024\n- **Warranty:** 1. The buyer may ensure that as soon as supplies are received, a request for a warranty certificate is made, along with logging into the OEM website/call center to verify the certificate. 2. The product in GeM marketplace (Direct Purchase & L1 purchase) comes with a minimum standard on site warranty of one year. In case the seller has standard warranty more than one year, the same may be mentioned in the catalogue (including in the model name) and in such case higher warranty offered shall prevail/supersede the minimum one year warranty.\n- **OMrelated to MII, Local content and MeitY advice on Model technical specifications:** Buyers are requested to refer to various OMs pertaining to DPIIT and MeitY, as issued from time to time, while making procurement and follow relevant provisions as applicable.\n- **Check points during Acceptance of Supplies:** Before generating the Consignee Receipt and Acceptance Certificate (CRAC), the consignee may inspect the system condition and verify that it complies with the agreed specifications and configurations. In the case of a large number of units to be procured, then the buyer may opt for bidding and accordingly stipulate conditions regarding installation, inspection by consignees/inspection agency. Consignees who receive the supplies should be vigilant and should complete checking to ensure that there is no scope for the supply of refurbished products. At the time of receiving supplies, the consignee may adhere to the following to ensure that any discrepancies in supplies can be flagged, taken into account, and reflected while generating the CRAC:\n- i. Packing should be checked properly\n- ii. A warranty certificate from the OEM should be insisted upon and checked.\n- iii. Instruction manuals and the OS installed should be checked.\n- iv. The machine serial number should also be checked through settings and can be verified from the OEM website. The above points are for guidance, and the buyer/consignee may take steps considered suitable by them for checking at the consignee end before acceptance of systems.\n- v. An escalation matrix for customer grievance redressal shall be insisted upon by the buyer from the seller at the time of delivery.\n- **Battery Backup:** Buyer may check/validate battery backup time with appropriate benchmark.",
+    "content_length": 5383,
+    "token_estimate": 1079,
+    "has_table": false,
+    "parent_heading": "1. Special terms and conditions- Version:3 effective from 31-01-2025",
+    "child_headings": []
+  },
+  {
+    "chunk_id": "Contract - GEMC-2__section_012",
+    "source_file": "Contract - GEMC-2.pdf",
+    "page_range": [
+      0,
+      0
+    ],
+    "heading_path": "Contract > Terms and Conditions > 1. Special terms and conditions- Version:3 effective from 31-01-2025 > For Sellers",
+    "heading_path_list": [
+      "Contract",
+      "Terms and Conditions",
+      "1. Special terms and conditions- Version:3 effective from 31-01-2025",
+      "For Sellers"
+    ],
+    "section_level": 4,
+    "section_heading": "For Sellers",
+    "chunk_index": 10,
+    "content": "<!-- context: Contract > Terms and Conditions > 1. Special terms and conditions- Version:3 effective from 31-01-2025 > For Sellers -->\n\n#### For Sellers\n- **OEM Website Link/Part No for product verification:** The OEM shall share the OEM website link with the buyer at the time of delivery. The offered model details/configuration should be available on their website. A unique device serial number shall also be provided at the time of supply, which is also mentioned on the product. The buyer/consignee shall be able to verify the complete product details, including configuration, through the shared OEM website link.\n- **Changing or altering the configuration:** Seller must refrain from changing or altering the configuration of the factory pre-loaded machine. The machine should be delivered to the Consignee in its original, factory-approved configuration.\n- **Warranty:** The seller shall furnish a valid warranty Certificate/Tag from the OEM to the purchaser, guaranteeing the product's coverage under the specified warranty terms. The warranty certificate should be verifiable through the OEM website/customer care center.\n- **Compliance of extended producer's responsibility:** With effect from 1.4.23, as per the E-waste rules 2022, EPR registration is mandatory for manufacturing entities. Therefore, all OEMs shall hold valid EPR registration, and the registration number should be reflected in the catalog parameter. OEMs shall ensure compliance with all responsibilities as per EPR registration applicable from time to time.\n- **Mandatory / Statutory requirements as applicable:** OEMs shall have to ensure compliance with the mandatory/statutory requirements as per the Government of India Notifications issued from time to time for hardware and software components, as applicable.\n- **Operating System:** It shall be the responsibility of OEMs to ensure that supplies are made with genuine operating systems.\n\nNote: This is system generated file. No signature is required. Print out of this document is not valid for payment/ transaction purpose.",
+    "content_length": 2064,
+    "token_estimate": 365,
+    "has_table": false,
+    "parent_heading": "1. Special terms and conditions- Version:3 effective from 31-01-2025",
+    "child_headings": []
+  }
+]

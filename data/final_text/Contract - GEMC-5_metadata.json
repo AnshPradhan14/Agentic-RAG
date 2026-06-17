@@ -1,0 +1,189 @@
+{
+  "title": "Contract",
+  "total_sections": 14,
+  "sections": [
+    {
+      "id": "section_001",
+      "heading": "Contract",
+      "level": 1,
+      "heading_path": "Contract",
+      "parent_id": null,
+      "children": [
+        "section_002",
+        "section_003",
+        "section_004",
+        "section_005",
+        "section_006",
+        "section_007",
+        "section_008",
+        "section_009",
+        "section_010",
+        "section_011",
+        "section_012",
+        "section_013",
+        "section_014"
+      ],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_002",
+      "heading": "Organisation Details",
+      "level": 2,
+      "heading_path": "Contract > Organisation Details",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_003",
+      "heading": "Financial Approval Detail",
+      "level": 2,
+      "heading_path": "Contract > Financial Approval Detail",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_004",
+      "heading": "Seller Details",
+      "level": 2,
+      "heading_path": "Contract > Seller Details",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_005",
+      "heading": "GST/Tax",
+      "level": 2,
+      "heading_path": "Contract > GST/Tax",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_006",
+      "heading": "Delivery Instructions :",
+      "level": 2,
+      "heading_path": "Contract > Delivery Instructions :",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_007",
+      "heading": "Product Details",
+      "level": 2,
+      "heading_path": "Contract > Product Details",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_008",
+      "heading": "Consignee Detail",
+      "level": 2,
+      "heading_path": "Contract > Consignee Detail",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_009",
+      "heading": "Buyer Details",
+      "level": 2,
+      "heading_path": "Contract > Buyer Details",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_010",
+      "heading": "Paying Authority Details",
+      "level": 2,
+      "heading_path": "Contract > Paying Authority Details",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_011",
+      "heading": "Delivery To",
+      "level": 2,
+      "heading_path": "Contract > Delivery To",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_012",
+      "heading": "ePBG Detail",
+      "level": 2,
+      "heading_path": "Contract > ePBG Detail",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_013",
+      "heading": "Terms and Conditions",
+      "level": 2,
+      "heading_path": "Contract > Terms and Conditions",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_014",
+      "heading": "2. General Terms and Conditions-",
+      "level": 2,
+      "heading_path": "Contract > 2. General Terms and Conditions-",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    }
+  ],
+  "source_file": "Contract - GEMC-5.pdf"
+}

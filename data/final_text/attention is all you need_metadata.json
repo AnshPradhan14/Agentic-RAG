@@ -1,0 +1,401 @@
+{
+  "title": "Attention Is All You Need",
+  "total_sections": 30,
+  "sections": [
+    {
+      "id": "section_001",
+      "heading": "Attention Is All You Need",
+      "level": 1,
+      "heading_path": "Attention Is All You Need",
+      "parent_id": null,
+      "children": [
+        "section_002",
+        "section_003",
+        "section_004",
+        "section_005",
+        "section_006",
+        "section_007",
+        "section_012",
+        "section_013",
+        "section_015",
+        "section_016",
+        "section_017",
+        "section_022",
+        "section_026",
+        "section_027",
+        "section_028",
+        "section_029",
+        "section_030"
+      ],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_002",
+      "heading": "Abstract",
+      "level": 2,
+      "heading_path": "Attention Is All You Need > Abstract",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_003",
+      "heading": "1 Introduction",
+      "level": 2,
+      "heading_path": "Attention Is All You Need > 1 Introduction",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_004",
+      "heading": "2 Background",
+      "level": 2,
+      "heading_path": "Attention Is All You Need > 2 Background",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_005",
+      "heading": "3 Model Architecture",
+      "level": 2,
+      "heading_path": "Attention Is All You Need > 3 Model Architecture",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_006",
+      "heading": "3.1 Encoder and Decoder Stacks",
+      "level": 2,
+      "heading_path": "Attention Is All You Need > 3.1 Encoder and Decoder Stacks",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_007",
+      "heading": "3.2 Attention",
+      "level": 2,
+      "heading_path": "Attention Is All You Need > 3.2 Attention",
+      "parent_id": "section_001",
+      "children": [
+        "section_008",
+        "section_009",
+        "section_010",
+        "section_011"
+      ],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_008",
+      "heading": "Scaled Dot-Product Attention",
+      "level": 3,
+      "heading_path": "Attention Is All You Need > 3.2 Attention > Scaled Dot-Product Attention",
+      "parent_id": "section_007",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_009",
+      "heading": "3.2.1 Scaled Dot-Product Attention",
+      "level": 3,
+      "heading_path": "Attention Is All You Need > 3.2 Attention > 3.2.1 Scaled Dot-Product Attention",
+      "parent_id": "section_007",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_010",
+      "heading": "3.2.2 Multi-Head Attention",
+      "level": 3,
+      "heading_path": "Attention Is All You Need > 3.2 Attention > 3.2.2 Multi-Head Attention",
+      "parent_id": "section_007",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_011",
+      "heading": "3.2.3 Applications of Attention in our Model",
+      "level": 3,
+      "heading_path": "Attention Is All You Need > 3.2 Attention > 3.2.3 Applications of Attention in our Model",
+      "parent_id": "section_007",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_012",
+      "heading": "3.3 Position-wise Feed-Forward Networks",
+      "level": 2,
+      "heading_path": "Attention Is All You Need > 3.3 Position-wise Feed-Forward Networks",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_013",
+      "heading": "3.4 Embeddings and Softmax",
+      "level": 2,
+      "heading_path": "Attention Is All You Need > 3.4 Embeddings and Softmax",
+      "parent_id": "section_001",
+      "children": [
+        "section_014"
+      ],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_014",
+      "heading": "Table 1: Maximum path lengths, per-layer complexity and minimum number of sequential operations for different layer types. n is the sequence length, d is the representation dimension, k is the kernel size of convolutions and r the size of the neighborhood in restricted self-attention.",
+      "level": 3,
+      "heading_path": "Attention Is All You Need > 3.4 Embeddings and Softmax > Table 1: Maximum path lengths, per-layer complexity and minimum number of sequential operations for different layer types. n is the sequence length, d is the representation dimension, k is the kernel size of convolutions and r the size of the neighborhood in restricted self-attention.",
+      "parent_id": "section_013",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_015",
+      "heading": "3.5 Positional Encoding",
+      "level": 2,
+      "heading_path": "Attention Is All You Need > 3.5 Positional Encoding",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_016",
+      "heading": "4 Why Self-Attention",
+      "level": 2,
+      "heading_path": "Attention Is All You Need > 4 Why Self-Attention",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_017",
+      "heading": "5 Training",
+      "level": 2,
+      "heading_path": "Attention Is All You Need > 5 Training",
+      "parent_id": "section_001",
+      "children": [
+        "section_018",
+        "section_019",
+        "section_020",
+        "section_021"
+      ],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_018",
+      "heading": "5.1 Training Data and Batching",
+      "level": 3,
+      "heading_path": "Attention Is All You Need > 5 Training > 5.1 Training Data and Batching",
+      "parent_id": "section_017",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_019",
+      "heading": "5.2 Hardware and Schedule",
+      "level": 3,
+      "heading_path": "Attention Is All You Need > 5 Training > 5.2 Hardware and Schedule",
+      "parent_id": "section_017",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_020",
+      "heading": "5.3 Optimizer",
+      "level": 3,
+      "heading_path": "Attention Is All You Need > 5 Training > 5.3 Optimizer",
+      "parent_id": "section_017",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_021",
+      "heading": "5.4 Regularization",
+      "level": 3,
+      "heading_path": "Attention Is All You Need > 5 Training > 5.4 Regularization",
+      "parent_id": "section_017",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_022",
+      "heading": "6 Results",
+      "level": 2,
+      "heading_path": "Attention Is All You Need > 6 Results",
+      "parent_id": "section_001",
+      "children": [
+        "section_023",
+        "section_024",
+        "section_025"
+      ],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_023",
+      "heading": "6.1 Machine Translation",
+      "level": 3,
+      "heading_path": "Attention Is All You Need > 6 Results > 6.1 Machine Translation",
+      "parent_id": "section_022",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_024",
+      "heading": "6.2 Model Variations",
+      "level": 3,
+      "heading_path": "Attention Is All You Need > 6 Results > 6.2 Model Variations",
+      "parent_id": "section_022",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_025",
+      "heading": "6.3 English Constituency Parsing",
+      "level": 3,
+      "heading_path": "Attention Is All You Need > 6 Results > 6.3 English Constituency Parsing",
+      "parent_id": "section_022",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_026",
+      "heading": "7 Conclusion",
+      "level": 2,
+      "heading_path": "Attention Is All You Need > 7 Conclusion",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_027",
+      "heading": "References",
+      "level": 2,
+      "heading_path": "Attention Is All You Need > References",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_028",
+      "heading": "Attention Visualizations Input-Input Layer5",
+      "level": 2,
+      "heading_path": "Attention Is All You Need > Attention Visualizations Input-Input Layer5",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_029",
+      "heading": "Attention Visualizations Input-Input Layer5",
+      "level": 2,
+      "heading_path": "Attention Is All You Need > Attention Visualizations Input-Input Layer5",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    },
+    {
+      "id": "section_030",
+      "heading": "Attention Visualizations Input-Input Layer5",
+      "level": 2,
+      "heading_path": "Attention Is All You Need > Attention Visualizations Input-Input Layer5",
+      "parent_id": "section_001",
+      "children": [],
+      "approximate_page_range": [
+        0,
+        0
+      ]
+    }
+  ],
+  "source_file": "attention is all you need.pdf"
+}
